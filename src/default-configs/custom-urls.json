@@ -1,0 +1,26 @@
+{
+  "/api/foo": {
+    "responses": [ 
+      {"name": "case 1", "url": "api-responses/foo.json", "active": true},
+      {"name": "case 2", "url": "api-responses/foo2.json"},
+      {"name": "case 3", "url": "api-responses/foo3.json"}
+    ]
+  },
+  "/api/bar": {
+    "responses": [ 
+      {"name": "case 1", "url": "api-responses/bar.json", "active": true},
+      {"name": "case 2", "url": "api-responses/bar2.json"},
+      {"name": "case 3", "url": "api-responses/bar3.json"}
+    ]
+  } ,
+  "/api/foo.html": {
+    "responses": [ 
+      {"name": "foo.html response", "url": "api-responses/foo.html", "active": true}
+    ]
+  },
+  "/api/bar.html": {
+    "responses": [ 
+      {"name": "bar.html response", "url": "api-responses/bar.html", "active": true}
+    ]
+  } 
+}

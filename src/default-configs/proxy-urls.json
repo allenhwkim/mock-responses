@@ -1,0 +1,14 @@
+  
+[
+  {
+    "active": true,
+    "context": ["/api/**"],
+    "options": {
+      "logLevel": "debug",
+      "target": "https://www.rogers.com",
+      "secure": false,
+      "autoRewrite": true,
+      "changeOrigin": true
+    }
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "basePath": "test",
+  "htmlHead": [ 
+    "<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/icon?family=Material+Icons\">",
+    "<link rel=\"stylesheet\" href=\"https://unpkg.com/font-awesome@4.7.0/css/font-awesome.css\">",
+    "<link rel=\"stylesheet\" href=\"https://unpkg.com/mce/dist/themes/blue.css\">",
+    "<script src=\"https://unpkg.com/mce/dist/mce.min.js\"></script>",
+    "<link id=\"mce-css\" rel=\"stylesheet\" href=\"https://unpkg.com/mce/dist/mce.min.css\">"
+  ]
+}
