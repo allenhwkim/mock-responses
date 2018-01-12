@@ -1,6 +1,6 @@
 # http-request-middleware
 
-Node.js http request middleware including management UI.
+NodeJS http request handling middleware with admin UI.
 
 Is your back-end api not ready, too slow, or unstable? You don't have to wait for that by mocking all back-end responses using `http-request-middleware`.
 
