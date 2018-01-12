@@ -27,7 +27,7 @@ app.listen(3000);
 
 ## Getting Started
 
-  ### 1. Create mock responses and write custom-urls.json
+  ### 1. Create mock responses and write `custom-urls.json`
   ```
   {
     "/api/foo": {
@@ -47,7 +47,7 @@ app.listen(3000);
   }
   ```
 
-  ### 2. Optional, Create proxy-urls.json 
+  ### 2. Optional, create `proxy-urls.json`
   ```
   [
     {
@@ -64,7 +64,7 @@ app.listen(3000);
   ] 
   ```
 
-  ### 3. Update config.json
+  ### 3. Update `config.json`
   ```
   {
     "name": "my package",
