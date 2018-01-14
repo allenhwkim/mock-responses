@@ -1,6 +1,6 @@
 {
   "name": "http-request-middleware",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "espress-kind http request middleware",
   "main": "index.js",
   "dependencies": {
@@ -35,7 +35,7 @@
   "homepage": "https://github.com/allenhwkim/http-request-middleware#readme",
   "httpRequestMiddleware": {
     "basePath": "test",
-    "headUrls": [ 
+    "headUrls": [
       "https://fonts.googleapis.com/icon?family=Material+Icons",
       "https://unpkg.com/font-awesome@4.7.0/css/font-awesome.css",
       "https://unpkg.com/mce/dist/themes/blue.css",
