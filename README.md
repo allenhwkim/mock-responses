@@ -6,6 +6,8 @@ Is your back-end api not ready, too slow, or unstable? You don't have to wait fo
 
 Compatible with [connect](https://github.com/senchalabs/connect), [express](https://github.com/strongloop/express), [browser-sync](https://github.com/BrowserSync/browser-sync) and [many more](#compatible-servers).
 
+![image](https://user-images.githubusercontent.com/1437734/34921357-fd4a5be4-f94e-11e7-8273-a3c94d3b38c9.png)
+
 ## TL;DR
 
 Add the middleware to your code before you start the server.
