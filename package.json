@@ -32,5 +32,18 @@
   "bugs": {
     "url": "https://github.com/allenhwkim/http-request-middleware/issues"
   },
-  "homepage": "https://github.com/allenhwkim/http-request-middleware#readme"
+  "homepage": "https://github.com/allenhwkim/http-request-middleware#readme",
+  "httpRequestMiddleware": {
+    "basePath": "test",
+    "headUrls": [ 
+      "https://fonts.googleapis.com/icon?family=Material+Icons",
+      "https://unpkg.com/font-awesome@4.7.0/css/font-awesome.css",
+      "https://unpkg.com/mce/dist/themes/blue.css",
+      "https://unpkg.com/mce/dist/mce.min.css",
+      "https://unpkg.com/mce/dist/mce.min.js"
+    ],
+    "navigationlinks": [
+      "<mce-nav-item icon='search' class='mce-disabled'>Disabled</mce-nav-item>"
+    ]
+  }
 }

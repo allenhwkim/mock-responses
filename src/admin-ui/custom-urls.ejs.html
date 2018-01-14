@@ -34,11 +34,6 @@ function search() {
     row.classList[func]('matching');
   })
 }
-
-function activate(pattern, name) {
-  fetch(`/developer/api/activate?pattern=${pattern}&name=${name}`)
-    .then(resp => {if (!resp.ok) throw('activation error'); return resp.json()})
-}
 </script>
 
 <div class="custom-urls">

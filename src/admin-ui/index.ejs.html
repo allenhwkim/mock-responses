@@ -3,7 +3,9 @@
   <head>
     <meta name="viewport" content="initial-scale=1, width=device-width">
 
-    <%- config.htmlHead.join('\n') %>
+    <%- config.headUrls.map(url => 
+        url.match(/\.js$/) ? `<script src="${url}"></script>` : `<link rel="stylesheet" href="${url}">`
+      ).join('\n') %>
 
     <style>
       body { font-family: sans-serif; margin: 0; }
@@ -36,7 +38,7 @@
             let htmlClass = resp.url.match(/\.html$/) ? 'html':'';
             let activeClass = resp.active && !htmlClass ? 'active':'';
             let checkedAttr = (resp.active ? 'checked="checked"':'');
-            rowHtml += `\n<tr class="${group} ${activeClass} ${htmlClass}">
+            rowHtml += `\n<tr class="${group} ${activeClass} ${htmlClass}" name="${pattern}">
                 <td class="active">
                   <mce-radio-button name="${pattern}" value="${resp.name}" ${checkedAttr}" 
                     onclick="activate(this.inputEl.name, this.inputEl.value)"></mce-radio-button>
@@ -49,6 +51,21 @@
         html = html.replace('<!-- custom urls -->', rowHtml);
         setTimeout(_ => document.querySelector('#custom-urls-data').innerHTML = html, 300);
 
+      }
+
+      function activate(pattern, name) {
+        fetch(`/developer/api/activate?pattern=${pattern}&name=${name}`)
+          .then(resp => {
+            if (!resp.ok) throw('activation error');
+            return resp.json()
+          }).then(json => {
+            console.log(`#custom-urls-data tr[name="${pattern}"]`);
+            Array.from(document.querySelectorAll(`#custom-urls-data tr[name="${pattern}"]`))
+              .forEach(el => el.classList.remove('active'));
+            document.querySelector(`input[name="${pattern}"][value="${name}"]`)
+              .closest('tr')
+              .classList.add('active');
+          })
       }
 
       function onRouteEnd(route) {
@@ -75,10 +92,11 @@
   <body>
     <mce-nav-drawer>
       <h2 class="mce-top-header" style="vertical-align:middle">
-        <img src="https://www.rogers.com/cms/rogers/css/img/logo-inverted.png"/>
+        http request middleware
       </h2>
       <mce-nav-item href="#custom-urls" icon="fa-cogs">Custom Urls</mce-nav-item>
       <mce-nav-item href="#proxy-urls" icon="fa-server">Proxy Urls</mce-nav-item>
+      <%- config.navigationlinks.join('\n') %>
       <mce-nav-item class="mce" href="https://mymce.github.io/" icon="fa-github">Built With MCE</mce-nav-item>
     </mce-nav-drawer>
 
@@ -88,7 +106,7 @@
       </div>
       <h1 class="mce-title">Welcome To Solaris Development</h1>
       <div class="mce-icons">
-        <mce-icon>rogers</mce-icon>
+        <mce-icon href="https://github.com/allenhwkim/http-request-middleware">fa-github</mce-icon>
       </div>
     </mce-app-bar>
 
