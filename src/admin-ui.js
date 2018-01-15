@@ -25,6 +25,11 @@ var adminUIMiddleware = function(req, res, next) {
         renderHTML(res, 'custom-urls.ejs.html'); break;
       case '/developer/proxy-urls.html':
         renderHTML(res, 'proxy-urls.ejs.html'); break;
+      case '/developer/api/config':
+        res.setHeader('Content-Type', 'application/json');
+        res.write(JSON.stringify(config)); 
+        res.end();
+        break;
       case '/developer/api/activate':
         let pattern =reqUrl.query.pattern, 
             name = reqUrl.query.name;

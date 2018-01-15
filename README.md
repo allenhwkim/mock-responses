@@ -87,6 +87,7 @@ app.listen(3000);
 
   browserSync.init({
     host: 'localhost', // e.g. localhost.mysite.com
+    port: 3000,
     browser: 'default',
     server: {
       baseDir: __dirname,
@@ -94,6 +95,40 @@ app.listen(3000);
     }
   });
   ```
+
+  ### 4. Visit admin UI.
+  ```
+  https://localhost:3000/developer.html
+  ```
+
+## Configuration Example at `package.json`
+```
+{
+  "name": "eclipse",
+  "version": "0.2.7",
+  ...
+  "httpRequestMiddleware": {
+    "basePath": "builds/dist",
+    "customUrls": "gulp-tasks/browser-sync/custom-urls.json",
+    "proxyUrls": "gulp-tasks/browser-sync/proxy-urls.json",
+    "https": {
+      "key": "gulp-tasks/browser-sync/apache.key",
+      "cert": "gulp-tasks/browser-sync/apache.crt"
+    },
+    "headUrls": [
+      "https://fonts.googleapis.com/icon?family=Material+Icons",
+      "https://unpkg.com/font-awesome@4.7.0/css/font-awesome.css",
+      "https://unpkg.com/mce/dist/themes/blue.css",
+      "https://unpkg.com/mce/dist/mce.min.css",
+      "https://unpkg.com/mce/dist/mce.min.js"
+    ],
+    "navigationlinks": [
+      "<mce-nav-item href='https://example.com/my-document' icon='fa-book'>Documents</mce-nav-item>",
+      "<mce-nav-item href='/web/consumer/developer' icon='link'>Links</mce-nav-item>"
+    ]
+  }
+}
+```
 
 ## Compatible servers
 `http-request-middleware` is compatible with the following servers:

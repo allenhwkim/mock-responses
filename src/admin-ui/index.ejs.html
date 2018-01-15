@@ -20,39 +20,6 @@
       mce-dialog .mce-content {white-space: pre; height: 60vh; width: 60vw; overflow: auto;}
     </style>
     <script>
-      var customUrls = <%- JSON.stringify(config.customUrls) %>;
-
-      function buildDataTable() {
-        let html = `<table class="show-all">
-          <tr class="header">
-            <td class="active">
-            <th class="name">Name
-            <th class="pattern">Request
-            <th class="url">Response</tr>
-          <!-- custom urls -->
-        </table>`;
-        let rowHtml = '', group = 'group1';
-        for (var pattern in customUrls) {
-          group = group === 'group1' ? 'group2' : 'group1';
-          customUrls[pattern].responses.forEach(resp => {
-            let htmlClass = resp.url.match(/\.html$/) ? 'html':'';
-            let activeClass = resp.active && !htmlClass ? 'active':'';
-            let checkedAttr = (resp.active ? 'checked="checked"':'');
-            rowHtml += `\n<tr class="${group} ${activeClass} ${htmlClass}" name="${pattern}">
-                <td class="active">
-                  <mce-radio-button name="${pattern}" value="${resp.name}" ${checkedAttr}" 
-                    onclick="activate(this.inputEl.name, this.inputEl.value)"></mce-radio-button>
-                <td class="name">${resp.name}
-                <td class="pattern">${pattern}
-                <td class="url">URL: <a href="javascript:void(0)" onclick="showJson('${resp.url}')">${resp.url}</a>
-              </tr>`;
-          });
-        }
-        html = html.replace('<!-- custom urls -->', rowHtml);
-        setTimeout(_ => document.querySelector('#custom-urls-data').innerHTML = html, 300);
-
-      }
-
       function activate(pattern, name) {
         fetch(`/developer/api/activate?pattern=${pattern}&name=${name}`)
           .then(resp => {
@@ -69,23 +36,13 @@
       }
 
       function onRouteEnd(route) {
-        (route.path === 'custom-urls') && buildDataTable();
         document.querySelector('mce-app-bar').setTitle(route.name);
-        setTimeout(window.ce.resizeHandler, 100);
-      }
-
-      function showJson(jsonUrl) {
-        let dialog = document.querySelector('#dialog');
-        fetch(jsonUrl)
-          .then(resp => resp.text())
-          .then(txt => dialog.open({
-              title: jsonUrl,
-              contents: txt
-            }));
-      }
-
-      function dq(selector) {
-        return document.querySelector(selector);
+        setTimeout(_ => {
+          window.ce.resizeHandler();
+          if (route.path === 'custom-urls' && typeof buildDataTable !== 'undefined') {
+            buildDataTable();
+          }
+        }, 100);
       }
     </script>
   </head>
@@ -102,7 +59,7 @@
 
     <mce-app-bar>
       <div class="mce-nav-icon">
-        <mce-icon onclick="dq('mce-nav-drawer').open()">menu</mce-icon>
+        <mce-icon onclick="document.querySelector('mce-nav-drawer').open()">menu</mce-icon>
       </div>
       <h1 class="mce-title">Welcome To Solaris Development</h1>
       <div class="mce-icons">
