@@ -1,6 +1,6 @@
 {
   "name": "http-request-middleware",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "espress-kind http request middleware",
   "main": "index.js",
   "dependencies": {
