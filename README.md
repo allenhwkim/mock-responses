@@ -82,10 +82,7 @@ app.listen(3000);
       baseDir: __dirname,
       middleware: httpRequestMiddleware.middlewares
     },
-    https: {
-      key: "src/default-configs/ssl.key",
-      cert: "src/default-configs/ssl.crt"
-    }
+    https: true
   });
   ```
   #### [`connect` example](test/connect.js)
