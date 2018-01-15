@@ -10,7 +10,8 @@
     "mce": "^0.4.8"
   },
   "devDependencies": {
-    "browser-sync": "^2.23.5"
+    "browser-sync": "^2.23.5",
+    "express": "^4.16.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

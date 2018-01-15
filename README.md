@@ -29,7 +29,7 @@ app.listen(3000);
 
 ## Getting Started
 
-  ### 1. Create mock responses and write `custom-urls.json`
+  ### 1. Create mock responses and list to `custom-urls.json`
   ```
   {
     "/api/foo": {
@@ -48,25 +48,9 @@ app.listen(3000);
     }
   }
   ```
+  Optionally, create `proxy-urls.json` to use proxy features. [example](src/default-configs/proxy-urls.json)
 
-  ### 2. Optional, create `proxy-urls.json`
-  ```
-  [
-    {
-      "active": true,
-      "context": ["/api/**"],
-      "options": {
-        "logLevel": "debug",
-        "target": "https://www.rogers.com",
-        "secure": false,
-        "autoRewrite": true,
-        "changeOrigin": true
-      }
-    }
-  ] 
-  ```
-
-  ### 3. Update `config.json`
+  ### 2. Update `package.json` with the configuration files
   ```
   {
     "name": "my package",
@@ -80,23 +64,34 @@ app.listen(3000);
   }
   ```
 
-  ### 4. Start your development server with middleware
+  ### 3. Start your development server with http-request-middleware
+  #### `browser-sync` example
   ```
   var browserSync = require('browser-sync');
   var httpRequestMiddleware = require('http-request-middleware');
 
   browserSync.init({
-    host: 'localhost', // e.g. localhost.mysite.com
+    logLevel: 'debug',
+    host: 'localhost.rogers.com', // e.g. localhost.mysite.com
     port: 3000,
+    startPath: '/',
+    ui:  { port:  3001 },
+    open: 'external',
     browser: 'default',
     server: {
       baseDir: __dirname,
       middleware: httpRequestMiddleware.middlewares
+    },
+    https: {
+      key: "src/default-configs/ssl.key",
+      cert: "src/default-configs/ssl.crt"
     }
   });
   ```
+  #### [`connect` example](test/connect.js)
+  #### [`express` example](test/express.js)
 
-  ### 4. Visit admin UI.
+  ### 4. Visit admin UI `/developer.html` to manage custom urls and/or proxy urls.
   ```
   https://localhost:3000/developer.html
   ```
