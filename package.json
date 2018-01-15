@@ -5,12 +5,9 @@
   "main": "index.js",
   "dependencies": {
     "ejs": "^2.5.7",
-    "font-awesome": "^4.7.0",
     "http-proxy": "^1.16.2",
     "http-proxy-middleware": "^0.17.4",
-    "material-design-icons": "^3.0.1",
-    "mce": "^0.4.8",
-    "packpath": "^0.1.0"
+    "mce": "^0.4.8"
   },
   "devDependencies": {
     "browser-sync": "^2.23.5"
