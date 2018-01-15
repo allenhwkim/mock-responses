@@ -92,6 +92,16 @@
           .classList.add('active');
       })
   }
+
+  function showJson(jsonUrl) {
+    let dialog = document.querySelector('#dialog');
+    fetch(jsonUrl)
+      .then(resp => resp.text())
+      .then(txt => dialog.open({
+          title: jsonUrl,
+          contents: txt
+        }));
+  }
 </script>
 
 <div class="custom-urls">

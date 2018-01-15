@@ -14,7 +14,7 @@ var packageJson = require(path.resolve(path.join('.', 'package.json')));
 var userConfig = packageJson.httpRequestMiddleware;
 
 var config = Object.assign({}, defaultConfig, userConfig);
-config.customUrls = require(config.customUrls);
-config.proxyUrls = require(config.proxyUrls);
+config.customUrls = require(path.resolve(config.customUrls));
+config.proxyUrls = require(path.resolve(config.proxyUrls));
 
 module.exports = config;
