@@ -90,6 +90,8 @@
         document.querySelector(`input[name="${pattern}"][value="${name}"]`)
           .closest('tr')
           .classList.add('active');
+        document.querySelector('mce-snackbar').close();
+        document.querySelector('mce-snackbar').open();
       })
   }
 
@@ -122,3 +124,4 @@
     <div class="data"><!-- Dynamic Portion --></div>
 </div>
 
+<mce-snackbar bottom="0">A Custom URL has been updated.</mce-snackbar>
