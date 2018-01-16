@@ -48,9 +48,28 @@ app.listen(3000);
     }
   }
   ```
-  Optionally, create `proxy-urls.json` to use proxy features. [example](src/default-configs/proxy-urls.json)
-
-  ### 2. Update `package.json` with the configuration files
+  
+  ### 2. Create proxy urls and list from `proxy-urls.json`
+  ```
+  [
+  	{
+  		"active":true,
+  		"context": [
+  			"api/foo"
+  		],
+  		"options": {
+  			"logLevel": "debug",
+  			"target": "https://www.yourServer.com",
+  			"secure": false,
+  			"autoRewrite": true,
+  			"changeOrigin": true
+  		}
+  	}
+  ]
+  ```
+  proxy-url options can be found [here](https://github.com/chimurai/http-proxy-middleware#http-proxy-options)
+  
+  ### 3. Update `package.json` with the configuration files
   ```
   {
     "name": "my package",
@@ -64,7 +83,7 @@ app.listen(3000);
   }
   ```
 
-  ### 3. Start your development server with http-request-middleware
+  ### 4. Start your development server with http-request-middleware
   #### `browser-sync` example
   ```
   var browserSync = require('browser-sync');
@@ -88,7 +107,7 @@ app.listen(3000);
   #### [`connect` example](test/connect.js)
   #### [`express` example](test/express.js)
 
-  ### 4. Visit admin UI `/developer.html` to manage custom urls and/or proxy urls.
+  ### 5. Visit admin UI `/developer.html` to manage custom urls and/or proxy urls.
   ```
   https://localhost:3000/developer.html
   ```
