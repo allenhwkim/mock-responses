@@ -48,9 +48,28 @@ app.listen(3000);
     }
   }
   ```
-  Optionally, create `proxy-urls.json` to use proxy features. [example](src/default-configs/proxy-urls.json)
-
-  ### 2. Update `package.json` with the configuration files
+  
+  ### 2. Optionally, create `proxy-urls.json` to use proxy features.
+  ```
+  [
+    {
+      "active":true,
+      "context": [
+        "api/foo"
+      ],
+      "options": {
+        "logLevel": "debug",
+        "target": "https://www.yourServer.com",
+        "secure": false,
+        "autoRewrite": true,
+        "changeOrigin": true
+      }
+    }
+  ]
+  ```
+  proxy-url options can be found [here](https://github.com/chimurai/http-proxy-middleware#http-proxy-options)
+  
+  ### 3. Update `package.json` with the configuration files
   ```
   {
     "name": "my package",
@@ -58,13 +77,13 @@ app.listen(3000);
     ...
     httpRequestMiddleware: {
       "basePath": "./dist",
-      "customUrls": "./config/custom-urls.json",
-      "proxyUrls": "./config/proxy-urls.json
+      "customUrls": "./custom-urls.json",
+      "proxyUrls": "./proxy-urls.json
     }
   }
   ```
 
-  ### 3. Start your development server with http-request-middleware
+  ### 4. Start your development server with http-request-middleware
   #### `browser-sync` example
   ```
   var browserSync = require('browser-sync');
@@ -88,12 +107,13 @@ app.listen(3000);
   #### [`connect` example](test/connect.js)
   #### [`express` example](test/express.js)
 
-  ### 4. Visit admin UI `/developer.html` to manage custom urls and/or proxy urls.
+  ### 5. Visit admin UI `/developer.html` to manage custom urls and/or proxy urls.
   ```
   https://localhost:3000/developer.html
   ```
 
-## Configuration Example at `package.json`
+## Configuration  at `package.json`
+### Example
 ```
 {
   "name": "eclipse",
@@ -103,10 +123,6 @@ app.listen(3000);
     "basePath": "builds/dist",
     "customUrls": "gulp-tasks/browser-sync/custom-urls.json",
     "proxyUrls": "gulp-tasks/browser-sync/proxy-urls.json",
-    "https": {
-      "key": "gulp-tasks/browser-sync/apache.key",
-      "cert": "gulp-tasks/browser-sync/apache.crt"
-    },
     "headUrls": [
       "https://fonts.googleapis.com/icon?family=Material+Icons",
       "https://unpkg.com/font-awesome@4.7.0/css/font-awesome.css",
@@ -121,6 +137,13 @@ app.listen(3000);
   }
 }
 ```
+|Option|Description|
+|--|--|
+|basePath| the base path that .json files are located. e.g. 'builds/dist'
+|customUrls| the file path of custom urls configuration file .g. './custom-urls.json'
+|proxyUrls| Optional, the file path of proxy urls configuration file .g. './proxy-urls.json'
+|headUrls| Optional, the list of HTML header files
+|navigationLinks| list of html links to be seen on the side bar of admin UI.
 
 ## Compatible servers
 `http-request-middleware` is compatible with the following servers:
