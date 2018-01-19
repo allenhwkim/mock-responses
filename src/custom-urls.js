@@ -10,16 +10,29 @@ var httpProxy = require('http-proxy');
 
 var config = require(__dirname + '/config.js');
 
+function isMatching(req, customUrl) {
+  if (customUrl.active && !customUrl.condition) {
+    return true;
+  }
+  if (customUrl.active && customUrl.condition) {
+    let urlParsed = url.parse(req.url, true);
+    let params = Object.assign({}, urlParsed.query, req.body);
+    let fn = new Function('req', 'params', `return ${customUrl.condition}`);
+    return fn(req, params);
+  }
+  return false;
+}
+
 /**
  * find the matching custom url for the current request. If not found return null
  */
-var getCustomUrl = function(req) {
+function getCustomUrl(req) {
   for (var pattern in config.customUrls) {
     var regExp = new RegExp(pattern);
     if (req.url.match(regExp)) {
       for(var i=0; i < config.customUrls[pattern].responses.length; i++) {
         let customUrl = config.customUrls[pattern].responses[i];
-        if (customUrl.active) {
+        if (isMatching(customUrl)) {
           return customUrl;
           break;
         }
@@ -30,7 +43,7 @@ var getCustomUrl = function(req) {
 };
 
 // hijack url and serve static file or function
-var customUrlsMiddleware = function(req, res, next) {
+function customUrlsMiddleware(req, res, next) {
 
   var customUrl = getCustomUrl(req);
 

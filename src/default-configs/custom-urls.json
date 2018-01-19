@@ -1,4 +1,13 @@
 {
+  "/api/conditional": {
+    "responses": [ 
+      {"name": "case 1", "url": "api-responses/foo.json", "condition": "req.method === 'POST'", "statusCode": 201, "active": true},
+      {"name": "case 2", "url": "api-responses/foo.json", "condition": "req.method === 'POST'"},
+      {"name": "case 3", "url": "api-responses/foo2.json", "condition": "params.a === 'foo'", "statusCode": 500, "active": true},
+      {"name": "case 4", "url": "api-responses/foo2.json", "condition": "params.a === 'foo'"},
+      {"name": "case 5", "url": "api-responses/foo3.json", "active": true}
+    ]
+  },
   "/api/foo": {
     "responses": [ 
       {"name": "case 1", "url": "api-responses/foo.json", "active": true},

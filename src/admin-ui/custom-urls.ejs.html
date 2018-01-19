@@ -4,7 +4,7 @@
   .custom-urls tr.group1 { background-color: #ddd; }
   .custom-urls tr .active { background-color: #fff; }
   .custom-urls tr.group2 { background-color: #fcfcfc; }
-  .custom-urls tr.active { font-weight: bold; }
+  /*.custom-urls tr.active { font-weight: bold; }*/
 
   .custom-urls tr { display:none; }
   .custom-urls tr.header { display:table-row; }
@@ -14,9 +14,9 @@
   .custom-urls .show-html tr.html { display:table-row }
 
   .custom-urls th { background-color: var(--theme-color-600, #757575); color: #fff;}
-  .custom-urls .pattern {width: 30%;}
-  .custom-urls .name {width: 20%;}
-  .custom-urls .url {width: 30%;}
+  .custom-urls .pattern {width: 35%;}
+  .custom-urls .name {width: 15%;}
+  .custom-urls .url {width: 35%;}
   .custom-urls .active {width: 32px;}
   .custom-urls table { table-layout:fixed; }
   .custom-urls td, .custom-urls th { padding: 4px; word-wrap: break-word; }
@@ -65,31 +65,37 @@
         let htmlClass = resp.url.match(/\.html$/) ? 'html':'';
         let activeClass = resp.active && !htmlClass ? 'active':'';
         let checkedAttr = (resp.active ? 'checked="checked"':'');
-        rowHtml += `\n<tr class="${group} ${activeClass} ${htmlClass}" name="${pattern}">
+        let grpName = pattern + (resp.condition ? `:${resp.condition}` : '');
+        rowHtml += `\n<tr class="${group} ${activeClass} ${htmlClass}" name="${grpName}">
             <td class="active">
-              <mce-radio-button name="${pattern}" value="${resp.name}" ${checkedAttr}" 
-                onclick="activate(this.inputEl.name, this.inputEl.value)"></mce-radio-button>
+              <mce-radio-button name="${grpName}" pattern="${pattern}" value="${resp.name}" ${checkedAttr}" 
+                condition="${resp.condition}" onclick="activate(this)"></mce-radio-button>
             <td class="name">${resp.name}
-            <td class="pattern">${pattern}
-            <td class="url">URL: <a href="javascript:void(0)" onclick="showJson('${resp.url}')">${resp.url}</a>
+            <td class="pattern">
+              url: ${pattern}
+              ${resp.condition ? '<br/>condition: ' + resp.condition : ''}
+            <td class="url">
+              url: <a href="javascript:void(0)" onclick="showJson('${resp.url}')">${resp.url}</a>
+              ${resp.statusCode ? '<br/>status code: ' + resp.statusCode : ''}
           </tr>`;
       });
     }
     return html.replace('<!-- custom urls -->', rowHtml);
   }
 
-  function activate(pattern, name) {
-    fetch(`/developer/api/activate?pattern=${pattern}&name=${name}`)
+  function activate(el) {
+    let pattern = el.getAttribute('pattern'),
+        name = el.getAttribute('value'),
+        condition = el.getAttribute('condition');
+    let grpName = pattern + (condition ? `:${condition}` : '');
+    fetch(`/developer/api/activate?pattern=${pattern}&name=${name}&condition=${condition}`)
       .then(resp => {
         if (!resp.ok) throw('activation error');
         return resp.json()
       }).then(json => {
-        console.log(`#custom-urls-data tr[name="${pattern}"]`);
-        Array.from(document.querySelectorAll(`#custom-urls-data tr[name="${pattern}"]`))
+        Array.from(document.querySelectorAll(`#custom-urls-data tr[name="${grpName}"]`))
           .forEach(el => el.classList.remove('active'));
-        document.querySelector(`input[name="${pattern}"][value="${name}"]`)
-          .closest('tr')
-          .classList.add('active');
+        el.closest('tr').classList.add('active');
         document.querySelector('mce-snackbar').close();
         document.querySelector('mce-snackbar').open();
       })

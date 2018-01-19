@@ -31,11 +31,15 @@ var adminUIMiddleware = function(req, res, next) {
         res.end();
         break;
       case '/developer/api/activate':
-        let pattern =reqUrl.query.pattern, 
-            name = reqUrl.query.name;
-        let responses = config.customUrls[pattern].responses;
+        let responses = config.customUrls[reqUrl.query.pattern].responses;
         responses.forEach(resp => {
-          resp.name === name ? (resp.active=true): (delete resp.active);
+          if (resp.condition === reqUrl.query.condition) {
+            if (resp.name === reqUrl.query.name) {
+              resp.active = true;
+            } else {
+              delete resp.active;
+            }
+          }
         })
         res.setHeader('Content-Type', 'application/json');
         res.write(JSON.stringify(responses, null, '  '));
