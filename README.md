@@ -106,6 +106,7 @@ app.listen(3000);
   ```
   #### [`connect` example](test/connect.js)
   #### [`express` example](test/express.js)
+  #### [`webpack` example](test/webpack-dev-server.js)
 
   ### 5. Visit admin UI `/developer.html` to manage custom urls and/or proxy urls.
   ```
@@ -156,6 +157,7 @@ app.listen(3000);
 * [grunt-browser-sync](https://www.npmjs.com/package/grunt-browser-sync)
 * [gulp-connect](https://www.npmjs.com/package/gulp-connect)
 * [gulp-webserver](https://www.npmjs.com/package/gulp-webserver)
+* [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
 
 ## License
 
