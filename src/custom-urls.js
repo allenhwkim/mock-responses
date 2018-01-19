@@ -32,7 +32,7 @@ function getCustomUrl(req) {
     if (req.url.match(regExp)) {
       for(var i=0; i < config.customUrls[pattern].responses.length; i++) {
         let customUrl = config.customUrls[pattern].responses[i];
-        if (isMatching(customUrl)) {
+        if (isMatching(req, customUrl)) {
           return customUrl;
           break;
         }
