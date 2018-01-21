@@ -146,6 +146,31 @@ app.listen(3000);
 |headUrls| Optional, the list of HTML header files
 |navigationLinks| list of html links to be seen on the side bar of admin UI.
 
+## Advanced custom-url.json Configuration
+custom-url can take a `condition` in which, if it evaluates to true, the mock is used, else the next active `condition` is used.
+### condition options
+#### req
+middleware `req` parameter, has the same properties, such as `req.method`
+
+####params
+concatenated object with both query parameters and request payload
+
+```
+{
+  "/api/conditional": {
+    "responses": [ 
+      {"name": "case 1", "url": "api-responses/foo.json", "condition": "req.method === 'POST'", "statusCode": 201, "active": true},
+      {"name": "case 2", "url": "api-responses/foo.json", "condition": "req.method === 'POST'"},
+      {"name": "case 3", "url": "api-responses/foo2.json", "condition": "params.a === 'foo'", "statusCode": 500, "active": true},
+      {"name": "case 4", "url": "api-responses/foo2.json", "condition": "params.a === 'foo'"},
+      {"name": "case 5", "url": "api-responses/foo3.json", "active": true}
+    ]
+  }
+}
+
+
+```
+
 ## Compatible servers
 `http-request-middleware` is compatible with the following servers:
 
