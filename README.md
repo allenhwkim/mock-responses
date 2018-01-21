@@ -78,7 +78,7 @@ app.listen(3000);
     httpRequestMiddleware: {
       "basePath": "./dist",
       "customUrls": "./custom-urls.json",
-      "proxyUrls": "./proxy-urls.json
+      "proxyUrls": "./proxy-urls.json"
     }
   }
   ```
