@@ -150,11 +150,12 @@ app.listen(3000);
 custom-url can take a `condition` in which, if it evaluates to true, the mock is used, else the next active `condition` is used.
 ### condition options
 #### req
-middleware `req` parameter, has the same properties, such as `req.method`
+middleware `req` parameter, has properties such as `req.method`
 
-####params
+#### params
 concatenated object with both query parameters and request payload
 
+### Example
 ```
 {
   "/api/conditional": {
