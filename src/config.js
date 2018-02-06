@@ -14,7 +14,19 @@ var packageJson = require(path.resolve(path.join('.', 'package.json')));
 var userConfig = packageJson.httpRequestMiddleware;
 
 var config = Object.assign({}, defaultConfig, userConfig);
-config.customUrls = require(path.resolve(config.customUrls));
 config.proxyUrls = require(path.resolve(config.proxyUrls));
+
+// set customUrls
+config.customUrls = require(path.resolve(config.customUrls));
+for (var pattern in config.customUrls) {
+  let value = config.customUrls[pattern];
+  if (typeof value === 'string') { // e.g., "api/hello": "hello.json"
+    //convert string to responses object with single active one
+    config.customUrls[pattern] = {
+      "responses": [ {"name": "Unnamed", "url": value, "active": true} ]
+    }
+  }
+}
+
 
 module.exports = config;

@@ -31,5 +31,7 @@
     "responses": [ 
       {"name": "bar.html response", "url": "api-responses/bar.html", "active": true}
     ]
-  } 
+  },
+  "/api/hello": "api-responses/hello.json",
+  "/api/world": "api-responses/world.json"
 }

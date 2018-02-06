@@ -32,6 +32,8 @@ app.listen(3000);
   ### 1. Create mock responses and list to `custom-urls.json`
   ```
   {
+    "/api/hello": "hello.json",
+    "/api/world": "world.json",
     "/api/foo": {
       "responses": [ 
         {"name": "case 1", "url": "api-responses/foo.json", "active": true},
@@ -112,8 +114,17 @@ app.listen(3000);
   https://localhost:3000/developer.html
   ```
 
-## Configuration  at `package.json`
-### Example
+## Configuration
+
+|Option|Description|
+|--|--|
+|basePath| the base path that .json files are located. e.g. 'builds/dist'
+|customUrls| the file path of custom urls configuration file .g. './custom-urls.json'
+|proxyUrls| Optional, the file path of proxy urls configuration file .g. './proxy-urls.json'
+|headUrls| Optional, the list of HTML header files
+|navigationLinks| list of html links to be seen on the side bar of admin UI.
+
+### `package.json` Example
 ```
 {
   "name": "eclipse",
@@ -137,13 +148,16 @@ app.listen(3000);
   }
 }
 ```
-|Option|Description|
-|--|--|
-|basePath| the base path that .json files are located. e.g. 'builds/dist'
-|customUrls| the file path of custom urls configuration file .g. './custom-urls.json'
-|proxyUrls| Optional, the file path of proxy urls configuration file .g. './proxy-urls.json'
-|headUrls| Optional, the list of HTML header files
-|navigationLinks| list of html links to be seen on the side bar of admin UI.
+
+### Custom File Configuration Example
+```
+'use strict';
+var httpRequestMiddleware = require('http-request-middleware');
+
+httpRequestMiddleware.config.basePath = './api-responses'; // where .json(s) exists
+httpRequestMiddleware.config.customUrls = require('./custom-urls.json');
+httpRequestMiddleware.config.proxyUrls = require('./proxy-urls.json');
+```
 
 ## Compatible servers
 `http-request-middleware` is compatible with the following servers:
