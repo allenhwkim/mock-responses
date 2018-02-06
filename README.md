@@ -80,7 +80,7 @@ app.listen(3000);
     httpRequestMiddleware: {
       "basePath": "./dist",
       "customUrls": "./custom-urls.json",
-      "proxyUrls": "./proxy-urls.json
+      "proxyUrls": "./proxy-urls.json"
     }
   }
   ```
@@ -108,6 +108,7 @@ app.listen(3000);
   ```
   #### [`connect` example](test/connect.js)
   #### [`express` example](test/express.js)
+  #### [`webpack` example](test/webpack-dev-server.js)
 
   ### 5. Visit admin UI `/developer.html` to manage custom urls and/or proxy urls.
   ```
@@ -159,6 +160,32 @@ httpRequestMiddleware.config.customUrls = require('./custom-urls.json');
 httpRequestMiddleware.config.proxyUrls = require('./proxy-urls.json');
 ```
 
+## Advanced custom-url.json Configuration
+custom-url can take a `condition` in which, if it evaluates to true, the mock is used, else the next active `condition` is used.
+### condition options
+#### req
+middleware `req` parameter, has properties such as `req.method`
+
+#### params
+concatenated object with both query parameters and request payload
+
+### Example
+```
+{
+  "/api/conditional": {
+    "responses": [ 
+      {"name": "case 1", "url": "api-responses/foo.json", "condition": "req.method === 'POST'", "statusCode": 201, "active": true},
+      {"name": "case 2", "url": "api-responses/foo.json", "condition": "req.method === 'POST'"},
+      {"name": "case 3", "url": "api-responses/foo2.json", "condition": "params.a === 'foo'", "statusCode": 500, "active": true},
+      {"name": "case 4", "url": "api-responses/foo2.json", "condition": "params.a === 'foo'"},
+      {"name": "case 5", "url": "api-responses/foo3.json", "active": true}
+    ]
+  }
+}
+
+
+```
+
 ## Compatible servers
 `http-request-middleware` is compatible with the following servers:
 
@@ -170,6 +197,7 @@ httpRequestMiddleware.config.proxyUrls = require('./proxy-urls.json');
 * [grunt-browser-sync](https://www.npmjs.com/package/grunt-browser-sync)
 * [gulp-connect](https://www.npmjs.com/package/gulp-connect)
 * [gulp-webserver](https://www.npmjs.com/package/gulp-webserver)
+* [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
 
 ## License
 
