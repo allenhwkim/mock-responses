@@ -9,6 +9,12 @@ var url = require('url');
 var httpProxy = require('http-proxy');
 
 var config = require(__dirname + '/config.js');
+for (var pattern in config.customUrls) {
+  let value = config.customUrls[pattern];
+  if (typeof value === 'string') {
+    config.customUrls[pattern] = { "responses": [ {"name": "Unnamed", "url": value, "active": true} ] }
+  }
+}
 
 function isMatching(req, customUrl) {
   if (customUrl.active && !customUrl.condition) {
