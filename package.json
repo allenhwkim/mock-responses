@@ -12,7 +12,7 @@
   "devDependencies": {
     "browser-sync": "^2.23.5",
     "express": "^4.16.2",
-    "mce": "^0.8.4",
+    "mce": "^0.8.6",
     "nodemon": "^1.18.3"
   },
   "scripts": {

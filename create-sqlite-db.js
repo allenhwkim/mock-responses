@@ -26,11 +26,11 @@ db.exec(`
 `);
 db.exec(`
   INSERT INTO mock_responses(active, req_url, res_body) VALUES
-  (true, '/api/hello', '["hello"]'),
-  (true, '/api/world', '["world"]'),
-  (true, '/api/foo', '{ "foo": "this is foo.json One"}'),
-  (false, '/api/foo', '{ "foo": "this is foo.json Two"}'),
-  (false, '/api/foo', '{ "foo": "this is foo.json Three"}');
+  (true, '/api/hello', '[\n  "hello"\n]'),
+  (true, '/api/world', '[\n  "world"\n]'),
+  (true, '/api/foo', '{\n  "foo": "this is foo.json One"\n}'),
+  (false, '/api/foo', '{\n  "foo": "this is foo.json Two"\n}'),
+  (false, '/api/foo', '{\n  "foo": "this is foo.json Three"\n}');
 `);
 
 rows = db.prepare("SELECT * FROM mock_responses").all();

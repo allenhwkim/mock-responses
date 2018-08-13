@@ -26,6 +26,9 @@ function getMockResponse(id) {
 function insertMockResponse(data) {
   data.name = data.name || 'Unnamed';
   data.req_method = data.req_method || 'GET';
+  try {
+    data.res_body = JSON.stringify(JSON.parse(data.res_doby), null, '  '); 
+  } catch(e) {}
   const sql = `
     INSERT INTO mock_responses(name, active, req_url, req_method, 
       res_status, res_content_type, res_body) VALUES 
