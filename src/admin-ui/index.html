@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1, width=device-width">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="https://unpkg.com/mce/dist/themes/blue.css">
+    <link rel="stylesheet" href="https://unpkg.com/mce/dist/mce.min.css">
+    <script src="https://unpkg.com/mce/dist/mce.min.js"></script>
+
+    <style>
+      body { font-family: sans-serif; margin: 0; }
+      body.mce-desktop mce-router { margin-left: 320px; height: calc(100vh - 56px); overflow: auto;}
+      *, *:before, *:after { box-sizing: border-box; }
+      .container { padding: 12px; }
+      mce-router {height: calc(100% - 112px); padding: 12px;}
+      .clear-both:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
+      .float-right { float: right; }
+      .float-left { float: left; }
+      .mce { position: absolute; bottom: 0;  width: 100% }
+      mce-dialog .mce-content {white-space: pre; height: 60vh; width: 60vw; overflow: auto;}
+    </style>
+  </head>
+  <body>
+    <mce-nav-drawer>
+      <h2 class="mce-top-header" style="vertical-align:middle">
+        Mock Responses
+      </h2>
+      <mce-nav-item href="#mock-responses" icon="fa-cogs">Custom Urls</mce-nav-item>
+      <mce-nav-item href="#proxy-responses" icon="fa-server">Proxy Urls</mce-nav-item>
+      <mce-nav-item class="mce" href="https://mymce.github.io/" icon="fa-github">Built With MCE</mce-nav-item>
+    </mce-nav-drawer>
+
+    <mce-app-bar>
+      <div class="mce-nav-icon">
+        <mce-icon onclick="document.querySelector('mce-nav-drawer').open()">menu</mce-icon>
+      </div>
+      <h1 class="mce-title">Welcome To Mock Responses</h1>
+      <div class="mce-icons">
+        <mce-icon href="https://github.com/allenhwkim/mock-responses">fa-github</mce-icon>
+      </div>
+    </mce-app-bar>
+
+    <mce-router>
+      <mce-route path="mock-responses" no-cache
+       import="developer/mock-responses.html"></mce-route>
+      <mce-route path="mock-edit-([0-9]+)" no-cache 
+        import="developer/mock-responses/:id/edit.html"></mce-route>
+      <mce-route path="mock-new" import="developer/mock-responses/new.html"></mce-route>
+      <mce-route path="proxy-responses" no-cache 
+        import="developer/proxy-responses.html"></mce-route>
+      <mce-route path="proxy-edit-([0-9]+)" no-cache 
+        import="developer/proxy-responses/:id/edit.html"></mce-route>
+      <mce-route path="proxy-new" import="developer/proxy-responses/new.html"></mce-route>
+      <mce-route path="" redirect="mock-responses"></mce-route>
+    </mce-router>
+
+    <mce-dialog id="dialog">
+      <h3 class="mce-title"></h3>
+      <div class="mce-content">Share This</div>
+      <div class="mce-actions"></div>
+    </mce-dialog>
+
+  </body>
+</html>

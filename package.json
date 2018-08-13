@@ -1,25 +1,28 @@
 {
-  "name": "http-request-middleware",
-  "version": "0.2.4",
+  "name": "mock-responses",
+  "version": "0.3.0",
   "description": "espress-kind http request middleware",
   "main": "index.js",
   "dependencies": {
-    "ejs": "^2.5.7",
+    "better-sqlite3": "^4.1.4",
+    "ejs": "^2.6.1",
     "http-proxy": "^1.16.2",
-    "http-proxy-middleware": "^0.17.4",
-    "mce": "^0.4.8"
+    "http-proxy-middleware": "^0.17.4"
   },
   "devDependencies": {
     "browser-sync": "^2.23.5",
-    "express": "^4.16.2"
+    "express": "^4.16.2",
+    "mce": "^0.8.4",
+    "nodemon": "^1.18.3"
   },
   "scripts": {
-    "start": "node test/browser-sync.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon demo/express.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "create-sqlite-db.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/allenhwkim/http-request-middleware.git"
+    "url": "git+https://github.com/allenhwkim/mock-responses.git"
   },
   "keywords": [
     "express",
@@ -29,9 +32,9 @@
   "author": "Allen Kim <allenhwkim@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/allenhwkim/http-request-middleware/issues"
+    "url": "https://github.com/allenhwkim/mock-responses/issues"
   },
-  "homepage": "https://github.com/allenhwkim/http-request-middleware#readme",
+  "homepage": "https://github.com/allenhwkim/mock-responses#readme",
   "httpRequestMiddleware": {
     "basePath": "test",
     "headUrls": [

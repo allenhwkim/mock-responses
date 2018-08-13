@@ -1,0 +1,100 @@
+<style>
+  form.mock-response {padding: 12px;}
+  form.mock-response fieldset {margin: 12px 0; border: 1px solid #ccc;}
+  form:invalid mce-button.mce-dark {background-color: inherit; color: inherit; pointer-events: none}
+</style>
+
+<script>
+  function submitForm() {
+    let values = {};
+    Array.from(document.querySelector('#form').elements)
+      .filter(el => el.name)
+      .forEach(el => values[el.name] = el.value);
+    values.active = document.querySelector('#form #active').checked ? 1 : 0;
+
+    window.fetch(`/developer/api/mock-responses/${values.id}`, {
+      method: 'PUT',
+      body: JSON.stringify(values),
+      headers: { 'Content-Type': 'application/json' } 
+    }).then(resp => { if (!resp.ok) throw('update error'); })
+      .then(json => window.location.hash = '#mock-responses')
+      .catch(error => alert('Update Error happened, please refer console message'));
+    return false;
+  }
+</script>
+
+<!-- <pre><%= JSON.stringify(data) %> </pre> -->
+<form id="form" class="mock-response" novalidate onsubmit="return submitForm();">
+  <input type="hidden" name="id" value="<%=data.id%>" />
+  <mce-text-field label="Name"
+    name="name"
+    value="<%= data.name %>"
+    optional="(optional)"
+    helper-text="Name to represent this mock response">
+  </mce-text-field>
+  <br/>
+  <br/> &nbsp; 
+  <mce-checkbox id="active" name="active"
+    <%= data.active ? "checked=\"checked\"" : "" %>>
+  </mce-checkbox>
+  <label for="active">Active</label>
+  <br/>
+  <fieldset>
+    <legend> Request </legend>
+    <mce-text-field name="req_method" 
+      value="<%= data.req_method %>"
+      optional="(optional)"
+      label="Request Method"
+      pattern-error="Must be GET, POST, PUT, or DELETE"
+      pattern="^(GET|POST|PUT|DELETE)$">
+    </mce-text-field>
+    <br/>
+    <mce-text-field name="req_url" required
+      value="<%= data.req_url %>"
+      class="mce-dirty"
+      style="min-width: 600px"
+      label="URL"
+      helper-text="URL that respond with the below response"
+      pattern-error="Please enter url. e.g. /api/v1/foo"
+      pattern="^\/[\w.,@?^=%&amp;:\/~+#-]+">
+    </mce-text-field>
+  </fieldset>
+  <fieldset>
+    <legend> Response</legend>
+    <mce-text-field label="Status Code" name="res_status"
+      value="<%= data.res_status %>"
+      helper-text="Http response status code. default 200"
+      type="number"
+      max="600"
+      min="200"
+      value="200"
+      min-error="Http response status code must be greater than 200"
+      max-error="Http response status code must be greater than 600">
+    </mce-text-field>
+    <br/>
+    <mce-text-field name="res_content_type"
+      value="<%= data.res_content_type %>"
+      helper-text="Response Content Type"
+      value="application/json"
+      pattern-error="Please enter mime type of response.e.g. text/html"
+      pattern="^\w+\/\w+"
+      label="Content Type">
+    </mce-text-field>
+    <br/>
+    <mce-text-field label="Response Contents" name="res_body"
+      required
+      value="<%= data.res_body %>"
+      class="mce-dirty"
+      style="min-width:100%"
+      helper-text="Mock response contents"
+      multi-line
+      type="number">
+    </mce-text-field>
+  </fieldset>
+  <br/>
+  <mce-button onclick="submitForm()"
+    class="mce-raised mce-dark">
+    <span>Submit</span>
+  </mce-button>
+
+</form>

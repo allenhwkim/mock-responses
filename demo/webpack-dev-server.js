@@ -1,7 +1,9 @@
+#!/usr/bin/env node
+
 const express = require('express');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
-const httpRequestMiddleware = require('http-request-middleware');
+const mockResponses = require('http-request-middleware');
 
 const app = express();
 const config = require('./webpack.config.js');
@@ -14,7 +16,7 @@ app.use(webpackDevMiddleware(compiler, {
 }));
 
 // Tell express to use http-request-middlewares
-httpRequestMiddleware.middlewares.forEach(mw => app.use(mw))
+mockResponses.forEach(mw => app.use(mw))
 
 // Serve the files on port 3000.
 app.listen(3000, function () {

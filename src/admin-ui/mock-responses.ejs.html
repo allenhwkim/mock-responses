@@ -1,0 +1,92 @@
+<style>
+.mock-responses { padding: 10px; }
+.mock-responses table { margin: 10px 0; }
+.mock-responses table th { background-color: #999; color: #fff; padding: 8px; }
+.mock-responses table td { padding: 4px; }
+.mock-responses table tr:nth-child(odd) { background: #eee; }
+a { text-decoration: none }
+</style>
+
+<script>
+  function deleteMock(id) {
+    window.fetch(`/developer/api/mock-responses/${id}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' }
+    }).then(resp => { if (!resp.ok) throw('delete error'); })
+      .then(json => window.location.hash = '#mock-responses')
+      .then(json => window.location.reload())
+      .catch(error => alert(error));
+  }
+
+  function playMock(method, url) {
+    let dialog = document.getElementById('dialog');
+
+    window.fetch(url, {method: method || 'GET'})
+      .then(resp => { if (!resp.ok) throw('error'); return resp.text(); })
+      .then(resp => {
+        dialog.open({
+          //title: 'Custim Title',
+          contents: resp,
+          //actions: {'Custom Button': () => alert('My Button is clicked.')}
+        });
+      })
+      .catch(error => alert(error));
+  }
+</script>
+
+<div class="mock-responses">
+  The following pattern-matcing requests are intercepted and served by Mock Responses.
+  <div id="mock-responses-data">
+    <a href="#mock-new">
+      <mce-button class="mce-dark">
+        <mce-icon class="fa fa-plus"></mce-icon>
+        Create New Mock Response
+      </mce-button>
+    </a>
+    <table class="data">
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Active</th>
+        <th>URL</th>
+        <th>Content Type</th>
+        <th>Response</th>
+        <th>Actions</th>
+      </tr>
+    <% data.forEach(el => { %>
+      <tr>
+        <td><%= el.id %></td>
+        <td><%= el.name %></td>
+        <td><%= el.active ? 'Yes':'no' %></td>
+        <td><%= el.req_method%> <%= el.req_url %></td>
+        <td><%= el.res_content_type %></td>
+        <td><%= el.res_body.length < 80 ? el.res_body : el.res_body.substr(0, 80) + ' ...' %></td>
+        <td>
+          <a href="#mock-responses" onclick="playMock('<%= el.req_method%>', '<%= el.req_url%>')">
+           <mce-icon class="mce-small mce-circle">play_arrow</mce-icon>
+          </a>
+          <a href="#mock-edit-<%= el.id %>">
+            <mce-icon class="mce-small mce-circle"><i class="fa fa-info"></i></mce-icon>
+          </a>
+          <a href="#mock-responses" onclick="deleteMock(<%= el.id %>)">
+            <mce-icon class="mce-small mce-circle"><i class="fa fa-trash"></i></mce-icon>
+          </a>
+        </td>
+      </tr>
+    <% }); %>
+    </table>
+  </div>
+
+  <mce-dialog id="dialog">
+    <h3 class="mce-title">Default Title</h3>
+    <div class="mce-content">Default contents</div>
+    <div class="mce-actions"></div>
+  </mce-dialog>
+</div>
+
+<!--
+<mce-blocker class="loading">
+  <mce-refresh-indicator class="mce-loading mce-no-border"></mce-refresh-indicator>
+</mce-blocker>
+-->
+<!-- <mce-snackbar bottom="0">A Custom URL has been updated.</mce-snackbar> -->
