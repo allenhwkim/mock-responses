@@ -2,7 +2,7 @@
 .mock-responses { padding: 10px; }
 .mock-responses table { margin: 10px 0; }
 .mock-responses table th { background-color: #999; color: #fff; padding: 8px; }
-.mock-responses table td { padding: 4px; }
+.mock-responses table td { padding: 4px; white-space: nowrap; }
 .mock-responses table tr:nth-child(odd) { background: #eee; }
 a { text-decoration: none }
 </style>
@@ -24,10 +24,12 @@ a { text-decoration: none }
     window.fetch(url, {method: method || 'GET'})
       .then(resp => { if (!resp.ok) throw('error'); return resp.text(); })
       .then(resp => {
+        try {
+          resp = JSON.stringify(JSON.parse(resp), null, '  ');
+        } catch(e) {}
         dialog.open({
-          //title: 'Custim Title',
+          //title: 'Custim Title', actions: {'Custom Button': () => alert('My Button is clicked.')}
           contents: resp,
-          //actions: {'Custom Button': () => alert('My Button is clicked.')}
         });
       })
       .catch(error => alert(error));
@@ -58,9 +60,11 @@ a { text-decoration: none }
         <td><%= el.id %></td>
         <td><%= el.name %></td>
         <td><%= el.active ? 'Yes':'no' %></td>
-        <td><%= el.req_method%> <%= el.req_url %></td>
+        <td title="<%= el.req_url %>"><%= el.req_method%> 
+          <%= el.req_url.length < 30 ? el.req_url : el.res_body.substr(0, 30) + ' ...' %>
+        </td>
         <td><%= el.res_content_type %></td>
-        <td><%= el.res_body.length < 80 ? el.res_body : el.res_body.substr(0, 80) + ' ...' %></td>
+        <td><%= el.res_body.length < 30 ? el.res_body : el.res_body.substr(0, 30) + ' ...' %></td>
         <td>
           <a href="#mock-responses" onclick="playMock('<%= el.req_method%>', '<%= el.req_url%>')">
            <mce-icon class="mce-small mce-circle">play_arrow</mce-icon>
