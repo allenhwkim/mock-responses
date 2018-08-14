@@ -3,8 +3,9 @@ const path = require('path');
 const db = require(path.join(__dirname, 'get-db.js')).sqlite3;
 
 function mockResponses(req, res, next) {
-  const sql = `SELECT * FROM mock_responses WHERE req_url = ? AND active = 1 LIMIT 1`;
-  const row = db.prepare(sql).get(req.url);
+  const req_url = req.url.match(/([\/\w-.]+)/)[0];
+  const sql = `SELECT * FROM mock_responses WHERE req_url = '${req_url}' AND active = 1 LIMIT 1`;
+  const row = db.prepare(sql).get();
 
   if (row) {
     console.log('CUSTOM-URL MIDDLEWARE', req.url, row.req_url);
