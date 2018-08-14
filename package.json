@@ -18,7 +18,6 @@
   "scripts": {
     "start": "nodemon demo/express.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "VERSION=`node -p \"require('./package.json').version\"` && git tag -a v$VERSION -m $VERSION",
     "postinstall": "node create-sqlite-db.js"
   },
   "repository": {
