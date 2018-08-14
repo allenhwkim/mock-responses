@@ -1,12 +1,12 @@
-# http-request-middleware
+# mock-responses
 
-NodeJS http request handling middleware with admin UI.
+NodeJS http request handling middleware, a mock server, with admin UI.
 
-Is your back-end api not ready, too slow, or unstable? You don't have to wait for that by mocking all back-end responses using `http-request-middleware`.
+Is your back-end api not ready, too slow, or unstable? You don't have to wait for that by mocking all back-end responses using `mock-responses`.
 
 Compatible with [connect](https://github.com/senchalabs/connect), [express](https://github.com/strongloop/express), [browser-sync](https://github.com/BrowserSync/browser-sync) and [many more](#compatible-servers).
 
-![image](https://user-images.githubusercontent.com/1437734/34921357-fd4a5be4-f94e-11e7-8273-a3c94d3b38c9.png)
+![image](https://user-images.githubusercontent.com/1437734/44070798-cd75a576-9f53-11e8-86f7-d902393aa35e.png)
 
 ## TL;DR
 
@@ -14,180 +14,43 @@ Add the middleware to your code before you start the server.
 
 ```javascript
 var express = require('express');
-var httpRequestMiddleware = require('http-request-middleware');
+var httpRequestMiddleware = require('mock-responses');
 
 var app = express();
-app.use(httpRequestMidleware.middlewares);
+app.use(httpRequestMidleware);
 app.listen(3000);
 ```
 
 ## Install
 
   ```javascript
-  $ npm install --save-dev http-request-middleware
+  $ npm install --save-dev mock-responses
   ```
 
 ## Getting Started
-
-  ### 1. Create mock responses and list to `custom-urls.json`
+  ### 1. Start your development server with mock-responses middleware
+  #### `express` example
   ```
-  {
-    "/api/hello": "hello.json",
-    "/api/world": "world.json",
-    "/api/foo": {
-      "responses": [ 
-        {"name": "case 1", "url": "api-responses/foo.json", "active": true},
-        {"name": "case 2", "url": "api-responses/foo2.json"},
-        {"name": "case 3", "url": "api-responses/foo3.json"}
-      ]
-    },
-    "/api/bar": {
-      "responses": [ 
-        {"name": "case 1", "url": "api-responses/bar.json", "active": true},
-        {"name": "case 2", "url": "api-responses/bar2.json"},
-        {"name": "case 3", "url": "api-responses/bar3.json"}
-      ]
-    }
-  }
+  const express = require('express');
+  const path = require('path');
+  const mockResponses = require(__dirname + '/../index.js');
+
+  const app = express()
+  mockResponses.forEach(mw => app.use(mw))
+
+  app.listen(3000, () => console.log('Example app listening on port 3000!'))
   ```
   
-  ### 2. Optionally, create `proxy-urls.json` to use proxy features.
+  ### 2. Visit admin UI `/developer#mock-responses` to manage mock or proxy responses.
   ```
-  [
-    {
-      "active":true,
-      "context": [
-        "api/foo"
-      ],
-      "options": {
-        "logLevel": "debug",
-        "target": "https://www.yourServer.com",
-        "secure": false,
-        "autoRewrite": true,
-        "changeOrigin": true
-      }
-    }
-  ]
+  https://localhost:3000/developer#mock-responses
   ```
   proxy-url options can be found [here](https://github.com/chimurai/http-proxy-middleware#http-proxy-options)
   
-  ### 3. Update `package.json` with the configuration files
-  ```
-  {
-    "name": "my package",
-    "version": "0.1.0",
-    ...
-    httpRequestMiddleware: {
-      "basePath": "./dist",
-      "customUrls": "./custom-urls.json",
-      "proxyUrls": "./proxy-urls.json"
-    }
-  }
-  ```
-
-  ### 4. Start your development server with http-request-middleware
-  #### `browser-sync` example
-  ```
-  var browserSync = require('browser-sync');
-  var httpRequestMiddleware = require('http-request-middleware');
-
-  browserSync.init({
-    logLevel: 'debug',
-    host: 'localhost.rogers.com', // e.g. localhost.mysite.com
-    port: 3000,
-    startPath: '/',
-    ui:  { port:  3001 },
-    open: 'external',
-    browser: 'default',
-    server: {
-      baseDir: __dirname,
-      middleware: httpRequestMiddleware.middlewares
-    },
-    https: true
-  });
-  ```
-  #### [`connect` example](test/connect.js)
-  #### [`express` example](test/express.js)
-  #### [`webpack` example](test/webpack-dev-server.js)
-
-  ### 5. Visit admin UI `/developer.html` to manage custom urls and/or proxy urls.
-  ```
-  https://localhost:3000/developer.html
-  ```
-
-## Configuration
-
-|Option|Description|
-|--|--|
-|basePath| the base path that .json files are located. e.g. 'builds/dist'
-|customUrls| the file path of custom urls configuration file .g. './custom-urls.json'
-|proxyUrls| Optional, the file path of proxy urls configuration file .g. './proxy-urls.json'
-|headUrls| Optional, the list of HTML header files
-|navigationLinks| list of html links to be seen on the side bar of admin UI.
-
-### `package.json` Example
-```
-{
-  "name": "eclipse",
-  "version": "0.2.7",
-  ...
-  "httpRequestMiddleware": {
-    "basePath": "builds/dist",
-    "customUrls": "gulp-tasks/browser-sync/custom-urls.json",
-    "proxyUrls": "gulp-tasks/browser-sync/proxy-urls.json",
-    "headUrls": [
-      "https://fonts.googleapis.com/icon?family=Material+Icons",
-      "https://unpkg.com/font-awesome@4.7.0/css/font-awesome.css",
-      "https://unpkg.com/mce/dist/themes/blue.css",
-      "https://unpkg.com/mce/dist/mce.min.css",
-      "https://unpkg.com/mce/dist/mce.min.js"
-    ],
-    "navigationlinks": [
-      "<mce-nav-item href='https://example.com/my-document' icon='fa-book'>Documents</mce-nav-item>",
-      "<mce-nav-item href='/web/consumer/developer' icon='link'>Links</mce-nav-item>"
-    ]
-  }
-}
-```
-
-### Custom File Configuration Example
-```
-'use strict';
-var httpRequestMiddleware = require('http-request-middleware');
-
-httpRequestMiddleware.config.basePath = './api-responses'; // where .json(s) exists
-httpRequestMiddleware.config.customUrls = require('./custom-urls.json');
-httpRequestMiddleware.config.proxyUrls = require('./proxy-urls.json');
-```
-
-## Advanced custom-url.json Configuration
-custom-url can take a `condition` in which, if it evaluates to true, the mock is used, else the next active `condition` is used.
-### condition options
-#### req
-middleware `req` parameter, has properties such as `req.method`
-
-#### params
-concatenated object with both query parameters and request payload
-
-### Example
-```
-{
-  "/api/conditional": {
-    "responses": [ 
-      {"name": "case 1", "url": "api-responses/foo.json", "condition": "req.method === 'POST'", "statusCode": 201, "active": true},
-      {"name": "case 2", "url": "api-responses/foo.json", "condition": "req.method === 'POST'"},
-      {"name": "case 3", "url": "api-responses/foo2.json", "condition": "params.a === 'foo'", "statusCode": 500, "active": true},
-      {"name": "case 4", "url": "api-responses/foo2.json", "condition": "params.a === 'foo'"},
-      {"name": "case 5", "url": "api-responses/foo3.json", "active": true}
-    ]
-  }
-}
-
-
-```
-
+  ### DONE!!
+  
 ## Compatible servers
-`http-request-middleware` is compatible with the following servers:
+`mock-responses` is compatible with the following servers:
 
 * [connect](https://www.npmjs.com/package/connect)
 * [express](https://www.npmjs.com/package/express)
