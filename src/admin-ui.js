@@ -11,10 +11,11 @@ function getHTML(templatePath, data) {
   return html;
 }
 
-function getMockResponses(cond={}) {
-  let sql = `SELECT * FROM mock_responses WHERE 1 `;
-  sql += cond.active ? `AND active = $cond.active `: '';
-  sql += cond.req_url ? `AND req_url LIKE '%${cond.req_url}%' `: '';
+function getMockResponses(key) {
+  let sql = `SELECT * FROM mock_responses`;
+  if (key !== 'undefined') {
+    sql += ` WHERE name like '%${key}%' OR req_url like '%${key}%' OR res_body like '%${key}%' `;
+  }
   return db.prepare(sql).all();
 }
 
@@ -52,7 +53,6 @@ function updateMockResponse(data) {
       res_body =  '${data.res_body}'
     WHERE id = ${data.id};
     `;
-  console.log('sql', sql);
   return db.exec(sql) ? 'updated' : 'error';
 }
 
@@ -87,7 +87,6 @@ function updateProxyResponse(data) {
         options = '${data.options}'
     WHERE id = ${data.id};
     `;
-  console.log('xxxxxxxx>>>>>>>>>>>>', sql)
 
   return db.exec(sql) ? 'updated' : 'error';
 }
@@ -99,7 +98,6 @@ function deleteProxyResponse(id) {
 
 var adminUIMiddleware = function(req, res, next) {
   const reqUrl = url.parse(req.url, true);
-  console.log('xxxxxxxxxxxx', reqUrl);
 
   if (reqUrl.pathname.match(/^\/developer/)) {
     console.log('DEVELOPER-URL MIDDLEWARE', reqUrl.pathname);
@@ -120,7 +118,6 @@ var adminUIMiddleware = function(req, res, next) {
         if (req.method == 'GET') {           // read
           resp = getMockResponse(id);
         } else if (req.method == 'PUT') {    // update
-          console.log('>>>>>>>>>>>>>>>>>>>>> req.body', req.body);
           resp = updateMockResponse(req.body);
         } else if (req.method == 'DELETE') { // delete
           resp = deleteMockResponse(id);
@@ -157,7 +154,7 @@ var adminUIMiddleware = function(req, res, next) {
       let sql, ejsPath, data;
 
       if (reqUrl.pathname === '/developer/mock-responses.html') {
-        data = getMockResponses();
+        data = getMockResponses(reqUrl.query.q);
         html = getHTML('mock-responses.ejs.html', {data}); 
       } else if (reqUrl.pathname === '/developer/mock-responses/new.html') {
         html = getHTML('mock-new.ejs.html'); 

@@ -42,8 +42,8 @@
     </mce-app-bar>
 
     <mce-router>
-      <mce-route path="mock-responses" no-cache
-       import="developer/mock-responses.html"></mce-route>
+      <mce-route path="mock-responses\??q?=?(\w+)?" no-cache
+        import="developer/mock-responses.html?q=:key"></mce-route>
       <mce-route path="mock-edit-([0-9]+)" no-cache 
         import="developer/mock-responses/:id/edit.html"></mce-route>
       <mce-route path="mock-new" import="developer/mock-responses/new.html"></mce-route>

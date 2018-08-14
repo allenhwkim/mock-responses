@@ -5,6 +5,7 @@
 .mock-responses table td { padding: 4px; white-space: nowrap; }
 .mock-responses table tr:nth-child(odd) { background: #eee; }
 a { text-decoration: none }
+.mce-search {float: right;}
 </style>
 
 <script>
@@ -34,6 +35,10 @@ a { text-decoration: none }
       })
       .catch(error => alert(error));
   }
+
+  function search(key) {
+    window.location.hash = `#mock-responses?q=${key}`;
+  }
 </script>
 
 <div class="mock-responses">
@@ -45,6 +50,8 @@ a { text-decoration: none }
         Create New Mock Response
       </mce-button>
     </a>
+    <mce-search class="mce-search mce-visible" on-search="search(keyword)"></mce-search>
+
     <table class="data">
       <tr>
         <th>Id</th>
@@ -61,7 +68,7 @@ a { text-decoration: none }
         <td><%= el.name %></td>
         <td><%= el.active ? 'Yes':'no' %></td>
         <td title="<%= el.req_url %>"><%= el.req_method%> 
-          <%= el.req_url.length < 30 ? el.req_url : el.res_body.substr(0, 30) + ' ...' %>
+          <%= el.req_url.length < 30 ? el.req_url : el.req_url.substr(0, 30) + ' ...' %>
         </td>
         <td><%= el.res_content_type %></td>
         <td><%= el.res_body.length < 30 ? el.res_body : el.res_body.substr(0, 30) + ' ...' %></td>
