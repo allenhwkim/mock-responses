@@ -47,7 +47,7 @@ app.listen(3000);
   ```
   proxy-url options can be found [here](https://github.com/chimurai/http-proxy-middleware#http-proxy-options)
   
-  ### DONE!!
+  ### 3. DONE!!
   
 ## Compatible servers
 `mock-responses` is compatible with the following servers:
