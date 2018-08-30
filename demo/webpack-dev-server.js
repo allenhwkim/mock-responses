@@ -3,7 +3,7 @@
 const express = require('express');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
-const mockResponses = require('http-request-middleware');
+const mockResponses = require('mock-responses');
 
 const app = express();
 const config = require('./webpack.config.js');
