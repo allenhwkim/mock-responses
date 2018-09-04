@@ -56,6 +56,16 @@ function updateMockResponse(data) {
   return db.exec(sql) ? 'updated' : 'error';
 }
 
+function activateMockResponse(id) {
+  const data = getMockResponse(id);
+  const deactivateSql = `UPDATE mock_responses SET active = 0 WHERE id <> ${id} AND req_url = '${data.url}'`;
+  const active = data.active ? 0 : 1; 
+  const activateSql = `UPDATE mock_responses SET active = ${active} WHERE id = ${id}`;
+
+  return db.exec(deactivateSql) 
+    && db.exec(activateSql) ? 'activated' : 'error';
+}
+
 function deleteMockResponse(id) {
   const sql = `DELETE FROM mock_responses where id=${id}`;
   return db.exec(sql) ? 'deleted' : 'error';
@@ -121,6 +131,10 @@ var adminUIMiddleware = function(req, res, next) {
           resp = updateMockResponse(req.body);
         } else if (req.method == 'DELETE') { // delete
           resp = deleteMockResponse(id);
+        }
+      } else if (reqUrl.pathname.match(/mock-responses\/[0-9]+\/activate$/)) {
+        if (req.method == 'PUT') {    // update
+          resp = activateMockResponse(id);
         }
       }
 

@@ -39,6 +39,17 @@ a { text-decoration: none }
   function search(key) {
     window.location.hash = `#mock-responses?q=${encodeURIComponent(key)}`;
   }
+
+  function toggle(id) {
+    window.fetch(`/developer/api/mock-responses/${id}/activate`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' }
+    }).then(resp => { if (!resp.ok) throw('activateion error error'); })
+      .then(json => window.location.hash = '#mock-responses')
+      .then(json => window.location.reload())
+      .catch(error => alert(error));
+  }
+
 </script>
 
 <div class="mock-responses">
@@ -66,7 +77,11 @@ a { text-decoration: none }
       <tr>
         <td><%= el.id %></td>
         <td><%= el.name %></td>
-        <td><%= el.active ? 'Yes':'no' %></td>
+        <td>&nbsp;
+          <a href="#mock-responses" onclick="toggle(<%= el.id%>)">
+            <mce-switch <%= el.active ? 'checked' : '' %>></mce-switch>
+          </a>
+        </td>
         <td title="<%= el.req_url %>"><%= el.req_method%> 
           <%= el.req_url.length < 30 ? el.req_url : el.req_url.substr(0, 30) + ' ...' %>
         </td>
