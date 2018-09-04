@@ -58,7 +58,9 @@ function updateMockResponse(data) {
 
 function activateMockResponse(id) {
   const data = getMockResponse(id);
-  const deactivateSql = `UPDATE mock_responses SET active = 0 WHERE id <> ${id} AND req_url = '${data.url}'`;
+  console.log('data.....', data);
+  const deactivateSql = `UPDATE mock_responses SET active = 0 WHERE id <> ${id} AND req_url = '${data.req_url}'`;
+  console.log('deactivateSql.....', deactivateSql);
   const active = data.active ? 0 : 1; 
   const activateSql = `UPDATE mock_responses SET active = ${active} WHERE id = ${id}`;
 

@@ -45,7 +45,7 @@ a { text-decoration: none }
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' }
     }).then(resp => { if (!resp.ok) throw('activateion error error'); })
-      .then(json => window.location.hash = '#mock-responses')
+      //.then(json => window.location.hash = '#mock-responses')
       .then(json => window.location.reload())
       .catch(error => alert(error));
   }
