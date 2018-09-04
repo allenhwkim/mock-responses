@@ -37,7 +37,7 @@ a { text-decoration: none }
   }
 
   function search(key) {
-    window.location.hash = `#mock-responses?q=${key}`;
+    window.location.hash = `#mock-responses?q=${encodeURIComponent(key)}`;
   }
 </script>
 
