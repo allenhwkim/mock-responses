@@ -5,6 +5,13 @@ const ejs = require('ejs');
 const path = require('path');
 const db = require(path.join(__dirname, 'get-db.js')).sqlite3;
 
+// Add a column if not exists
+try {
+  let resp = db.exec('select res_delay_sec from mock_responses limit 1');
+} catch(e) {
+  db.exec('ALTER TABLE mock_responses ADD COLUMN res_delay_sec integer');
+}
+
 function getHTML(templatePath, data) {
   const contents = fs.readFileSync(path.join(__dirname, 'admin-ui', templatePath), 'utf8');
   const html = ejs.render(contents, data);
@@ -32,10 +39,10 @@ function insertMockResponse(data) {
   } catch(e) {}
   const sql = `
     INSERT INTO mock_responses(name, active, req_url, req_method, 
-      res_status, res_content_type, res_body) VALUES 
+      res_status, res_delay_sec, res_content_type, res_body) VALUES 
       (
        '${data.name}', ${data.active}, '${data.req_url}', '${data.req_method}',
-       ${data.res_status}, '${data.res_content_type}', '${data.res_body}'
+       ${data.res_status}, ${data.res_delay_sec || 'NULL'}, '${data.res_content_type}', '${data.res_body}'
       )
     `;
   return db.exec(sql) ? 'inserted' : 'error';
@@ -49,6 +56,7 @@ function updateMockResponse(data) {
       req_url = '${data.req_url}',
       req_method = '${data.req_method}',
       res_status = ${data.res_status},
+      res_delay_sec = ${data.res_delay_sec || 'NULL'},
       res_content_type = '${data.res_content_type}',
       res_body =  '${data.res_body}'
     WHERE id = ${data.id};

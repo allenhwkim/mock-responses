@@ -67,9 +67,19 @@
       type="number"
       max="600"
       min="200"
-      value="200"
+      value="<%= data.resp_status %>"
       min-error="Http response status code must be greater than 200"
       max-error="Http response status code must be greater than 600">
+    </mce-text-field>
+    <mce-text-field label="Delay Time" name="res_delay_sec"
+      value="<%= data.res_delay_sec %>"
+      helper-text="Response delay in seconds. default 0"
+      type="number"
+      max="100"
+      min="0"
+      value="<%= data.resp_delay_sec %>"
+      min-error="Http response status code must be greater than -1"
+      max-error="Http response status code must be greater than 100">
     </mce-text-field>
     <br/>
     <mce-text-field name="res_content_type"

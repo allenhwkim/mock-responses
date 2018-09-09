@@ -8,11 +8,14 @@ function mockResponses(req, res, next) {
   const row = db.prepare(sql).get();
 
   if (row) {
-    console.log('CUSTOM-URL MIDDLEWARE', req.url, row.req_url);
-    res.setHeader('Content-Type', row.res_content_type);
-    res.statusCode = row.res_status;
-    res.write(row.res_body);
-    res.end();
+    console.log('MOCK-RESPONSES : ', req.url, row.req_url);
+    row.res_delay_sec && console.log('MOCK-RESPONSES : Delaying ', row.res_delay_sec, 'seconds');
+    setTimeout(_ => {
+      res.setHeader('Content-Type', row.res_content_type);
+      res.statusCode = row.res_status;
+      res.write(row.res_body);
+      res.end();
+    }, (row.res_delay_sec || 0) * 1000);
   } else {
     next();
   }
