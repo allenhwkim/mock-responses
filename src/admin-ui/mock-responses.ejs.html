@@ -69,7 +69,7 @@ a { text-decoration: none }
         <th>Name</th>
         <th>Active</th>
         <th>URL</th>
-        <th>Content Type</th>
+        <th>Delay</th>
         <th>Response</th>
         <th>Actions</th>
       </tr>
@@ -85,7 +85,7 @@ a { text-decoration: none }
         <td title="<%= el.req_url %>"><%= el.req_method%> 
           <%= el.req_url.length < 30 ? el.req_url : el.req_url.substr(0, 30) + ' ...' %>
         </td>
-        <td><%= el.res_content_type %></td>
+        <td><%= el.res_delay_sec %></td>
         <td><%= el.res_body.length < 30 ? el.res_body : el.res_body.substr(0, 30) + ' ...' %></td>
         <td>
           <a href="#mock-responses" onclick="playMock('<%= el.req_method%>', '<%= el.req_url%>')">
