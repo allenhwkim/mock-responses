@@ -2,6 +2,12 @@
   form.mock-response {padding: 12px;}
   form.mock-response fieldset {margin: 12px 0; border: 1px solid #ccc;}
   form:invalid mce-button.mce-dark {background-color: inherit; color: inherit; pointer-events: none}
+  mce-text-field.code-input  textarea { 
+    background-color: #eee !important; 
+    font-size: 14px !important; 
+    line-height: 16px !important; 
+    color: #666 !important;
+  }
 </style>
 
 <script>
@@ -91,7 +97,7 @@
       label="Content Type">
     </mce-text-field>
     <br/>
-    <mce-text-field label="Response Contents" name="res_body"
+    <mce-text-field class="code-input" label="Response Contents" name="res_body"
       required
       value="<%= data.res_body %>"
       class="mce-dirty"
