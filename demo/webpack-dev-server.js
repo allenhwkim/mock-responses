@@ -3,7 +3,7 @@
 const express = require('express');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
-const mockResponses = require('mock-responses');
+const mockResponses = require('mock-responses')('./demo/mock-responses.sqlite3');
 
 const app = express();
 const config = require('./webpack.config.js');
@@ -20,5 +20,5 @@ mockResponses.forEach(mw => app.use(mw))
 
 // Serve the files on port 3000.
 app.listen(3000, function () {
-  console.log('Example app listening on port 3000!\n');
+  console.log('[mock-responses] Example app listening on port 3000!\n');
 });

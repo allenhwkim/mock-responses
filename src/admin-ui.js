@@ -3,7 +3,7 @@ const fs = require('fs');
 const url = require('url');
 const ejs = require('ejs');
 const path = require('path');
-const db = require(path.join(__dirname, 'get-db.js')).sqlite3;
+const db = require(path.join(__dirname, 'database.js')).instance;
 
 // Add a column if not exists
 try {
@@ -66,9 +66,7 @@ function updateMockResponse(data) {
 
 function activateMockResponse(id) {
   const data = getMockResponse(id);
-  console.log('data.....', data);
   const deactivateSql = `UPDATE mock_responses SET active = 0 WHERE id <> ${id} AND req_url = '${data.req_url}'`;
-  console.log('deactivateSql.....', deactivateSql);
   const active = data.active ? 0 : 1; 
   const activateSql = `UPDATE mock_responses SET active = ${active} WHERE id = ${id}`;
 
@@ -120,7 +118,7 @@ var adminUIMiddleware = function(req, res, next) {
   const reqUrl = url.parse(req.url, true);
 
   if (reqUrl.pathname.match(/^\/developer/)) {
-    console.log('DEVELOPER-URL MIDDLEWARE', reqUrl.pathname);
+    console.log('[mock-resonses]', reqUrl.pathname);
     
     const id = (reqUrl.pathname.match(/\/([0-9]+)\/?/) || [])[1];
     let html;

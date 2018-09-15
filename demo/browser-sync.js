@@ -3,7 +3,7 @@
 'use strict';
 
 var browserSync = require('browser-sync');
-var mockResponses = require(__dirname + '/../index.js');
+var mockResponses = require(__dirname + '/../index.js')('./demo/mock-responses.sqlite3');
 
 browserSync.init({
   logLevel: 'debug',

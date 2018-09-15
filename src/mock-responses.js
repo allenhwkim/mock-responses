@@ -1,6 +1,6 @@
 const sqlite3 = require('better-sqlite3');
 const path = require('path');
-const db = require(path.join(__dirname, 'get-db.js')).sqlite3;
+const db = require(path.join(__dirname, 'database.js')).instance;
 
 function mockResponses(req, res, next) {
   const req_url = req.url.match(/([\/\w-.]+)/)[0];

@@ -2,7 +2,7 @@
 
 var connect = require('connect');
 var http = require('http');
-var mockResponses = require(__dirname + '/../index.js');
+var mockResponses = require(__dirname + '/../index.js')('./demo/mock-responses.sqlite3');
 
 var app = connect();
 mockResponses.forEach(mw => app.use(mw))

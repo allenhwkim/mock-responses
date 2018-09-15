@@ -1,8 +1,7 @@
 const sqlite3 = require('better-sqlite3');
 const bodyParser = require('body-parser');
 const path = require('path');
-
-const db = require(path.join(__dirname, 'src', 'get-db.js')).sqlite3;
+const glob = require('glob');
 
 // GET     /developer/mock-responses.html
 // GET     /developer/mock-responses/new.html
@@ -20,15 +19,26 @@ const db = require(path.join(__dirname, 'src', 'get-db.js')).sqlite3;
 // GET     /developer/api/proxy-responses/:id
 // PUT     /developer/api/proxy-responses/:id
 // DELETE  /developer/api/proxy-responses/:id
-const adminUI = require(path.join(__dirname, 'src', 'admin-ui.js'));
+const db = require(path.join(__dirname, 'src', 'database.js'));
 
-const mockResponses = require(path.join(__dirname, 'src', 'mock-responses.js'));
+module.exports = dbPath => {
+  if (dbPath) {
+    db.path = dbPath;
+  } else {
+    const dbFile = glob.sync('{,!(node_modules|dist|coverage)**/}mock-responses.sqlite3')[0];
+    console.log('[mock-responses] found sqlite3 database file, setting database path as ', dbFile);
+    db._dbPath = path.join(process.cwd(), dbFile);
+  }
 
-const proxyResponses = require(path.join(__dirname, 'src', 'proxy-responses.js'));
+  const adminUI = require(path.join(__dirname, 'src', 'admin-ui.js'));
+  const mockResponses = require(path.join(__dirname, 'src', 'mock-responses.js'));
+  const proxyResponses = require(path.join(__dirname, 'src', 'proxy-responses.js'));
+  const middlewares = [].concat(
+    bodyParser.json(),
+    adminUI, 
+    mockResponses,
+    proxyResponses
+  );
 
-module.exports = [].concat(
-  bodyParser.json(),
-  adminUI, 
-  mockResponses,
-  proxyResponses
-);
+  return middlewares
+}
