@@ -8,8 +8,8 @@ function mockResponses(req, res, next) {
   const row = db.prepare(sql).get();
 
   if (row) {
-    console.log('MOCK-RESPONSES : ', req.url, row.req_url);
-    row.res_delay_sec && console.log('MOCK-RESPONSES : Delaying ', row.res_delay_sec, 'seconds');
+    console.log('[mock-responses] handling request', row.req_url);
+    row.res_delay_sec && console.log('[mock-responses] Delaying ', row.res_delay_sec, 'seconds');
     setTimeout(_ => {
       res.setHeader('Content-Type', row.res_content_type);
       res.statusCode = row.res_status;
