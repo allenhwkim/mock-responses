@@ -1,6 +1,6 @@
 {
   "name": "mock-responses",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "espress-kind http request middleware",
   "main": "index.js",
   "dependencies": {
