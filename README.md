@@ -14,7 +14,7 @@ Add the middleware to your code before you start the server.
 
 ```javascript
 var express = require('express');
-var httpRequestMiddleware = require('mock-responses');
+var httpRequestMiddleware = require('mock-responses')('./mock-responses.sqlite3');
 
 var app = express();
 app.use(httpRequestMidleware);
