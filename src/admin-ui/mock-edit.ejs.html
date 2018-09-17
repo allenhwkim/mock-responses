@@ -8,6 +8,7 @@
     line-height: 16px !important; 
     color: #666 !important;
   }
+  .time-stamps { font-size: 14px; padding: 12px 24px; color: #ccc; }
 </style>
 
 <script>
@@ -99,7 +100,7 @@
     <br/>
     <mce-text-field class="code-input" label="Response Contents" name="res_body"
       required
-      value="<%= data.res_body %>"
+      value="<%= data.res_body.replace(/\\x27/g, '\'') %>"
       class="mce-dirty"
       style="min-width:100%"
       helper-text="Mock response contents"
@@ -107,7 +108,12 @@
       type="number">
     </mce-text-field>
   </fieldset>
-  <br/>
+  <div class="time-stamps">
+    <div>Created At: <%= new Date(data.created_at) %></div>
+    <div>Created By: <%= data.created_by %></div>
+    <div>Updated At: <%= new Date(data.created_at) %></div>
+    <div>Updated By: <%= data.updated_by %></div>
+  </div>
   <mce-button onclick="submitForm()"
     class="mce-raised mce-dark">
     <span>Submit</span>

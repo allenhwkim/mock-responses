@@ -33,7 +33,10 @@ a { text-decoration: none }
           contents: resp,
         });
       })
-      .catch(error => alert(error));
+      .catch(error => {
+        console.error(error);
+        alert(error)
+      });
   }
 
   function search(key) {
@@ -65,18 +68,17 @@ a { text-decoration: none }
 
     <table class="data">
       <tr>
-        <th>Id</th>
-        <th>Name</th>
+        <th>Id/Name</th>
         <th>Active</th>
         <th>URL</th>
         <th>Delay</th>
+        <th>Response Type</th>
         <th>Response</th>
         <th>Actions</th>
       </tr>
     <% data.forEach(el => { %>
       <tr>
-        <td><%= el.id %></td>
-        <td><%= el.name %></td>
+        <td><%= el.id %><br/><%= el.name %></td>
         <td>&nbsp;
           <a href="#mock-responses" onclick="toggle(<%= el.id%>)">
             <mce-switch <%= el.active ? 'checked' : '' %>></mce-switch>
@@ -85,8 +87,9 @@ a { text-decoration: none }
         <td title="<%= el.req_url %>"><%= el.req_method%> 
           <%= el.req_url.length < 30 ? el.req_url : el.req_url.substr(0, 30) + ' ...' %>
         </td>
-        <td><%= el.res_delay_sec %></td>
+        <td><%= el.res_delay_sec ? el.res_delay_sec + 'seconds' : '' %></td>
         <td><%= el.res_body.length < 30 ? el.res_body : el.res_body.substr(0, 30) + ' ...' %></td>
+        <td><%= el.res_content_type.split('/')[1] %></td>
         <td>
           <a href="#mock-responses" onclick="playMock('<%= el.req_method%>', '<%= el.req_url%>')">
            <mce-icon class="mce-small mce-circle">play_arrow</mce-icon>

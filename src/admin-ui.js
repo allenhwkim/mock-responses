@@ -4,13 +4,31 @@ const url = require('url');
 const ejs = require('ejs');
 const path = require('path');
 const db = require(path.join(__dirname, 'database.js')).instance;
+const username = require('username').sync();
 
-// Add a column if not exists
+
+// --------------------------  Migration start -----------------------
+//  . add res_delay_sec column
 try {
-  let resp = db.exec('select res_delay_sec from mock_responses limit 1');
+  db.exec('select res_delay_sec from mock_responses limit 1');
 } catch(e) {
   db.exec('ALTER TABLE mock_responses ADD COLUMN res_delay_sec integer');
 }
+
+//  . add created_at, created_by, updated_at, updated_by columns
+try {
+  db.exec('select created_at from mock_responses limit 1');
+} catch(e) {
+  db.exec('ALTER TABLE mock_responses ADD COLUMN created_at INTEGER');
+  db.exec('ALTER TABLE mock_responses ADD COLUMN created_by string');
+  db.exec('ALTER TABLE mock_responses ADD COLUMN updated_at INTEGER');
+  db.exec('ALTER TABLE mock_responses ADD COLUMN updated_by string');
+}
+
+try {
+  db.exec(`UPDATE mock_responses SET req_method = NULL WHERE req_method = ''`);
+} catch(e) {}
+// --------------------------  Migration end   -----------------------
 
 function getHTML(templatePath, data) {
   const contents = fs.readFileSync(path.join(__dirname, 'admin-ui', templatePath), 'utf8');
@@ -18,11 +36,22 @@ function getHTML(templatePath, data) {
   return html;
 }
 
+function isFunc(code) {
+  try {
+    new Function(`return ${code}`);
+  } catch(e) {
+    console.error('[mock-responses] function error', e, code);
+    return false;
+  }
+  return true;
+}
+
 function getMockResponses(key) {
   let sql = `SELECT * FROM mock_responses`;
   if (key !== 'undefined') {
-    sql += ` WHERE name like '%${key}%' OR req_url like '%${key}%' OR res_body like '%${key}%' `;
+    sql += `WHERE name like '%${key}%' OR req_url like '%${key}%' OR res_body like '%${key}%' `;
   }
+  sql += ' ORDER BY updated_at DESC';
   return db.prepare(sql).all();
 }
 
@@ -32,33 +61,54 @@ function getMockResponse(id) {
 }
 
 function insertMockResponse(data) {
-  data.name = data.name || 'Unnamed';
-  data.req_method = data.req_method || 'GET';
   try {
     data.res_body = JSON.stringify(JSON.parse(data.res_doby), null, '  '); 
   } catch(e) {}
+
+  const createdAt = new Date().getTime();
+
+  const reqMethod = data.req_method ? `'${data.req_method}'` : 'NULL'; 
+
+  const reqName = data.name ? `'${data.name}'` : 'NULL';
+  const resDelaySec = data.reqDelaySec ? data.res_delay_sec : 'NULL';
+  data.res_content_type === 'text/javascript' && isFunc(data.res_body);
+  const resBody = data.res_body.replace(/'/g,'\\x27');
   const sql = `
     INSERT INTO mock_responses(name, active, req_url, req_method, 
-      res_status, res_delay_sec, res_content_type, res_body) VALUES 
+      res_status, res_delay_sec,
+      res_content_type, res_body,
+      created_at, created_by, updated_at, updated_by
+      ) VALUES 
       (
-       '${data.name}', ${data.active}, '${data.req_url}', '${data.req_method}',
-       ${data.res_status}, ${data.res_delay_sec || 'NULL'}, '${data.res_content_type}', '${data.res_body}'
+       ${reqName}, ${data.active}, '${data.req_url}', ${reqMethod},
+       ${data.res_status}, ${resDelaySec},
+      '${data.res_content_type}', '${resBody}',
+       ${createdAt}, '${username}', ${createdAt}, '${username}'
       )
     `;
+
   return db.exec(sql) ? 'inserted' : 'error';
 }
 
 function updateMockResponse(data) {
+  const updatedAt = new Date().getTime();
+  const reqMethod = data.req_method ? `'${data.req_method}'` : 'NULL'; 
+  const reqName = data.name ? `'${data.name}'` : 'NULL';
+  const resDelaySec = data.reqDelaySec ? data.res_delay_sec : 'NULL';
+  data.res_content_type === 'text/javascript' && isFunc(data.res_body);
+  const resBody = data.res_body.replace(/'/g,'\\x27');
   const sql = `
     UPDATE mock_responses SET
-      name = '${data.name}',
+      name = ${reqName},
       active = ${data.active},
       req_url = '${data.req_url}',
-      req_method = '${data.req_method}',
+      req_method = ${reqMethod},
       res_status = ${data.res_status},
-      res_delay_sec = ${data.res_delay_sec || 'NULL'},
+      res_delay_sec = ${resDelaySec},
       res_content_type = '${data.res_content_type}',
-      res_body =  '${data.res_body}'
+      res_body =  '${resBody}',
+      updated_at = ${updatedAt},
+      updated_by = '${username}'
     WHERE id = ${data.id};
     `;
   return db.exec(sql) ? 'updated' : 'error';
