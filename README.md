@@ -48,6 +48,16 @@ app.listen(3000);
   proxy-url options can be found [here](https://github.com/chimurai/http-proxy-middleware#http-proxy-options)
   
   ### 3. DONE!!
+
+## function response example
+```
+function(req, res, next) {
+  if (req.query.foo == 1) return serveResponse(7);
+  else if (req.query.foo == 2) return serveResponse(8);
+  else if (req.query.foo == 3) return serveResponse(9);
+  else return false;
+}
+```
   
 ## Compatible servers
 `mock-responses` is compatible with the following servers:
