@@ -49,7 +49,7 @@ function isFunc(code) {
 function getMockResponses(key) {
   let sql = `SELECT * FROM mock_responses`;
   if (key !== 'undefined') {
-    sql += `WHERE name like '%${key}%' OR req_url like '%${key}%' OR res_body like '%${key}%' `;
+    sql += ` WHERE name like '%${key}%' OR req_url like '%${key}%' OR res_body like '%${key}%' `;
   }
   sql += ' ORDER BY updated_at DESC';
   return db.prepare(sql).all();
