@@ -50,6 +50,7 @@ app.listen(3000);
   ### 3. DONE!!
 
 ## function response example
+To use function, please set response content type as *`text/javascript`*
 ```
 function(req, res, next) {
   if (req.query.foo == 1) return serveResponse(7);
