@@ -2,7 +2,6 @@ const sqlite3 = require('better-sqlite3');
 const path = require('path');
 const db = require(path.join(__dirname, 'database.js')).instance;
 
-
 function getMockResoponse(req, res, next) {
 
   function serveResponse(id) {
@@ -15,6 +14,13 @@ function getMockResoponse(req, res, next) {
     row.res_delay_sec && console.log('[mock-responses] Delaying ', row.res_delay_sec, 'seconds');
     setTimeout(_ => {
       res.setHeader('Content-Type', row.res_content_type);
+
+      // CORS enabled
+      res.setHeader('Access-Control-Allow-Origin', req.protocol + '://' + req.get('host'));
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, OPTIONS');
+      res.setHeader('Access-Control-Allow-Credentials', true);
+
       res.statusCode = row.res_status;
       res.write(row.res_body);
       res.end();
