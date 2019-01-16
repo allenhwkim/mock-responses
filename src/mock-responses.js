@@ -16,10 +16,14 @@ function getMockResoponse(req, res, next) {
       res.setHeader('Content-Type', row.res_content_type);
 
       // CORS enabled
-      res.setHeader('Access-Control-Allow-Origin', req.protocol + '://' + req.get('host'));
-      res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
-      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, OPTIONS');
-      res.setHeader('Access-Control-Allow-Credentials', true);
+      // req.protocol does not exist for browsersync
+      const origin = req.protocol ? req.protocol + '://' + req.get('host') : req.headers['origin'];
+      if (origin) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, OPTIONS');
+        res.setHeader('Access-Control-Allow-Credentials', true);
+      }
 
       res.statusCode = row.res_status;
       res.write(row.res_body);
