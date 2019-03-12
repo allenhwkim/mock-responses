@@ -72,7 +72,7 @@ function insertMockResponse(data) {
   const reqName = data.name ? `'${data.name}'` : 'NULL';
   const resDelaySec = data.reqDelaySec ? data.res_delay_sec : 'NULL';
   data.res_content_type === 'text/javascript' && isFunc(data.res_body);
-  const resBody = data.res_body.replace(/'/g,"\\'");
+  const resBody = data.res_body.replace(/'/g,'\'\'');
   const sql = `
     INSERT INTO mock_responses(name, active, req_url, req_method, 
       res_status, res_delay_sec,
@@ -96,7 +96,7 @@ function updateMockResponse(data) {
   const reqName = data.name ? `'${data.name}'` : 'NULL';
   const resDelaySec = data.reqDelaySec ? data.res_delay_sec : 'NULL';
   data.res_content_type === 'text/javascript' && isFunc(data.res_body);
-  const resBody = data.res_body.replace(/'/g,"\\'");
+  const resBody = data.res_body.replace(/'/g,'\'\'');
   const sql = `
     UPDATE mock_responses SET
       name = ${reqName},
