@@ -88,7 +88,7 @@ a { text-decoration: none }
           </a>
         </td>
         <td title="<%= el.req_url %>"><%= el.req_method%> 
-          <%= el.req_url.length < 30 ? el.req_url : el.req_url.substr(0, 30) + ' ...' %>
+          <%= el.req_url.length < 55 ? el.req_url : el.req_url.substr(0, 55) + ' ...' %>
         </td>
         <td><%= el.res_delay_sec ? el.res_delay_sec + ' seconds' : '' %></td>
         <td><%= el.res_content_type.split('/')[1] %></td>
