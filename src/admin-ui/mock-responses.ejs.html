@@ -97,7 +97,13 @@ a { text-decoration: none }
       .then(json => window.location.reload())
       .catch(error => alert(error));
   }
-
+  
+  setTimeout(() => {
+    const tooltipEls = document.getElementsByClassName('tooltiptext');
+    for(let i = 0; i < tooltipEls.length; i++) {
+      tooltipEls[i].innerHTML = tooltipEls[i].innerHTML.trim();
+    }
+  }, 1000);
 </script>
 
 <div class="mock-responses">
