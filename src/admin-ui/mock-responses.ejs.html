@@ -6,6 +6,51 @@
 .mock-responses table tr:nth-child(odd) { background: #eee; }
 a { text-decoration: none }
 .mce-search {float: right;}
+.timer-icon { 
+  width: 14px;
+  height: 14px;
+  content: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEUSURBVEhL3dRBSgNBEIXhEcSdiHvJJnoMBaPxgNlFt3oIQRQ9ghD1Bm5URNyb/+EUyPBqphsiiA8+CN1UzWSmp5q/kq/EyuKay89sYP375+qzhnNcYlsLNTnBKZ7w2Xps16ZQdvAM/SvtjTGYPdyi+1i6brCLEe7btQv05gBv6DbLvEI1m5hhC2l0N+9wjSJuTxdR7WDu4BpIxO3JNXpzDFcYIm4vTJDmDK4oRNxe0OlKo6PoikLE7YUHpPmAKwoRtxfUI82vX0BfoSuq0fuIhl5yiTnSHMEV1eg9popmiysscYXB6HOvmUPhBUWjQtHg0mxxjRw130dVdDclj0vzp2j+Z9FL08lYQGdc9Ftrh/jXaZolOJkBmy6Spr4AAAAASUVORK5CYII=');
+}
+.url-column { min-width: 450px; }
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  white-space: pre;
+  visibility: visible;
+  max-height: 600px;
+  max-width: 600px;
+  min-width: 100px;
+  overflow-y: scroll;
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  border-radius: 6px;
+  padding: 15px;
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  right: 100%;
+  min-height: 50px;
+  text-align: left;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent black;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
 </style>
 
 <script>
@@ -52,7 +97,13 @@ a { text-decoration: none }
       .then(json => window.location.reload())
       .catch(error => alert(error));
   }
-
+  
+  setTimeout(() => {
+    const tooltipEls = document.getElementsByClassName('tooltiptext');
+    for(let i = 0; i < tooltipEls.length; i++) {
+      tooltipEls[i].innerHTML = tooltipEls[i].innerHTML.trim();
+    }
+  }, 1000);
 </script>
 
 <div class="mock-responses">
@@ -68,34 +119,39 @@ a { text-decoration: none }
 
     <table class="data">
       <tr>
-        <th>Id/Name</th>
         <th>Active</th>
-        <th>URL</th>
-        <th>Delay</th>
-        <th>Response Type</th>
-        <th>Response</th>
+        <th class="url-column">URL</th>
+        <th>Type</th>
         <th>Actions</th>
       </tr>
     <% data.forEach(el => { %>
       <tr>
-        <td><%= el.id %><br/><%= el.name %></td>
         <td>&nbsp;
           <a href="#mock-responses" onclick="toggle(<%= el.id%>)">
             <mce-switch <%= el.active ? 'checked' : '' %>></mce-switch>
           </a>
         </td>
-        <td title="<%= el.req_url %>"><%= el.req_method%> 
-          <%= el.req_url.length < 30 ? el.req_url : el.req_url.substr(0, 30) + ' ...' %>
+        <td title="<%= el.req_url %>">
+          <% if (el.res_delay_sec) { %>
+            <img class="timer-icon">
+            <%= el.res_delay_sec ? el.res_delay_sec + ' seconds' : '' %>
+          <% } %>
+          <%= el.req_method%> 
+          <%= el.req_url.length < 55 ? el.req_url : el.req_url.substr(0, 55) + ' ...' %>
         </td>
-        <td><%= el.res_delay_sec ? el.res_delay_sec + 'seconds' : '' %></td>
-        <td><%= el.res_body.length < 30 ? el.res_body : el.res_body.substr(0, 30) + ' ...' %></td>
-        <td><%= el.res_content_type.split('/')[1] %></td>
+        <td class="tooltip"><%= el.res_content_type.split('/')[1] %>
+          <pre class="tooltiptext">
+            <%= el.res_body%>
+          </pre>
+        </td>
         <td>
           <a href="#mock-responses" onclick="playMock('<%= el.req_method%>', '<%= el.req_url%>')">
            <mce-icon class="mce-small mce-circle">play_arrow</mce-icon>
           </a>
           <a href="#mock-edit-<%= el.id %>">
-            <mce-icon class="mce-small mce-circle"><i class="fa fa-info"></i></mce-icon>
+            <mce-icon class="mce-small mce-circle"><i class="fa fa-info">
+              
+            </i></mce-icon>
           </a>
           <a href="#mock-responses" onclick="deleteMock(<%= el.id %>)">
             <mce-icon class="mce-small mce-circle"><i class="fa fa-trash"></i></mce-icon>

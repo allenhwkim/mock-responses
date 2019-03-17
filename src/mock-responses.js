@@ -18,8 +18,9 @@ function getMockResoponse(req, res, next) {
       // CORS enabled
       // req.protocol does not exist for browsersync
       // const origin = req.protocol ? req.protocol + '://' + req.get('host') : req.headers['origin'];
+      origin = req.headers['origin'];
       if (origin) {
-        res.setHeader('Access-Control-Allow-Origin', req.headers['origin']);
+        res.setHeader('Access-Control-Allow-Origin', origin);
         res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
         res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, OPTIONS');
         res.setHeader('Access-Control-Allow-Credentials', true);

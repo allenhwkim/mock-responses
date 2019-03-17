@@ -70,7 +70,7 @@ function insertMockResponse(data) {
   const reqMethod = data.req_method ? `'${data.req_method}'` : 'NULL'; 
 
   const reqName = data.name ? `'${data.name}'` : 'NULL';
-  const resDelaySec = data.reqDelaySec ? data.res_delay_sec : 'NULL';
+  const resDelaySec = data.res_delay_sec ? data.res_delay_sec : 'NULL';
   data.res_content_type === 'text/javascript' && isFunc(data.res_body);
   const resBody = data.res_body.replace(/'/g,'\'\'');
   const sql = `
@@ -86,7 +86,7 @@ function insertMockResponse(data) {
        ${createdAt}, '${username}', ${createdAt}, '${username}'
       )
     `;
-
+        
   return db.exec(sql) ? 'inserted' : 'error';
 }
 
@@ -94,7 +94,7 @@ function updateMockResponse(data) {
   const updatedAt = new Date().getTime();
   const reqMethod = data.req_method ? `'${data.req_method}'` : 'NULL'; 
   const reqName = data.name ? `'${data.name}'` : 'NULL';
-  const resDelaySec = data.reqDelaySec ? data.res_delay_sec : 'NULL';
+  const resDelaySec = data.res_delay_sec ? data.res_delay_sec : 'NULL';
   data.res_content_type === 'text/javascript' && isFunc(data.res_body);
   const resBody = data.res_body.replace(/'/g,'\'\'');
   const sql = `
