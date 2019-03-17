@@ -115,7 +115,7 @@ a { text-decoration: none }
       <tr>
         <th>Active</th>
         <th class="url-column">URL</th>
-        <th>Response Type</th>
+        <th>Type</th>
         <th>Actions</th>
       </tr>
     <% data.forEach(el => { %>
@@ -135,7 +135,7 @@ a { text-decoration: none }
         </td>
         <td class="tooltip"><%= el.res_content_type.split('/')[1] %>
           <pre class="tooltiptext">
-              <%= el.res_body%>
+            <%= el.res_body%>
           </pre>
         </td>
         <td>
