@@ -26,7 +26,9 @@ function getMockResoponse(req, res, next) {
         res.setHeader('Access-Control-Allow-Credentials', true);
       }
 
-      res.statusCode = row.res_status;
+      if (req.method.toLowerCase() !== 'options') {
+        res.statusCode = row.res_status;
+      }
       res.write(row.res_body);
       res.end();
     }, (row.res_delay_sec || 0) * 1000);
