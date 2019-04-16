@@ -32,7 +32,7 @@ try {
 // Parse a cookie header
 function parseCookies(str) {
   var obj = {};
-  var pairs = str.split(/; */);
+  var pairs = (str||'').split(/; */);
 
   for (var i = 0; i < pairs.length; i++) {
     var pair = pairs[i];
