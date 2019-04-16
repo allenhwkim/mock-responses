@@ -1,6 +1,6 @@
 <style>
 .mock-responses { padding: 10px; }
-.mock-responses table { margin: 10px 0; }
+.mock-responses table { margin: 10px 0; width: 100%; }
 .mock-responses table th { background-color: #999; color: #fff; padding: 8px; }
 .mock-responses table td { padding: 4px; white-space: nowrap; }
 .mock-responses table tr:nth-child(odd) { background: #eee; }
@@ -11,7 +11,16 @@ a { text-decoration: none }
   height: 14px;
   content: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEUSURBVEhL3dRBSgNBEIXhEcSdiHvJJnoMBaPxgNlFt3oIQRQ9ghD1Bm5URNyb/+EUyPBqphsiiA8+CN1UzWSmp5q/kq/EyuKay89sYP375+qzhnNcYlsLNTnBKZ7w2Xps16ZQdvAM/SvtjTGYPdyi+1i6brCLEe7btQv05gBv6DbLvEI1m5hhC2l0N+9wjSJuTxdR7WDu4BpIxO3JNXpzDFcYIm4vTJDmDK4oRNxe0OlKo6PoikLE7YUHpPmAKwoRtxfUI82vX0BfoSuq0fuIhl5yiTnSHMEV1eg9popmiysscYXB6HOvmUPhBUWjQtHg0mxxjRw130dVdDclj0vzp2j+Z9FL08lYQGdc9Ftrh/jXaZolOJkBmy6Spr4AAAAASUVORK5CYII=');
 }
-.url-column { min-width: 450px; }
+.url-column {
+  max-width: 600px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.name-column {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .tooltip {
   position: relative;
   display: inline-block;
@@ -119,6 +128,7 @@ a { text-decoration: none }
 
     <table class="data">
       <tr>
+        <th class="name-column">Name</th>
         <th>Active</th>
         <th class="url-column">URL</th>
         <th>Type</th>
@@ -126,18 +136,19 @@ a { text-decoration: none }
       </tr>
     <% data.forEach(el => { %>
       <tr>
+        <td class="name-column"><%= el.name || ''%></td>
         <td>&nbsp;
           <a href="#mock-responses" onclick="toggle(<%= el.id%>)">
             <mce-switch <%= el.active ? 'checked' : '' %>></mce-switch>
           </a>
         </td>
-        <td title="<%= el.req_url %>">
+        <td class="url-column" title="<%= el.req_url %>">
           <% if (el.res_delay_sec) { %>
             <img class="timer-icon">
             <%= el.res_delay_sec ? el.res_delay_sec + ' seconds' : '' %>
           <% } %>
-          <%= el.req_method%> 
-          <%= el.req_url.length < 55 ? el.req_url : el.req_url.substr(0, 55) + ' ...' %>
+          <%= el.req_method %> 
+          <%= el.req_url %>
         </td>
         <td class="tooltip"><%= el.res_content_type.split('/')[1] %>
           <pre class="tooltiptext">

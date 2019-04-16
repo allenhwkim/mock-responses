@@ -6,7 +6,6 @@ const path = require('path');
 const db = require(path.join(__dirname, 'database.js')).instance;
 const username = require('username').sync();
 
-
 // --------------------------  Migration start -----------------------
 //  . add res_delay_sec column
 try {
@@ -30,6 +29,29 @@ try {
 } catch(e) {}
 // --------------------------  Migration end   -----------------------
 
+// Parse a cookie header
+function parseCookies(str) {
+  var obj = {};
+  var pairs = str.split(/; */);
+
+  for (var i = 0; i < pairs.length; i++) {
+    var pair = pairs[i];
+    var eq_idx = pair.indexOf('=');
+
+    // skip things that don't look like key=value
+    if (eq_idx < 0) {
+      continue;
+    } else {
+      var key = pair.substr(0, eq_idx).trim()
+      var val = pair.substr(++eq_idx, pair.length).trim();
+      ('"' == val[0]) && (val = val.slice(1, -1));
+      obj[key] = val;
+    }
+  }
+
+  return obj;
+}
+
 function getHTML(templatePath, data) {
   const contents = fs.readFileSync(path.join(__dirname, 'admin-ui', templatePath), 'utf8');
   const html = ejs.render(contents, data);
@@ -51,7 +73,7 @@ function getMockResponses(key) {
   if (key !== 'undefined') {
     sql += ` WHERE name like '%${key}%' OR req_url like '%${key}%' OR res_body like '%${key}%' `;
   }
-  sql += ' ORDER BY updated_at DESC';
+  sql += ' ORDER BY req_url, updated_at DESC';
   return db.prepare(sql).all();
 }
 
@@ -224,8 +246,10 @@ var adminUIMiddleware = function(req, res, next) {
     // html responses 
     if (!reqUrl.pathname.match(/^\/developer\/api\//)) {
       let sql, ejsPath, data;
-
-      if (reqUrl.pathname === '/developer/mock-responses.html') {
+      const cookies = parseCookies(req.headers.cookie);
+      if (cookies['mock-responses'] === undefined) {
+        html = 'Unauthorized login';
+      } else if (reqUrl.pathname === '/developer/mock-responses.html') {
         data = getMockResponses(reqUrl.query.q);
         html = getHTML('mock-responses.ejs.html', {data}); 
       } else if (reqUrl.pathname === '/developer/mock-responses/new.html') {
