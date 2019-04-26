@@ -68,9 +68,15 @@ function isFunc(code) {
   return true;
 }
 
+function activateByName(key) {
+  let activateSql = `UPDATE mock_responses SET active = '1' WHERE name like '${key}'`;
+  const deactivateSql = `UPDATE mock_responses SET active = 0 WHERE name <> '' AND name NOT LIKE '${key}'`;
+  return db.exec(activateSql) && db.exec(deactivateSql);
+}
+
 function getMockResponses(key) {
   let sql = `SELECT * FROM mock_responses`;
-  if (key !== 'undefined') {
+  if (key !== 'undefined' && key.indexOf('*') === -1) {
     sql += ` WHERE name like '%${key}%' OR req_url like '%${key}%' OR res_body like '%${key}%' `;
   }
   sql += ' ORDER BY req_url, updated_at DESC';
@@ -188,10 +194,9 @@ function deleteProxyResponse(id) {
 
 var adminUIMiddleware = function(req, res, next) {
   const reqUrl = url.parse(req.url, true);
-
   if (reqUrl.pathname.match(/^\/developer/)) {
-    console.log('[mock-resonses]', reqUrl.pathname);
-    
+    console.log('[mock-responses]', reqUrl.pathname);
+        
     const id = (reqUrl.pathname.match(/\/([0-9]+)\/?/) || [])[1];
     let html;
 
@@ -248,7 +253,7 @@ var adminUIMiddleware = function(req, res, next) {
       let sql, ejsPath, data;
       const cookies = parseCookies(req.headers.cookie);
       if (cookies['mock-responses'] === undefined) {
-        html = 'Unauthorized login';
+        html = getHTML('unauthorized.ejs.html');
       } else if (reqUrl.pathname === '/developer/mock-responses.html') {
         data = getMockResponses(reqUrl.query.q);
         html = getHTML('mock-responses.ejs.html', {data}); 
@@ -269,6 +274,14 @@ var adminUIMiddleware = function(req, res, next) {
         html = getHTML(ejsPath, {data}); 
       } else if (reqUrl.pathname === '/developer') {
         html = getHTML('index.html'); 
+      } else if (reqUrl.pathname.match(/^\/developer\/[0-9a-zA-Z]+\/batch.html/)) {
+        let sql = `SELECT DISTINCT name FROM mock_responses`;
+        data = db.prepare(sql).all();
+        html = getHTML('batch.ejs.html', {data});
+      } else if (reqUrl.pathname.match(/^\/developer\/activate/)) {
+        const name = (reqUrl.pathname.match(/^\/developer\/activate\/([0-9a-zA-Z\-]+)/) || [])[1];
+        activateByName(name);
+        html = 'successfully activated';
       } else {
         html = '404 Not Found';
       }

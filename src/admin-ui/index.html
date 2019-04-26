@@ -28,6 +28,7 @@
       </h2>
       <mce-nav-item href="#mock-responses" icon="fa-cogs">Mock Responses</mce-nav-item>
       <mce-nav-item href="#proxy-responses" icon="fa-server">Proxy Responses</mce-nav-item>
+      <mce-nav-item href="#batch" icon="fa-server">Activate By Name</mce-nav-item>
       <mce-nav-item class="mce" href="https://mymce.github.io/" icon="fa-github">Built With MCE</mce-nav-item>
     </mce-nav-drawer>
 
@@ -42,6 +43,8 @@
     </mce-app-bar>
 
     <mce-router>
+      <mce-route path="batch??q?=?(.*)?" no-cache
+        import="developer/:name/batch.html?q=:key"></mce-route>
       <mce-route path="mock-responses\??q?=?(.*)?" no-cache
         import="developer/mock-responses.html?q=:key"></mce-route>
       <mce-route path="mock-edit-([0-9]+)" no-cache 
