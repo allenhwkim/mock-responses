@@ -20,16 +20,17 @@
   <form>
 <table>
   <tr>
-    <th>Name</th>
+    <th>Name Includes</th>
     <th>Turn On</th>
   </tr>
   <% data.filter(el => el.name).forEach(el => { %>
-    <tr><td><%= el.name? el.name : 'empty-name' %></td>
-        <td>
-            <a href="#mock-responses" onclick="activateByName('<%= el.name%>')">
-                <mce-switch name="qq" ></mce-switch>
-            </a>
-        </td>
+    <tr>
+      <td><%= el.name? el.name : 'empty-name' %></td>
+      <td>
+        <a href="#mock-responses" onclick="activateByName('<%= el.name%>')">
+          <mce-switch name="qq" ></mce-switch>
+        </a>
+      </td>
     </tr>
   <% }); %>
 </table>

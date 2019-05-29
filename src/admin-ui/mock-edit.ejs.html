@@ -28,6 +28,20 @@
       .catch(error => alert('Update Error happened, please refer console message'));
     return false;
   }
+
+  function updatePayloadMethod(e) {
+    const payloadEl = document.querySelector('input[name=req_payload]');
+    const methodEl = document.querySelector('input[name=req_method]');
+    if (e.target.name === 'req_payload') {
+      if (payloadEl.value && methodEl.value === 'GET') {
+        methodEl.value = '';
+      }
+    } else if (e.target.name === 'req_method') {
+      if (methodEl.value === 'GET') {
+        payloadEl.value = '';
+      }
+    }
+  }
 </script>
 
 <!-- <pre><%= JSON.stringify(data) %> </pre> -->
@@ -50,6 +64,7 @@
     <legend> Request </legend>
     <mce-text-field name="req_method" 
       value="<%= data.req_method %>"
+      onchange="updatePayloadMethod(event)"
       optional="(optional)"
       label="Request Method"
       pattern-error="Must be GET, POST, PUT, or DELETE"
@@ -65,6 +80,17 @@
       pattern-error="Please enter url. e.g. /api/v1/foo"
       pattern="^\/[\w.,@?^=%&amp;:\/~+#-]+">
     </mce-text-field>
+    <br/>
+    <mce-text-field name="req_payload"
+      value="<%= data.req_payload %>"
+      onchange="updatePayloadMethod(event)"
+      class="mce-dirty"
+      style="min-width: 600px"
+      label="Payload"
+      helper-text="Payload keys for this request in comma-separated format"
+      pattern-error="e.g., \"ctn, accountNumber\"">
+    </mce-text-field>
+
   </fieldset>
   <fieldset>
     <legend> Response</legend>

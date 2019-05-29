@@ -54,11 +54,10 @@ http://localhost:3000/my/api/path
   app.listen(3000, () => console.log('Example app listening on port 3000!'))
   ```
   
-  ### 2. Visit admin UI `/developer#mock-responses` to manage mock or proxy responses.
+  ### 2. Visit admin UI `/developer#mock-responses` to manage mock responses.
   ```
   https://localhost:3000/developer#mock-responses
   ```
-  proxy-url options can be found [here](https://github.com/chimurai/http-proxy-middleware#http-proxy-options)
   
   ### 3. DONE!!
   Now, you can add, update, delete, or search your api responses, which is mocked but never fails.

@@ -1,12 +1,23 @@
 const sqlite3 = require('better-sqlite3');
 const path = require('path');
-const db = require(path.join(__dirname, 'database.js')).instance;
+const DB = require(path.join(__dirname, 'database.js'));
+const fs = require('fs');
 
 function getMockResoponse(req, res, next) {
 
   function serveResponse(id) {
-    const row = db.prepare(`SELECT * FROM mock_responses WHERE id = ${id}`).get();
+    const row = DB.getById(id);
     return serveRow(row);
+  }
+
+  function serveFile(row) {
+    // file://yyyy.xxxx.js
+    const filePath = path.join(path.dirname(DB.__sqlite3Path), row.res_body.replace('file://', ''));
+    const contents = fs.readFileSync(filePath, 'utf8');
+
+    res.setHeader('Content-Type', row.res_content_type);
+    res.write(contents);
+    res.end();
   }
 
   function serveRow(row) {
@@ -29,48 +40,51 @@ function getMockResoponse(req, res, next) {
       if (req.method.toLowerCase() !== 'options') {
         res.statusCode = row.res_status;
       }
+
       res.write(row.res_body);
       res.end();
     }, (row.res_delay_sec || 0) * 1000);
     return row;
   }
 
-  const row = getRowByRequest(req);
+  function checkPayload(row) {
+    if (row.req_payload)  {
+      console.log('[mock-responses] payload checking', row.req_payload, req.body);
+      const payloads = row.req_payload.split(',');
+      for (var i=0; i < payloads.length; i++) {
+        var el = payloads[i].trim();
+        if (el && !req.body[el])  return 422;
+      }
+    }
+    return 200;
+  }
+
+  const row = DB.getByRequest(req);
+
   if (row) {
-    if (row.res_content_type === 'text/javascript') {
-      const func = new Function('serveResponse', 
-        `return ${row.res_body.replace(/\\x27/g, '\'')}`);
-      const result = func(serveResponse)(req, res, next);
-      console.log('result', result);
-      result || serveRow(row); //serveResponse is not defined
-    } else if (row) {
-      serveRow(row);
+    // payload check
+    const payloadStatus = checkPayload(row);
+    if (payloadStatus !== 200) {
+      res.statusCode = payloadStatus;
+      res.end();
+    }
+
+    if (payloadStatus === 200) {
+      if (row.res_body.match(/^file:\/\//)) {
+        serveFile(row);
+      } else if (row.res_content_type === 'text/javascript') {
+        const func = new Function('serveResponse', 
+          `return ${row.res_body.replace(/\\x27/g, '\'')}`);
+        const result = func(serveResponse)(req, res, next);
+        result || serveRow(row); //serveResponse is not defined
+      } else if (row) {
+        serveRow(row);
+      }
     }
   } else {
     next();
   }
 
 };
-
-function getRowByRequest(req) {
-  const req_url = req.url.match(/([\/\w-.]+)/)[0];
-  const sql1 = `
-    SELECT * 
-    FROM mock_responses 
-    WHERE req_url = '${req_url}' 
-      AND req_method = '${req.method}'
-      AND active = 1
-    LIMIT 1
-  `;
-  const sql2 = `
-    SELECT * 
-    FROM mock_responses 
-    WHERE req_url = '${req_url}' 
-      AND req_method IS NULL
-      AND active = 1
-    LIMIT 1
-  `;
-  return db.prepare(sql1).get() || db.prepare(sql2).get();
-}
 
 module.exports = getMockResoponse;

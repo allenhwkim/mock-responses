@@ -27,6 +27,20 @@
       .catch(error => alert(error));
     return false;
   }
+
+  function updatePayloadMethod(e) {
+    const payloadEl = document.querySelector('input[name=req_payload]');
+    const methodEl = document.querySelector('input[name=req_method]');
+    if (e.target.name === 'req_payload') {
+      if (payloadEl.value && methodEl.value === 'GET') {
+        methodEl.value = '';
+      }
+    } else if (e.target.name === 'req_method') {
+      if (methodEl.value === 'GET') {
+        payloadEl.value = '';
+      }
+    }
+  }
 </script>
 
 <form id="form" class="mock-response" novalidate onsubmit="return submitForm()">
@@ -47,6 +61,7 @@
     <legend> Request </legend>
     <mce-text-field name="req_method" 
       optional="(optional)"
+      onchange="updatePayloadMethod(event)"
       label="Request Method"
       pattern-error="Must be GET, POST, PUT, or DELETE"
       pattern="^(GET|POST|PUT|DELETE)$">
@@ -59,6 +74,15 @@
       helper-text="URL that respond with the below response"
       pattern-error="Please enter url. e.g. /api/v1/foo"
       pattern="^\/[\w.,@?^=%&amp;:\/~+#-]+">
+    </mce-text-field>
+    <br/>
+    <mce-text-field name="req_payload"
+      class="mce-dirty"
+      style="min-width: 600px"
+      label="Payload"
+      onchange="updatePayloadMethod(event)"
+      helper-text="Only available for POST method. Payload keys as comma-separated format"
+      pattern-error="e.g., \"ctn, accountNumber\"">
     </mce-text-field>
   </fieldset>
   <fieldset>
