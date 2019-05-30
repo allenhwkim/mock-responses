@@ -53,7 +53,7 @@ function getMockResoponse(req, res, next) {
       const payloads = row.req_payload.split(',');
       for (var i=0; i < payloads.length; i++) {
         var el = payloads[i].trim();
-        if (el && !req.body[el])  return 422;
+        if (el && typeof req.body[el] === 'undefined')  return 422;
       }
     }
     return 200;

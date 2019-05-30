@@ -1,20 +1,19 @@
 <style>
 .mock-responses { padding: 10px; }
-.mock-responses table { margin: 10px 0; width: 100%; }
+.mock-responses table { margin: 10px 0; width: 100%; table-layout:fixed; }
 .mock-responses table th { background-color: #999; color: #fff; padding: 8px; }
-.mock-responses table td { padding: 4px; white-space: nowrap; }
+.mock-responses table td { padding: 4px; }
 .mock-responses table td.payload { white-space: inherit; }
 .mock-responses table tr:nth-child(odd) { background: #eee; }
+.mock-responses .name { width: 10%; }
+.mock-responses .active { width: 5%; }
+.mock-responses .url { width: 45%; word-break: break-word; }
+.mock-responses .payload { width: 10%; }
+.mock-responses .response_type { width: 10%; min-width: 125px; }
+.mock-responses .actions { width: 20%; }
 a { text-decoration: none }
 .mce-search {float: right;}
-.url-column {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.name-column {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+
 .tooltip {
   position: relative;
   display: inline-block;
@@ -62,7 +61,7 @@ a { text-decoration: none }
     const options = {method: method || 'POST'};
     if (payload && method !== 'GET' && method !== 'DELETE') {
       const json = {};
-      payload.split(',').forEach(el => el.trim() && (json[el.trim()] = 'test'));
+      payload.split(',').forEach(el => el.trim() && (json[el.trim()] = 0));
       options.body = JSON.stringify(json);
       options.headers = { 'Content-Type': 'application/json'};
     }
@@ -119,22 +118,22 @@ a { text-decoration: none }
 
     <table class="data">
       <tr>
-        <th class="name-column">Name</th>
-        <th width="10">Active</th>
-        <th class="url-column">URL</th>
-        <th width="10">Payload</th>
-        <th width="10">Response Type</th>
-        <th width="10">Actions</th>
+        <th class="name">Name</th>
+        <th class="active">Active</th>
+        <th class="url">URL</th>
+        <th width="payload">Payload</th>
+        <th width="response_type">Response Type</th>
+        <th width="actions">Actions</th>
       </tr>
     <% data.forEach(el => { %>
       <tr>
-        <td class="name-column"><%= el.name || ''%></td>
-        <td>&nbsp;
+        <td class="name"><%= el.name || ''%></td>
+        <td class="active">&nbsp;
           <a href="#mock-responses" onclick="toggle(<%= el.id%>)">
             <mce-switch <%= el.active ? 'checked' : '' %>></mce-switch>
           </a>
         </td>
-        <td class="url-column" title="<%= el.req_url %>">
+        <td class="url" title="<%= el.req_url %>">
           <% if (el.res_delay_sec) { %>
             <span class="delay">
               <i class="fas fa-stopwatch" style="font-size:24px;color: #ccc"></i>
@@ -147,12 +146,12 @@ a { text-decoration: none }
         <td class="payload">
           <%= el.req_payload %>
         </td>
-        <td class="tooltip"><%= el.res_content_type %>
+        <td class="response_type tooltip"><%= el.res_content_type %>
           <pre class="tooltiptext">
             <%= el.res_body%>
           </pre>
         </td>
-        <td>
+        <td class="actions">
           <a href="#mock-responses" onclick="playMock('<%= el.req_url%>', '<%= el.req_method%>', '<%= el.req_payload %>')">
            <mce-icon class="mce-small mce-circle">play_arrow</mce-icon>
           </a>
