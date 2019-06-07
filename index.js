@@ -27,7 +27,7 @@ module.exports = dbPath => {
   const middlewares = [].concat(
     bodyParser.json(),
     adminUI, 
-    mockResponses,
+    mockResponses
   );
 
   return middlewares

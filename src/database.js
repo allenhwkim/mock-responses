@@ -143,7 +143,7 @@ DB.updateMockResponse = function(data) {
 };
 
 DB.activateMockResponse = function(id) {
-  const data = DB.sqlite3.getMockResponse(id);
+  const data = DB.getMockResponse(id);
   const deactivateSql = `UPDATE mock_responses SET active = 0 WHERE id <> ${id} AND req_url = '${data.req_url}'`;
   const active = data.active ? 0 : 1; 
   const activateSql = `UPDATE mock_responses SET active = ${active} WHERE id = ${id}`;
