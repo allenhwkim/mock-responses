@@ -5,8 +5,6 @@ const ejs = require('ejs');
 const path = require('path');
 const DB = require(path.join(__dirname, 'database.js'));
 
-require('./migration.js'); // migration script
-
 // Parse a cookie header
 function parseCookies(str) {
   var obj = {};

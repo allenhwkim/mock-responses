@@ -1,6 +1,8 @@
 const path = require('path');
+const fs = require('fs');
 const sqlite3 = require('better-sqlite3');
 const username = require('username').sync();
+const {execSync} = require('child_process');
 
 function isFunc(code) {
   try {
@@ -12,10 +14,33 @@ function isFunc(code) {
   return true;
 }
 
+function runCommand(cmd) {
+  console.log('[mock-responses] COMMAND: ', cmd);
+  const cmds = cmd.split(' ');
+  const child = execSync(cmd, [], {env:{PATH: process.env.PATH}});
+  child.error && console.log('[mock-responses] error', '' + child.error);
+  child.stdout && console.log('[mock-responses] stdout ', '' + child.stdout);
+  child.stderr && console.log('[mock-responses] stderr ', '' + child.stderr); 
+}
+
 const DB = {
   set sqlite3Path(path) {
     DB.__sqlite3Path = path;
-    DB.sqlite3 = new sqlite3(path);
+    const sqlFile = path.replace(/\.sqlite3/, '.sql');
+    const sqlite3File = path.replace(/\.sql$/, '.sqlite3');
+    // if sql file founc, re-create sqlite3 file from it
+    if (fs.existsSync(sqlFile))  {
+      console.log('.sql file found. re-creating .sqlite3 file from it', sqlFile);
+      runCommand(`rm -f ${sqlite3File}`);
+      runCommand(`sqlite3 ${sqlite3File} < ${sqlFile}`)
+    } 
+    // if sqlite3 file founc, create sql file from it
+    else if (fs.existsSync(sqlite3File)) {
+      console.log('.sqlite3 file found. creating .sql file from it', sqlFile);
+      runCommand(`sqlite3 ${sqlite3File} .dump > ${sqlFile}`)
+    }
+    DB.sqlite3 = new sqlite3(sqlite3File);
+    require('./migration.js'); // migration script
   }
 };
 
