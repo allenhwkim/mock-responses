@@ -195,7 +195,7 @@ DB.deleteMockResponse = function(id) {
 DB.backupToSqlTimer = 0;
 DB.backupToSql = function() {
   clearTimeout(DB.backupToSqlTimer);
-  // Run this every 2 minute
+  // Run this every 1 minute
   DB.backupToSqlTimer = setTimeout(function () {
     const sqlFile = DB.__sqlite3Path.replace(/\.sqlite3/, '.sql');
     const sqlite3File = DB.__sqlite3Path.replace(/\.sql$/, '.sqlite3');
