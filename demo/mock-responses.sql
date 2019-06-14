@@ -28,7 +28,7 @@ INSERT INTO "mock_responses" VALUES(1,NULL,1,'/api/hello',NULL,200,NULL,'applica
   "hello GET API request"
 ]',NULL,NULL,1537137745509,'allen.kim',NULL);
 INSERT INTO "mock_responses" VALUES(2,NULL,1,'/api/world',NULL,200,NULL,'text/javascript','file://foo.js',NULL,NULL,1559167349451,'allen.kim','');
-INSERT INTO "mock_responses" VALUES(3,NULL,1,'/api/foo','POST',200,1,'text/plain','success',NULL,NULL,1559162550305,'allen.kim','abc,');
+INSERT INTO "mock_responses" VALUES(3,NULL,1,'/api/foo','POST',200,1,'text/plain','success',NULL,NULL,1560525947886,'allen.kim','abc,def');
 INSERT INTO "mock_responses" VALUES(4,'',0,'/api/foo','GET',200,NULL,'application/json','{
   "foo": "this is foo.json Two"
 }',NULL,NULL,NULL,NULL,NULL);

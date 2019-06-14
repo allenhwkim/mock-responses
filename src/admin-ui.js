@@ -55,7 +55,6 @@ var adminUIMiddleware = function(req, res, next) {
         if (req.method == 'GET') {           // read
           resp = DB.getMockResponse(id);
         } else if (req.method == 'PUT') {    // update
-          console.log('..........................', req.body);
           resp = DB.updateMockResponse(req.body);
         } else if (req.method == 'DELETE') { // delete
           resp = DB.deleteMockResponse(id);
