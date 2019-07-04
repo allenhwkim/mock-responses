@@ -45,11 +45,11 @@ var adminUIMiddleware = function(req, res, next) {
     // UI API responses
     if (reqUrl.pathname.match(/^\/developer\/api\//)) {
       let resp, sql;
-      if (reqUrl.pathname.match(/mock-responses$/)) {
+      if (reqUrl.pathname.match(/mock-responses(\?q=.*)?$/)) {
         if (req.method == 'POST') { // create
           resp = DB.insertMockResponse(req.body);
         } else {                    // list
-          resp = DB.getMockResponses();
+          resp = DB.getMockResponses(reqUrl.query.q);
         }
       } else if (reqUrl.pathname.match(/mock-responses\/[0-9]+$/)) {
         if (req.method == 'GET') {           // read
