@@ -61,7 +61,10 @@ function getMockResoponse(req, res, next) {
 
   const row = DB.getByRequest(req);
 
-  if (row) {
+  if (row && req.method.toLowerCase() === 'options') {
+    res.statusCode = 200;
+    res.end();
+  } else if (row) {
     // payload check
     const payloadStatus = checkPayload(row);
     if (payloadStatus !== 200) {
