@@ -20,22 +20,22 @@ function getMockResoponse(req, res, next) {
     res.end();
   }
 
+  function enableCORS() {
+    origin = req.headers['origin'];
+    if (origin) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, OPTIONS');
+      res.setHeader('Access-Control-Allow-Credentials', true);
+    }
+  }
+
   function serveRow(row) {
-    console.log('[mock-responses] handling request', row.req_url);
+    console.log('[mock-responses] handling request', req.method, row.req_url);
     row.res_delay_sec && console.log('[mock-responses] Delaying ', row.res_delay_sec, 'seconds');
     setTimeout(_ => {
       res.setHeader('Content-Type', row.res_content_type);
-
-      // CORS enabled
-      // req.protocol does not exist for browsersync
-      // const origin = req.protocol ? req.protocol + '://' + req.get('host') : req.headers['origin'];
-      origin = req.headers['origin'];
-      if (origin) {
-        res.setHeader('Access-Control-Allow-Origin', origin);
-        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, OPTIONS');
-        res.setHeader('Access-Control-Allow-Credentials', true);
-      }
+      enableCORS();
 
       if (req.method.toLowerCase() !== 'options') {
         res.statusCode = row.res_status;
@@ -62,6 +62,8 @@ function getMockResoponse(req, res, next) {
   const row = DB.getByRequest(req);
 
   if (row && req.method.toLowerCase() === 'options') {
+    console.log('[mock-responses] handling request', req.method, row.req_url);
+    enableCORS();
     res.statusCode = 200;
     res.end();
   } else if (row) {

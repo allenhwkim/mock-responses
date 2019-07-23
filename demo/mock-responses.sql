@@ -51,4 +51,5 @@ INSERT INTO "mock_responses" VALUES(10,'Test',1,'/api/func',NULL,200,NULL,'text/
   else return false;
 }',1537151086419,'allen.kim',1555448814836,'allen.kim',NULL);
 INSERT INTO "mock_responses" VALUES(11,'Long name Long nameLong name Long nameLong name Long nameLong name Long nameLong name Long name',1,'/payload/test/foo/bar/payload/test/foo/bar/payload/test/foo/bar/payload/test/foo/bar/payload/test/foo/bar/payload/test/foo/bar/payload/test/foo/bar',NULL,200,NULL,'application/json','[]',1559154964262,'allen.kim',1559237881327,'allen.kim','foo, bar, xxxx, yyy, accountNumber, ctn');
+INSERT INTO "mock_responses" VALUES(12,NULL,1,'/cors/options/call','OPTIONS',200,NULL,'application/json','{}',1563894834295,'allen.kim',1563894834295,'allen.kim','');
 COMMIT;
