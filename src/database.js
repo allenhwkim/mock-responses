@@ -89,7 +89,7 @@ DB.getUniqueNames = function() {
 
 DB.getMockResponses = function(key) {
   let sql = `SELECT * FROM mock_responses`;
-  if (key && key.indexOf('*') === -1) {
+  if (key && key !== 'undefined' && key.indexOf('*') === -1) {
     sql += ` WHERE name like '%${key}%' OR req_url like '%${key}%' OR res_body like '%${key}%' `;
   }
   sql += ' ORDER BY req_url, updated_at DESC';
