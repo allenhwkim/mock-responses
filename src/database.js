@@ -133,7 +133,10 @@ DB.insertMockResponse = function(data) {
        ${createdAt}, '${username}', ${createdAt}, '${username}'
       )
     `;
-        
+
+  const deactivateSql = `UPDATE mock_responses SET active = 0 WHERE req_url = '${data.req_url}'`;
+  DB.sqlite3.exec(deactivateSql); //this is not critical, insertion should happen even if this fails
+
   console.log('[mock-responses]', sql)
   const result = DB.sqlite3.exec(sql) ? 'inserted' : 'error';
   DB.backupToSql();
