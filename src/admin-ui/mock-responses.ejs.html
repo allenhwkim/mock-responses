@@ -2,6 +2,7 @@
 .mock-responses { padding: 10px; }
 .mock-responses table { margin: 10px 0; width: 100%; table-layout:fixed; }
 .mock-responses table th { background-color: #999; color: #fff; padding: 8px; }
+.mock-responses table th a { color: #fff; text-decoration: underline }
 .mock-responses table td { padding: 4px; }
 .mock-responses table td.payload { white-space: inherit; }
 .mock-responses table tr:nth-child(odd) { background: #eee; }
@@ -103,6 +104,45 @@ a { text-decoration: none }
       tooltipEls[i].innerHTML = tooltipEls[i].innerHTML.trim();
     }
   }, 1000);
+
+  function swop(rows, i, j){
+    //if i is greater then j than swap them first
+    if(i > j) (i ^= j), (j ^= i), (i ^= j); 
+    
+    rows[0].parentNode.insertBefore(rows[i], rows[j]);
+    rows[0].parentNode.insertBefore(rows[j], rows[i]);
+  }
+
+  function quickSort(rows, column, desc, lo, hi){
+    if(lo >= hi) return; 
+
+    let pivot = rows[hi].querySelectorAll("td")[column].innerHTML.toLowerCase();
+    let left = lo;
+
+    for(let right=lo; right < hi; right++){
+      let cell = rows[right].querySelectorAll("td")[column].innerHTML.toLowerCase();
+      if((!desc && cell < pivot) || (desc && cell > pivot)){
+        swop(rows, right, left);
+        left++;
+      }
+    }
+
+    swop(rows, left, hi);
+    quickSort(rows, column, desc, lo, left-1);
+    quickSort(rows, column, desc, left+1, hi);  
+  }
+
+  function sort(column, el) {
+    var desc = el.innerHTML.includes('caret-up');
+    document.querySelectorAll('table th a').forEach(e => e.innerHTML = e.text);
+    el.innerHTML = el.text + (desc ? "<i class='fa fa-caret-down'></i>" : "<i class='fa fa-caret-up'></i>");
+
+    let table = document.querySelector("table.data");
+    let rows = table.rows;
+    if(rows.length > 2){
+      quickSort(rows, column, desc,  1, rows.length-1);
+    }
+  }
 </script>
 
 <div class="mock-responses">
@@ -118,9 +158,9 @@ a { text-decoration: none }
 
     <table class="data">
       <tr>
-        <th class="name">Name</th>
+        <th class="name"><a href="javascript:void(0)" onclick="sort(0, this)">Name</a></th>
         <th class="active">Active</th>
-        <th class="url">URL</th>
+        <th class="url"><a href="javascript:void(0)" onclick="sort(2, this)">URL</a></th>
         <th width="payload">Payload</th>
         <th width="response_type">Response Type</th>
         <th width="actions">Actions</th>
