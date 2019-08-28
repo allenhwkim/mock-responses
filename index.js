@@ -25,7 +25,7 @@ module.exports = dbPath => {
   const adminUI = require(path.join(__dirname, 'src', 'admin-ui.js'));
   const mockResponses = require(path.join(__dirname, 'src', 'mock-responses.js'));
   const middlewares = [].concat(
-    bodyParser.json(),
+    bodyParser.json({limit: "5mb"}),
     adminUI, 
     mockResponses
   );
