@@ -4,12 +4,11 @@
   "description": "espress-kind http request middleware",
   "main": "index.js",
   "dependencies": {
-    "better-sqlite3": "^4.1.4",
+    "better-sqlite3": "4.1.4",
     "ejs": "^2.6.1",
     "glob": "^7.1.3",
     "http-proxy": "^1.16.2",
     "http-proxy-middleware": "0.17.4",
-    "sqlite3": "^4.0.2",
     "username": "^4.0.0"
   },
   "devDependencies": {

@@ -3,3 +3,4 @@ node_modules
 mockserver
 initial-load.js
 .DS_Store
+demo/mock-responses.sqlite3
