@@ -3,29 +3,6 @@
   "version": "2.0.0",
   "description": "espress-kind http request middleware",
   "main": "index.js",
-  "dependencies": {
-    "better-sqlite3": "4.1.4",
-    "ejs": "^2.6.1",
-    "glob": "^7.1.3",
-    "http-proxy": "^1.16.2",
-    "http-proxy-middleware": "0.17.4",
-    "username": "^4.0.0"
-  },
-  "devDependencies": {
-    "browser-sync": "^2.26.5",
-    "cryptiles": "^4.1.2",
-    "express": "^4.16.2",
-    "mce": "^0.8.9",
-    "mime": "^1.4.1",
-    "nodemon": "^1.18.3",
-    "opn": "^5.3.0",
-    "randomatic": "^3.0.0",
-    "webpack-dev-server": "^3.1.11"
-  },
-  "scripts": {
-    "start": "nodemon demo/express.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/allenhwkim/mock-responses.git"
@@ -41,17 +18,72 @@
     "url": "https://github.com/allenhwkim/mock-responses/issues"
   },
   "homepage": "https://github.com/allenhwkim/mock-responses#readme",
-  "httpRequestMiddleware": {
-    "basePath": "test",
-    "headUrls": [
-      "https://fonts.googleapis.com/icon?family=Material+Icons",
-      "https://unpkg.com/font-awesome@4.7.0/css/font-awesome.css",
-      "https://unpkg.com/mce/dist/themes/blue.css",
-      "https://unpkg.com/mce/dist/mce.min.css",
-      "https://unpkg.com/mce/dist/mce.min.js"
+  "scripts": {
+    "build": "rimraf dist && tsc -p tsconfig.build.json",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "start": "ts-node -r tsconfig-paths/register src/main.ts",
+    "start:dev": "tsc-watch -p tsconfig.build.json --onSuccess \"node dist/main.js\"",
+    "start:debug": "tsc-watch -p tsconfig.build.json --onSuccess \"node --inspect-brk dist/main.js\"",
+    "start:prod": "node dist/main.js",
+    "start:exmaple": "nodemon demo/express.js",
+    "lint": "tslint -p tsconfig.json -c tslint.json",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config ./test/jest-e2e.json"
+  },
+  "dependencies": {
+    "@nestjs/common": "^6.7.2",
+    "@nestjs/core": "^6.7.2",
+    "@nestjs/platform-express": "^6.7.2",
+    "better-sqlite3": "4.1.4",
+    "ejs": "^2.6.1",
+    "glob": "^7.1.3",
+    "http-proxy": "^1.16.2",
+    "http-proxy-middleware": "0.17.4",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.5.3",
+    "username": "^4.0.0"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^6.8.4",
+    "@nestjs/schematics": "^6.6.6",
+    "@nestjs/testing": "^6.7.1",
+    "@types/express": "^4.17.1",
+    "@types/jest": "^24.0.18",
+    "@types/node": "^12.7.5",
+    "@types/supertest": "^2.0.8",
+    "browser-sync": "^2.26.5",
+    "cryptiles": "^4.1.2",
+    "express": "^4.16.2",
+    "jest": "^24.9.0",
+    "mime": "^1.4.1",
+    "nodemon": "^1.18.3",
+    "opn": "^5.3.0",
+    "prettier": "^1.18.2",
+    "randomatic": "^3.0.0",
+    "rimraf": "^3.0.0",
+    "supertest": "^4.0.2",
+    "ts-jest": "^24.1.0",
+    "ts-loader": "^6.1.1",
+    "ts-node": "^8.4.1",
+    "tsc-watch": "^4.0.0",
+    "tsconfig-paths": "^3.9.0",
+    "tslint": "^5.20.0",
+    "typescript": "^3.6.3",
+    "webpack-dev-server": "^3.1.11"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
     ],
-    "navigationlinks": [
-      "<mce-nav-item icon='search' class='mce-disabled'>Disabled</mce-nav-item>"
-    ]
+    "rootDir": "src",
+    "testRegex": ".spec.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    }
   }
 }

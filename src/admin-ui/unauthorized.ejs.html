@@ -1,9 +1,0 @@
-<h1 class="unauth" tabindex="0">Unauthorized access</h1>
-<script>
-  document.querySelector('.unauth').addEventListener('keydown', e => {
-    if (e.keyCode === 56 && e.shiftKey) {
-      document.cookie = "mock-responses=''";
-      location.reload(true);
-    }
-  });
-</script>
