@@ -23,16 +23,16 @@ function fetchUrl(url, options) {
   return window.fetch(url, options)
     .then(resp => {
       if (!resp.ok) throw Error(resp); 
-      console.log('resp', resp);
-      return resp.json();
+      const contentType = resp.headers.get('Content-Type');
+      return (contentType || '').match(/\/json/) ? resp.json() : resp.text();
     });
 }
 
 function fireEvent(event, type, data) {
-  const detail = data || event.detail || undefined;
+  const detail = data || (event && event.detail) || undefined;
   const custEvent = new CustomEvent(type, {detail, bubbles: true});
 
-  const srcEl = event.target instanceof HTMLElement ? event.target : document.body;
+  const srcEl = (event && event.target) instanceof HTMLElement ? event.target : document.body;
   console.log('[mock-responses]  firing custom event', srcEl, custEvent);
   srcEl.dispatchEvent(custEvent);
 }
@@ -69,6 +69,7 @@ function handleCustomEvents(event) {
 var UseCase = {
   list: function (keyword) {
     const url = `/use-cases?q=${keyword||''}`;
+    console.log('>>>>>>>>>>>>>>>>>> list', url);
     document.querySelector('hce-list#use-cases').source = fetchUrl(url);
   },
   new: function() { // show form for create
@@ -83,7 +84,7 @@ var UseCase = {
       document.querySelector('hce-dialog').open({title: 'Error', body: 'Invalid Use Case Data'});
     } else {
       fetchUrl('/use-cases', {method: 'POST', body: JSON.stringify(useCase)})
-        .then(resp => fireEvent('list-use-cases'));
+        .then(resp => fireEvent(null, 'list-use-cases', ''));
     }
   },
   update: function(useCase) {

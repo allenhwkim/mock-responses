@@ -53,4 +53,15 @@ CREATE TABLE use_cases (
         );
 INSERT INTO "use_cases" VALUES(1,'test','desc','1,2,3');
 INSERT INTO "use_cases" VALUES(2,'fdsaf','fdsaf','8,10');
+INSERT INTO "use_cases" VALUES(3,'111','222','10,4');
+INSERT INTO "use_cases" VALUES(4,'yyy','yyy','10');
+INSERT INTO "use_cases" VALUES(5,'yyy','yyy','10');
+INSERT INTO "use_cases" VALUES(6,'zzz','zzz','10');
+INSERT INTO "use_cases" VALUES(7,'aaa','aaa','10,7');
+INSERT INTO "use_cases" VALUES(8,'bbb','vvv','4,7');
+INSERT INTO "use_cases" VALUES(9,'ccc','ccc','10');
+INSERT INTO "use_cases" VALUES(10,'ddd','ddd','11');
+INSERT INTO "use_cases" VALUES(11,'ee','ee','10');
+INSERT INTO "use_cases" VALUES(12,'ff','ff','8,7');
+INSERT INTO "use_cases" VALUES(13,'gg','gg','10,8');
 COMMIT;
