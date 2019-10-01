@@ -1,18 +1,19 @@
 import * as username from 'username';
 import { Injectable } from '@nestjs/common';
-import { UseCase } from '../common/interfaces/use-case.interface';
+
+import { UseCase, MockResponse } from '../common/interfaces';
 import { BetterSqlite3 } from '../common/better-sqlite3';
+import { MockResponsesService } from '../mock-responses/mock-responses.service';
 
 @Injectable()
 export class UseCasesService {
   db;
 
-  constructor() {
+  constructor(private mockResp: MockResponsesService) {
     this.db =  BetterSqlite3.db;
   }
 
   create(data: UseCase) {
-    console.log('........................... create data', data)
     const name = data.name.trim().replace(/'/g, '\'\'');
     const description = data.description.trim().replace(/'/g, '\'\'');
     const mockResponses = data.mock_responses.trim().replace(/'/g, '\'\'');;
@@ -52,8 +53,8 @@ export class UseCasesService {
     const sql = `
       UPDATE use_cases SET
         name = '${name}',
-        active = '${description}',
-        mock_responses = '${mockResponses}',
+        description = '${description}',
+        mock_responses = '${mockResponses}'
       WHERE id = ${data.id};
       `;
     console.log('[mock-responses]', sql);
@@ -77,4 +78,14 @@ export class UseCasesService {
     }
   }
 
+  activate(id) {
+    const useCase = this.find(id);
+    const mockRespIds = useCase.mock_responses.split(',').map(el => parseInt(el));
+    console.log('[mock-responses] activate mock_responses with ids', mockRespIds);
+
+    const mockResponses = this.mockResp.findByIds(mockRespIds);
+    mockResponses.forEach(mockResp => {
+      this.mockResp.activate(mockResp.id);
+    });
+  }
 }

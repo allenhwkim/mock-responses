@@ -15,7 +15,6 @@ export class MockResponsesController {
   @Get('index')
   @Render('mock-responses/index')
   index(@Query('q') key) {
-    console.log('.................. index', key);
     const mockResponses = this.mockResp.findAll(key);
     return { mockResponses };
   }

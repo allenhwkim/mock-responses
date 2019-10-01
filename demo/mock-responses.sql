@@ -24,13 +24,13 @@ INSERT INTO "mock_responses" VALUES(2,NULL,1,'/api/world',NULL,200,NULL,'text/ja
 INSERT INTO "mock_responses" VALUES(3,NULL,0,'/api/foo','POST',200,1,'text/plain','{
   "foo": "this is foo.json One"
 }',NULL,NULL,1562268657126,'allen.kim','abc,def');
-INSERT INTO "mock_responses" VALUES(4,'',0,'/api/foo','GET',200,NULL,'application/json','{
+INSERT INTO "mock_responses" VALUES(4,'',1,'/api/foo','GET',200,NULL,'application/json','{
   "foo": "this is foo.json Two"
 }',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO "mock_responses" VALUES(5,'',1,'/api/foo','GET',200,NULL,'application/json','{
+INSERT INTO "mock_responses" VALUES(5,'',0,'/api/foo','GET',200,NULL,'application/json','{
   "foo": "this is foo.json Three"
 }',NULL,NULL,NULL,NULL,NULL);
-INSERT INTO "mock_responses" VALUES(6,NULL,1,'/api/hello','POST',200,NULL,'application/json','[
+INSERT INTO "mock_responses" VALUES(6,NULL,0,'/api/hello','POST',200,NULL,'application/json','[
   "hello POST API request"
 ]',1537137462311,'allen.kim',1559163936174,'allen.kim','foo,bar');
 INSERT INTO "mock_responses" VALUES(7,NULL,0,'/api/func',NULL,200,NULL,'application/json','["function response ONE"]',1537150686178,'allen.kim',1537150744918,'allen.kim',NULL);
@@ -52,7 +52,7 @@ CREATE TABLE use_cases (
           mock_responses TEXT
         );
 INSERT INTO "use_cases" VALUES(1,'test','desc','1,2,3');
-INSERT INTO "use_cases" VALUES(2,'fdsaf','fdsaf','8,10');
+INSERT INTO "use_cases" VALUES(2,'fdsaf','fdsaf','8,10,3');
 INSERT INTO "use_cases" VALUES(3,'111','222','10,4');
 INSERT INTO "use_cases" VALUES(4,'yyy','yyy','10');
 INSERT INTO "use_cases" VALUES(5,'yyy','yyy','10');
@@ -60,8 +60,4 @@ INSERT INTO "use_cases" VALUES(6,'zzz','zzz','10');
 INSERT INTO "use_cases" VALUES(7,'aaa','aaa','10,7');
 INSERT INTO "use_cases" VALUES(8,'bbb','vvv','4,7');
 INSERT INTO "use_cases" VALUES(9,'ccc','ccc','10');
-INSERT INTO "use_cases" VALUES(10,'ddd','ddd','11');
-INSERT INTO "use_cases" VALUES(11,'ee','ee','10');
-INSERT INTO "use_cases" VALUES(12,'ff','ff','8,7');
-INSERT INTO "use_cases" VALUES(13,'gg','gg','10,8');
 COMMIT;

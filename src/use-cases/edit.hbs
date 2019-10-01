@@ -20,6 +20,7 @@ console.log('data...', data);
   listEl.insertAdjacentHTML('beforeend', `
     <div class="mock-response row">
       <div class="id">${mockResp.id}</div>
+      <div class="active">${mockResp.active}</div>
       <div class="name">${mockResp.name}</div>
       <div class="req_method">${mockResp.req_method}</div>
       <div class="req_url">${mockResp.req_url}</div>
@@ -47,6 +48,7 @@ function searchMockResponses(keyword) {
 .mock-responses .row * { overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
 .mock-responses .row.header > * { background: #CCC; }
 .mock-responses .row .id { width: 24px; }
+.mock-responses .row .active { width: 48px; }
 .mock-responses .row .name {  width: 120px;  }
 .mock-responses .row .req_method { width: 80px;}
 .mock-responses .row .req_url { width: 120px; }
@@ -59,6 +61,13 @@ function searchMockResponses(keyword) {
 
 <div class="use-case form">
   <input type="hidden" id="id" value="{{useCase.id}}">
+
+  {{#if useCase.id}}
+  <div class="id">
+    <label for="id">Id</label>
+    <input id="id" readonly value="{{useCase.id}}" />
+  </div>
+  {{/if}}
 
   <div class="name">
     <label for="name">Name</label>
@@ -76,6 +85,7 @@ function searchMockResponses(keyword) {
       <div class="desc"> Search and add mock responses from the left</div>
       <div class="header row">
         <div class="id">id</div>
+        <div class="active">active</div>
         <div class="name">name</div>
         <div class="req_method">method</div>
         <div class="req_url">url</div>
@@ -85,6 +95,7 @@ function searchMockResponses(keyword) {
       {{#each mockResponses}}
         <div class="mock-response row">
           <div class="id">{{this.id}}</div>
+          <div class="active">{{this.active}}</div>
           <div class="name">{{this.name}}</div>
           <div class="req_method">{{this.req_method}}</div>
           <div class="req_url">{{this.req_url}}</div>
@@ -99,6 +110,7 @@ function searchMockResponses(keyword) {
       </div>
       <div class="header row">
         <div class="id">id</div>
+        <div class="active">active</div>
         <div class="name">name</div>
         <div class="req_method">method</div>
         <div class="req_url">url</div>
@@ -106,6 +118,7 @@ function searchMockResponses(keyword) {
       <hce-list id="search-mock-responses" class="list" (selected)="addMockResponse(event)">
         <div class="mock-response row">
           <div class="id">[[id]]</div>
+          <div class="active">[[active]]</div>
           <div class="name">[[name]]</div>
           <div class="req_method">[[req_method]]</div>
           <div class="req_url">[[req_url]]</div>
@@ -117,6 +130,9 @@ function searchMockResponses(keyword) {
   {{#if useCase.id}}
     <button onclick="fireEvent(event, 'update-use-case', getFormData())">
       Update Use Case
+    </button>
+    <button onclick="fireEvent(event, 'delete-use-case', {{useCase.id}})">
+      Delete Use Case
     </button>
   {{else}}
     <button onclick="fireEvent(event, 'create-use-case', getFormData())">

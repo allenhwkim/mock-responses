@@ -69,17 +69,19 @@ function handleCustomEvents(event) {
 var UseCase = {
   list: function (keyword) {
     const url = `/use-cases?q=${keyword||''}`;
-    console.log('>>>>>>>>>>>>>>>>>> list', url);
     document.querySelector('hce-list#use-cases').source = fetchUrl(url);
   },
   new: function() { // show form for create
     document.querySelector('.contents .hce-routes').setAttribute('src', '/use-cases/new');
   },
   edit: function(useCase) { // show form for edit
-    document.querySelector('.contents .hce-routes').setAttribute('src', `/use-cases/edit/${useCase.id}`);
+    const mockRespIds = useCase.mock_responses;
+    fetchUrl(`/use-cases/${useCase.id}/activate`, {method: 'PUT'})
+      .then(resp => {
+        document.querySelector('.contents .hce-routes').setAttribute('src', `/use-cases/edit/${useCase.id}`);
+      })
   },
   create: function(useCase) {
-    console.log('....................... useCase', useCase);
     if (!isValidUseCase(useCase)) {
       document.querySelector('hce-dialog').open({title: 'Error', body: 'Invalid Use Case Data'});
     } else {
@@ -88,18 +90,24 @@ var UseCase = {
     }
   },
   update: function(useCase) {
-    // TODO verify useCase data, and show error message.
-    console.log('.......... update a use case', useCase);
+    if (!isValidUseCase(useCase)) {
+      document.querySelector('hce-dialog').open({title: 'Error', body: 'Invalid Use Case Data'});
+    } else {
+      fetchUrl(`/use-cases/${useCase.id}`, {method: 'PUT', body: JSON.stringify(useCase)})
+        .then(resp => fireEvent(null, 'list-use-cases', ''));
+    }
   },
   delete: function(id) {
-    console.log('.......... delete a use case', id);
+    fetchUrl(`/use-cases/${id}`, {method: 'DELETE'})
+      .then(resp => fireEvent(null, 'list-use-cases', ''))
+      .then(resp => fireEvent(null, 'list-mock-responses', ''));
   }
 }
 
 var MockResponse = {
   list: function (key) {
-    const url = `/use-cases?q=${keyword||''}`;
-    document.querySelector('hce-list#use-cases').source = fetchUrl(url);
+    const url = `/mock-responses/index?q=${key||''}`;
+    document.querySelector('.contents .hce-routes').setAttribute('src', url);
   },
   new: function(data) { // show form for create
     console.log('.......... show form for mock response edit', data);

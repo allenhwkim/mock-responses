@@ -15,7 +15,7 @@ td > div {
 
 <input id="use-cases" 
    placeholder="Type to search mock responses" 
-   onchange="searchMockResponses(this.value)">
+   onchange="fireEvent(event, 'list-mock-responses', this.value)">
 <button title="create a new mock response" onclick="alert('TODO')">+</button>
 
 <table class="mock-responses">

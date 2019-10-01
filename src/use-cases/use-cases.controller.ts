@@ -44,8 +44,13 @@ export class UseCasesController {
 
   @Post()
   create(@Body() data: UseCase) {
-    console.log('>>>>>>>>>>>>>>>>>>>>>>> CREATE body data', data);
     return this.useCase.create(data);
+  }
+
+  @Put(':id/activate')
+  activate(@Param() params) {
+    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> :id/activate', params.id)
+    return this.useCase.activate(params.id);
   }
 
   @Put(':id')

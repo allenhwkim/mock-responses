@@ -88,9 +88,9 @@ export class MockResponsesService {
   }
 
   findByIds(ids: Array<number>) {
-    const whereSql = `id in (ids.join(','))`;
+    const whereSql = `id IN (${ids.join(',')})`;
     const sql1 = `SELECT * FROM mock_responses WHERE ${whereSql}`;
-    return this.db.prepare(sql1).get();
+    return this.db.prepare(sql1).all();
   }
 
   update(data) {

@@ -15,7 +15,6 @@
         <div class="expanded sidebar">
           <div class="hce-body">
             <h2>Use Cases</h2>
-            <div> TODO: list, create, read, update, delete</div>
             <input id="use-cases" placeholder="Type to search use cases" onchange="UseCase.list(this.value)">
             <button title="create a new use case" onclick="fireEvent(event, 'new-use-case')">+</button>
             <br>
@@ -27,6 +26,7 @@
           <div class="hce-header"></div> 
         </div>
         <div class="contents">
+          <div> TODO: mock-responses search, create, read, update, delete</div>
           <hce-routes class="hce-routes" src="/mock-responses/index">
             <div route-match="/use-cases/new" import="/use-cases/new"> </div>
             <div route-match="/use-cases/edit/(\d)" import="/use-cases/edit/{{1}}"></div>
