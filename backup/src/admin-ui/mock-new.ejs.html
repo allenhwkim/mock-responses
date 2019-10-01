@@ -1,0 +1,131 @@
+<style>
+  form.mock-response {padding: 12px;}
+  form.mock-response fieldset {margin: 12px 0; border: 1px solid #ccc;}
+  form:invalid mce-button.mce-dark {background-color: inherit; color: inherit; pointer-events: none}
+  mce-text-field.code-input  textarea { 
+    background-color: #eee !important; 
+    font-size: 14px !important; 
+    line-height: 16px !important; 
+    color: #666 !important;
+  }
+</style>
+
+<script>
+  function submitForm() {
+    let values = {};
+    Array.from(document.querySelector('#form').elements)
+      .filter(el => el.name)
+      .forEach(el => values[el.name] = el.value);
+    values.active = document.querySelector('#form #active').checked ? true : false;
+
+    window.fetch('/developer/api/mock-responses', {
+      method: 'POST',
+      body: JSON.stringify(values),
+      headers: { 'Content-Type': 'application/json' }
+    }).then(resp => { if (!resp.ok) throw('activation error'); })
+      .then(json => window.location.hash = '#mock-responses')
+      .catch(error => alert(error));
+    return false;
+  }
+
+  function updatePayloadMethod(e) {
+    const payloadEl = document.querySelector('input[name=req_payload]');
+    const methodEl = document.querySelector('input[name=req_method]');
+    if (e.target.name === 'req_payload') {
+      if (payloadEl.value && methodEl.value === 'GET') {
+        methodEl.value = '';
+      }
+    } else if (e.target.name === 'req_method') {
+      if (methodEl.value === 'GET') {
+        payloadEl.value = '';
+      }
+    }
+  }
+</script>
+
+<form id="form" class="mock-response" novalidate onsubmit="return submitForm()">
+  <mce-text-field label="Name"
+    name="name"
+    optional="(optional)"
+    helper-text="Name to represent this mock response">
+  </mce-text-field>
+  <br/>
+  <br/> &nbsp; 
+  <mce-checkbox id="active" 
+    name="active" 
+    checked="checked">
+  </mce-checkbox>
+  <label for="active">Active</label>
+  <br/>
+  <fieldset>
+    <legend> Request </legend>
+    <mce-text-field name="req_method" 
+      optional="(optional)"
+      onchange="updatePayloadMethod(event)"
+      label="Request Method"
+      pattern-error="Must be GET, POST, PUT, DELETE, OPTIONS"
+      pattern="^(GET|POST|PUT|DELETE|OPTIONS)$">
+    </mce-text-field>
+    <br/>
+    <mce-text-field name="req_url" required
+      class="mce-dirty"
+      style="min-width: 600px"
+      label="URL"
+      helper-text="URL that respond with the below response"
+      pattern-error="Please enter url. e.g. /api/v1/foo"
+      pattern="^\/[\w.,@?^=%&amp;:\/~+#-]+">
+    </mce-text-field>
+    <br/>
+    <mce-text-field name="req_payload"
+      class="mce-dirty"
+      style="min-width: 600px"
+      label="Payload"
+      onchange="updatePayloadMethod(event)"
+      helper-text="Only available for POST method. Payload keys as comma-separated format"
+      pattern-error="e.g., \"ctn, accountNumber\"">
+    </mce-text-field>
+  </fieldset>
+  <fieldset>
+    <legend> Response</legend>
+    <mce-text-field label="Status Code" name="res_status"
+      helper-text="Http response status code. default 200"
+      type="number"
+      max="600"
+      min="200"
+      value="200"
+      min-error="Http response status code must be greater than 200"
+      max-error="Http response status code must be greater than 600">
+    </mce-text-field>
+    <mce-text-field label="Delay Time" name="res_delay_sec"
+      helper-text="Response delay in seconds. default 0"
+      type="number"
+      max="100"
+      min="0"
+      min-error="Http response status code must be greater than -1"
+      max-error="Http response status code must be greater than 100">
+    </mce-text-field>
+    <br/>
+    <mce-text-field name="res_content_type"
+      helper-text="Response Content Type"
+      value="application/json"
+      pattern-error="Please enter mime type of response.e.g. text/html"
+      pattern="^\w+\/\w+"
+      label="Content Type">
+    </mce-text-field>
+    <br/>
+    <mce-text-field  class="code-input" label="Response Contents" name="res_body"
+      required
+      class="mce-dirty"
+      style="min-width:100%"
+      helper-text="Mock response contents"
+      multi-line
+      type="number">
+    </mce-text-field>
+  </fieldset>
+  <br/>
+  <mce-button onclick="submitForm()"
+    class="mce-raised mce-dark">
+    <span>Submit</span>
+  </mce-button>
+
+</form>

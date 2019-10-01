@@ -1,0 +1,175 @@
+<style>
+.mock-responses { padding: 10px; }
+.mock-responses table { margin: 10px 0; width: 100%; table-layout:fixed; }
+.mock-responses table th { background-color: #999; color: #fff; padding: 8px; }
+.mock-responses table td { padding: 4px; }
+.mock-responses table td.payload { white-space: inherit; }
+.mock-responses table tr:nth-child(odd) { background: #eee; }
+.mock-responses .name { width: 10%; }
+.mock-responses .active { width: 5%; }
+.mock-responses .url { width: 45%; word-break: break-word; }
+.mock-responses .payload { width: 10%; }
+.mock-responses .response_type { width: 10%; min-width: 125px; }
+.mock-responses .actions { width: 20%; }
+a { text-decoration: none }
+.mce-search {float: right;}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  white-space: pre;
+  visibility: visible;
+  max-height: 600px;
+  max-width: 600px;
+  min-width: 100px;
+  overflow-y: scroll;
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  border-radius: 6px;
+  padding: 15px;
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  top: 100%;
+  min-height: 50px;
+  text-align: left;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+</style>
+
+<script>
+  function deleteMock(id) {
+    window.fetch(`/developer/api/mock-responses/${id}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' }
+    }).then(resp => { if (!resp.ok) throw('delete error'); })
+      .then(json => window.location.hash = '#mock-responses')
+      .then(json => window.location.reload())
+      .catch(error => alert(error));
+  }
+
+  function playMock(url, method, payload) {
+    let dialog = document.getElementById('dialog');
+    const options = {method: method || 'POST'};
+    if (payload && method !== 'GET' && method !== 'DELETE') {
+      const json = {};
+      payload.split(',').forEach(el => el.trim() && (json[el.trim()] = 0));
+      options.body = JSON.stringify(json);
+      options.headers = { 'Content-Type': 'application/json'};
+    }
+
+    window.fetch(url, options)
+      .then(resp => { if (!resp.ok) throw('error'); return resp.text(); })
+      .then(resp => {
+        try {
+          resp = JSON.stringify(JSON.parse(resp), null, '  ');
+        } catch(e) {}
+        dialog.open({
+          //title: 'Custim Title', actions: {'Custom Button': () => alert('My Button is clicked.')}
+          contents: resp,
+        });
+      })
+      .catch(error => {
+        console.error(error);
+        alert(error)
+      });
+  }
+
+  function search(key) {
+    window.location.hash = `#mock-responses?q=${encodeURIComponent(key)}`;
+  }
+
+  function toggle(id) {
+    window.fetch(`/developer/api/mock-responses/${id}/activate`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' }
+    }).then(resp => { if (!resp.ok) throw('activateion error error'); })
+      //.then(json => window.location.hash = '#mock-responses')
+      .then(json => window.location.reload())
+      .catch(error => alert(error));
+  }
+  
+  setTimeout(() => {
+    const tooltipEls = document.getElementsByClassName('tooltiptext');
+    for(let i = 0; i < tooltipEls.length; i++) {
+      tooltipEls[i].innerHTML = tooltipEls[i].innerHTML.trim();
+    }
+  }, 1000);
+</script>
+
+<div class="mock-responses">
+  The following pattern-matcing requests are intercepted and served by Mock Responses.
+  <div id="mock-responses-data">
+    <a href="#mock-new">
+      <mce-button class="mce-dark">
+        <mce-icon class="fa fa-plus"></mce-icon>
+        Create New Mock Response
+      </mce-button>
+    </a>
+    <mce-search class="mce-search mce-visible" on-search="search(keyword)"></mce-search>
+
+    <table class="data">
+      <tr>
+        <th class="name">Name</th>
+        <th class="active">Active</th>
+        <th class="url">URL</th>
+        <th width="payload">Payload</th>
+        <th width="response_type">Response Type</th>
+        <th width="actions">Actions</th>
+      </tr>
+    <% data.forEach(el => { %>
+      <tr>
+        <td class="name"><%= el.name || ''%></td>
+        <td class="active">&nbsp;
+          <a href="#mock-responses" onclick="toggle(<%= el.id%>)">
+            <mce-switch <%= el.active ? 'checked' : '' %>></mce-switch>
+          </a>
+        </td>
+        <td class="url" title="<%= el.req_url %>">
+          <% if (el.res_delay_sec) { %>
+            <span class="delay">
+              <i class="fas fa-stopwatch" style="font-size:24px;color: #ccc"></i>
+              <b style="position: relative; left: -20px"><%= el.res_delay_sec ? el.res_delay_sec + '' : '' %></b>
+            </span>
+          <% } %>
+          <%= el.req_method %> 
+          <%= el.req_url %>
+        </td>
+        <td class="payload">
+          <%= el.req_payload %>
+        </td>
+        <td class="response_type tooltip"><%= el.res_content_type %>
+          <pre class="tooltiptext">
+            <%= el.res_body%>
+          </pre>
+        </td>
+        <td class="actions">
+          <a href="#mock-responses" onclick="playMock('<%= el.req_url%>', '<%= el.req_method%>', '<%= el.req_payload %>')">
+           <mce-icon class="mce-small mce-circle">play_arrow</mce-icon>
+          </a>
+          <a href="#mock-edit-<%= el.id %>">
+            <mce-icon class="mce-small mce-circle"><i class="fa fa-info"></i></mce-icon>
+          </a>
+          <a href="#mock-responses" onclick="deleteMock(<%= el.id %>)">
+            <mce-icon class="mce-small mce-circle"><i class="fa fa-trash"></i></mce-icon>
+          </a>
+        </td>
+      </tr>
+    <% }); %>
+    </table>
+  </div>
+
+  <mce-dialog id="dialog">
+    <h3 class="mce-title">Default Title</h3>
+    <div class="mce-content">Default contents</div>
+    <div class="mce-actions"></div>
+  </mce-dialog>
+</div>

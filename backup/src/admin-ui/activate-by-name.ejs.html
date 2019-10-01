@@ -1,0 +1,38 @@
+<style>
+  .batch-update { width: 400px; }
+  .batch-update  table { margin: 10px 0; width: 100%; }
+  .batch-update  table th { background-color: #999; color: #fff; padding: 8px; }
+  .batch-update  table td { padding: 4px; white-space: nowrap; }
+  .batch-update  table tr:nth-child(odd) { background: #eee; }
+</style>
+<script>
+  function activateByName(name) {
+
+    window.fetch(`/developer/activate/${name}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' }
+    }).then(resp => { })
+      .catch(error => alert(error));
+  }
+
+</script>
+<div class="batch-update">
+  <form>
+<table>
+  <tr>
+    <th>Name Includes</th>
+    <th>Turn On</th>
+  </tr>
+  <% data.filter(el => el.name).forEach(el => { %>
+    <tr>
+      <td><%= el.name? el.name : 'empty-name' %></td>
+      <td>
+        <a href="#mock-responses" onclick="activateByName('<%= el.name%>')">
+          <mce-switch name="qq" ></mce-switch>
+        </a>
+      </td>
+    </tr>
+  <% }); %>
+</table>
+</form>
+</div>

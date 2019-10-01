@@ -1,0 +1,48 @@
+<style>
+.mock-responses { width: 100%;}
+.mock-responses .header { background: #ccc }
+td {
+  border: 1px solid #ccc;
+}
+td > div {
+  width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+</style>
+<h2> Mock Responses </h2>
+
+<input id="use-cases" 
+   placeholder="Type to search mock responses" 
+   onchange="searchMockResponses(this.value)">
+<button title="create a new mock response" onclick="alert('TODO')">+</button>
+
+<table class="mock-responses">
+  <tr class="header">
+    <td class="id">id</td>
+    <td class="active">active</td>
+    <td class="name">name</td>
+    <td class="method">method</td>
+    <td class="url">url</td>
+    <td class="payload">payload</td>
+    <td class="status">status</td>
+    <td class="delay_sec">delay sec</td>
+    <td class="content type">content type</td>
+    <td class="body">body</td>
+  </tr>
+  {{#each mockResponses}}
+    <tr class="mock-response">
+      <td class="id">{{this.id}}</td>
+      <td class="active">{{this.active}}</td>
+      <td class="name"><div>{{this.name}}<div></td>
+      <td class="method">{{this.req_method}}</td>
+      <td class="url"><div>{{this.req_url}}<div></td>
+      <td class="payload"><div>{{this.req_payload}}</div></td>
+      <td class="status">{{this.res_status}}</td>
+      <td class="delay_sec">{{this.res_delay_sec}}</td>
+      <td class="content type">{{this.res_content_type}}</td>
+      <td class="body"><div>{{this.res_body}}<div></td>
+    </tr>
+  {{/each}}
+</ul>
