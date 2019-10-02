@@ -6,28 +6,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const core_1 = require("@nestjs/core");
 const common_1 = require("@nestjs/common");
 const app_controller_1 = require("./app.controller");
-const app_service_1 = require("./app.service");
-const logger_middleware_1 = require("./common/logger.middleware");
-const logger_interceptor_1 = require("./common/logger.interceptor");
-const cats_module_1 = require("./cats/cats.module");
-const cats_controller_1 = require("./cats/cats.controller");
+const mock_responses_controller_1 = require("./mock-responses/mock-responses.controller");
+const mock_responses_service_1 = require("./mock-responses/mock-responses.service");
+const use_cases_service_1 = require("./use-cases/use-cases.service");
+const use_cases_controller_1 = require("./use-cases/use-cases.controller");
 let AppModule = class AppModule {
-    configure(consumer) {
-        consumer
-            .apply(logger_middleware_1.LoggerMiddleware)
-            .forRoutes(cats_controller_1.CatsController);
-    }
 };
 AppModule = __decorate([
     common_1.Module({
-        imports: [cats_module_1.CatsModule],
-        controllers: [app_controller_1.AppController],
+        controllers: [
+            app_controller_1.AppController,
+            mock_responses_controller_1.MockResponsesController,
+            use_cases_controller_1.UseCasesController,
+        ],
         providers: [
-            app_service_1.AppService,
-            { provide: core_1.APP_INTERCEPTOR, useClass: logger_interceptor_1.LoggerInterceptor },
+            mock_responses_service_1.MockResponsesService,
+            use_cases_service_1.UseCasesService,
         ],
     })
 ], AppModule);

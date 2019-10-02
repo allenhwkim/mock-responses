@@ -2,7 +2,7 @@
   "name": "mock-responses",
   "version": "2.0.0",
   "description": "espress-kind http request middleware",
-  "main": "index.js",
+  "main": "dist/main.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/allenhwkim/mock-responses.git"
@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/allenhwkim/mock-responses#readme",
   "scripts": {
+    "prepublish": "npm run build",
     "build": "rimraf dist && tsc -p tsconfig.build.json",
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "npm run start:copy-assets && ts-node -r tsconfig-paths/register src/main.ts",
