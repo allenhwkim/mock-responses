@@ -49,7 +49,7 @@ export class MockResponsesService {
         created_at, created_by, updated_at, updated_by
         ) VALUES
         (
-         ${reqName}, ${data.active},
+         ${reqName}, ${data.active || 0},
         '${data.req_url}', ${reqMethod}, '${data.req_payload}',
          ${data.res_status}, ${resDelaySec},
         '${data.res_content_type}', '${resBody}',
@@ -57,10 +57,12 @@ export class MockResponsesService {
         )
       `;
 
-    console.log('[mock-responses] create', sql);
-    const result = this.db.exec(sql);
-    result && BetterSqlite3.backupToSql();
-    return result;
+    console.log('[mock-responses] MockResponseService create', sql);
+    if (this.db.exec(sql)) {
+      BetterSqlite3.backupToSql();
+    } else {
+      throw '[mock-responses] error create mock_responses'
+    }
   }
 
   find(id: number) {
@@ -77,7 +79,7 @@ export class MockResponsesService {
       ORDER BY req_url, updated_at DESC
     `;
 
-    console.log('[mock-responses]', sql);
+    console.log('[mock-responses] MockResponseService', sql);
     return this.db.prepare(sql).all();
   }
 
@@ -102,7 +104,7 @@ export class MockResponsesService {
     const sql = `
       UPDATE mock_responses SET
         name = ${reqName},
-        active = ${data.active},
+        active = ${data.active || 0},
         req_url = '${data.req_url}',
         req_method = ${reqMethod},
         req_payload = '${data.req_payload}',
@@ -111,33 +113,41 @@ export class MockResponsesService {
         res_content_type = '${data.res_content_type}',
         res_body =  '${resBody}',
         updated_at = ${new Date().getTime()},
-        updated_by = '${username}'
+        updated_by = '${username.sync()}'
       WHERE id = ${data.id};
       `;
-    console.log('[mock-responses]', sql);
+    console.log('[mock-responses] MockResponseService', sql);
 
-    const result = this.db.exec(sql);
-    result && BetterSqlite3.backupToSql();
-    return result;
+    if (this.db.exec(sql)) {
+      BetterSqlite3.backupToSql();
+    } else {
+      throw '[mock-responses] error update mock_responses'
+    }
   }
 
-  activate(id): string {
+  activate(id) {
     const data = this.find(id);
     const deactivateSql = `UPDATE mock_responses SET active = 0 WHERE id <> ${id} AND req_url = '${data.req_url}'`;
     const activateSql = `UPDATE mock_responses SET active = 1 WHERE id = ${id}`;
 
-    console.log('[mock-responses]', deactivateSql, activateSql);
+    console.log('[mock-responses] MockResponseServivce', deactivateSql, activateSql);
     const result = this.db.exec(deactivateSql) && this.db.exec(activateSql);
-    result && BetterSqlite3.backupToSql();
-    return result;
+
+    if (result) {
+      BetterSqlite3.backupToSql();
+    } else {
+      throw '[mock-responses] error activate mock_responses'
+    }
   }
 
   delete(id) {
     const sql = `DELETE FROM mock_responses where id=${id}`;
-    console.log('[mock-responses]', sql);
-    const result = this.db.exec(sql);
-    result && BetterSqlite3.backupToSql();
-    return result;
+    console.log('[mock-responses] MockResponseService ', sql);
+    if (this.db.exec(sql)) {
+      BetterSqlite3.backupToSql();
+    } else {
+      throw '[mock-responses] error deleete mock_responses'
+    }
   }
 
 }

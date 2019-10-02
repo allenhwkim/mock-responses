@@ -4,27 +4,94 @@ html, body {
 }
 body {
   font-size: 16px;
-}
-body * {
+  font-family: sans-serif;
+  color: #555;
   box-sizing: border-box;
+  min-width: 1200px;
 }
 .main {
-  border: 1px solid #ccc;
   height: 100%;
 }
 .main > * {
   height: 100%;
 }
-.main .horizontal .hce-body {
+.main .top-header {
+  margin: -12px; /* to expand full width */
+  height: 56px;
+  line-height: 56px;
+  padding: 0 12px;
+  font-size: 20px;
+  background-color: #1F88E5;
+  color: #FFF;
+}
+.main .top-header .icon {
+  color: #FFF;
+  float: right;
+  line-height: 56px;
+  padding: 0 12px;
+}
+.main .hce.horizontal .sidebar .hce-body .more,
+.main .hce.horizontal .sidebar .hce-body .less {
+  display: none;
+}
+.main .hce.horizontal .sidebar:not(.expanded) .hce-body {
+  width: auto;
+  height: auto;
+}
+.horizontal.horizontal :not(.expanded) .hce-body {
+  transform: translateX(0);
+}
+
+.main .hce.horizontal .sidebar.expanded .hce-body .more {
+  display: block;
   padding: 12px;
   width: 240px;
 }
-.main .hce.horizontal .hce-header:empty {
-  padding: 2px;
+.main .hce.horizontal .sidebar:not(.expanded) .hce-body .less {
+  display: block;
+  writing-mode: vertical-lr;
+  padding: 0;
+  height: 100%;
+  cursor: pointer;
 }
 .main .horizontal .contents {
-  border: 1px solid #ccc;
   padding: 12px;
   flex: 1;
   display: block;
+}
+.main .horizontal .contents hce-routes {
+  display: block;
+  padding-top: 12px;
+}
+input:invalid, textarea:invalid {
+  color: red;
+  border: 1px solid red;
+}
+#use-cases .list {
+  padding: 12px 0;
+}
+#use-cases .list div:nth-child(even) {
+  background: #eee;
+}
+#use-cases .list div {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+input, textarea {
+  padding: 4px;
+  border: 1px solid #ccc;
+}
+button {
+  background-color: #2188e5;
+  padding: 8px;
+  border-radius: 4px;
+  color: #FFF;
+}
+button.icon {
+  color: #2188E5;
+  padding: 0;
+  border: none;
+  background: none;
 }

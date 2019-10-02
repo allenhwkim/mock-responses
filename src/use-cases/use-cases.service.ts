@@ -23,7 +23,7 @@ export class UseCasesService {
         (name, description, mock_responses)
         VALUES ('${name}', '${description}', '${mockResponses}');
       `;
-    console.log('[mock-responses] use_cases create', sql);
+    console.log('[mock-responses] UseCaseService use_cases create', sql);
     if (this.db.exec(sql)) {
       BetterSqlite3.backupToSql();
     } else {
@@ -41,7 +41,7 @@ export class UseCasesService {
       `name like '%${key}%' OR description like '%${key}%'` : `1=1`;
 
     const sql = `SELECT * FROM use_cases WHERE ${whereSql}`;
-    console.log('[mock-responses]', sql);
+    console.log('[mock-responses] UseCaseService', sql);
     return this.db.prepare(sql).all();
   }
 
@@ -57,7 +57,7 @@ export class UseCasesService {
         mock_responses = '${mockResponses}'
       WHERE id = ${data.id};
       `;
-    console.log('[mock-responses]', sql);
+    console.log('[mock-responses] UseCaseService', sql);
     const result = this.db.exec(sql);
     if (this.db.exec(sql)) {
       BetterSqlite3.backupToSql();
@@ -69,7 +69,7 @@ export class UseCasesService {
   delete(id) {
     const sql = `DELETE FROM use_cases where id=${id}`;
 
-    console.log('[mock-responses]', sql);
+    console.log('[mock-responses] UseCaseService', sql);
     const result = this.db.exec(sql);
     if (this.db.exec(sql)) {
       BetterSqlite3.backupToSql();
@@ -81,7 +81,7 @@ export class UseCasesService {
   activate(id) {
     const useCase = this.find(id);
     const mockRespIds = useCase.mock_responses.split(',').map(el => parseInt(el));
-    console.log('[mock-responses] activate mock_responses with ids', mockRespIds);
+    console.log('[mock-responses] UseCaseService activate mock_responses with ids', mockRespIds);
 
     const mockResponses = this.mockResp.findByIds(mockRespIds);
     mockResponses.forEach(mockResp => {

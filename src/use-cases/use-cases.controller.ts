@@ -49,7 +49,6 @@ export class UseCasesController {
 
   @Put(':id/activate')
   activate(@Param() params) {
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> :id/activate', params.id)
     return this.useCase.activate(params.id);
   }
 

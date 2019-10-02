@@ -24,7 +24,9 @@ console.log('data...', data);
       <div class="name">${mockResp.name}</div>
       <div class="req_method">${mockResp.req_method}</div>
       <div class="req_url">${mockResp.req_url}</div>
-      <button onclick="this.parentElement.remove()">x</button>
+      <button onclick="this.parentElement.remove()">
+        <i class="fas fa-trash-alt"></i>
+      </button>
     </div>`);
 }
 
@@ -39,14 +41,14 @@ function searchMockResponses(keyword) {
 }
 </script>
 <style>
-.mock-responses { display: flex;}
-.mock-responses .left { padding: 0 24px; }
-.mock-responses .left .desc {  height: 32px; padding: 4px; }
-.mock-responses .right { padding: 0 24px; }
-.mock-responses .right .search { text-align: right; height: 32px; padding: 4px; }
+.mock-responses { display: flex; }
+.mock-responses .left .desc {  height: 44px; padding: 4px; }
+.mock-responses .middle { width: 24px; text-align: center; font-size: 2em; padding-top: 80px; }
+.mock-responses .right .search { padding: 8px 0; text-align: right; }
 .mock-responses .row > * {display: inline-block}
 .mock-responses .row * { overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
-.mock-responses .row.header > * { background: #CCC; }
+.mock-responses .row.header > * { background: #CCC; padding: 4px;}
+.mock-responses .row.mock-response:nth-child(even) { background: #EEE;}
 .mock-responses .row .id { width: 24px; }
 .mock-responses .row .active { width: 48px; }
 .mock-responses .row .name {  width: 120px;  }
@@ -54,6 +56,9 @@ function searchMockResponses(keyword) {
 .mock-responses .row .req_url { width: 120px; }
 .mock-responses .row .action { width: 1em; }
 .mock-responses .row button { background: none; border: none; cursor: pointer; padding: 0; color: blue; }
+
+.use-case.form .column  { padding: 4px 0; }
+.use-case.form .column label { display: inline-block; width: 100px; }
 </style>
 <h3>
   {{#if useCase.id}} Update Use Case {{else}} Create Use Case {{/if}}
@@ -63,20 +68,20 @@ function searchMockResponses(keyword) {
   <input type="hidden" id="id" value="{{useCase.id}}">
 
   {{#if useCase.id}}
-  <div class="id">
+  <div class="id column">
     <label for="id">Id</label>
     <input id="id" readonly value="{{useCase.id}}" />
   </div>
   {{/if}}
 
-  <div class="name">
+  <div class="name column">
     <label for="name">Name</label>
     <input id="name" value="{{useCase.name}}" />
   </div>
 
-  <div class="description">
+  <div class="description column">
     <label for="description">Description</label>
-    <input id="description" value="{{useCase.description}}" />
+    <input id="description" size="40" value="{{useCase.description}}" />
   </div>
 
   <h3>Mock Responses</h3>
@@ -99,14 +104,19 @@ function searchMockResponses(keyword) {
           <div class="name">{{this.name}}</div>
           <div class="req_method">{{this.req_method}}</div>
           <div class="req_url">{{this.req_url}}</div>
-          <button onclick="this.parentElement.remove()">X</button>
+          <button class="icon" onclick="this.parentElement.remove()">
+            <i class="fas fa-trash-alt"></i>
+          </button>
         </div>
       {{/each}}
       </div>
     </div>
+    <div class="middle">
+      <i class="fas fa-caret-left"></i>
+    </div>
     <div class="right">
       <div class="search">
-        <input placeholder="Type to search mock-responses" onchange="searchMockResponses(this.value)" />
+        <input size="30" placeholder="Type to search mock-responses" onchange="searchMockResponses(this.value)" />
       </div>
       <div class="header row">
         <div class="id">id</div>
@@ -129,13 +139,16 @@ function searchMockResponses(keyword) {
 
   {{#if useCase.id}}
     <button onclick="fireEvent(event, 'update-use-case', getFormData())">
+      <i class="fas fa-edit"></i>
       Update Use Case
     </button>
     <button onclick="fireEvent(event, 'delete-use-case', {{useCase.id}})">
+      <i class="fas fa-trash-alt"></i>
       Delete Use Case
     </button>
   {{else}}
     <button onclick="fireEvent(event, 'create-use-case', getFormData())">
+      <i class="fas fa-plus-circle"></i>
       Create Use Case
     </button>
   {{/if}}
