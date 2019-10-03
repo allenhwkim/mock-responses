@@ -10,7 +10,7 @@
     <script src="page-controller.js"></script>
   </head>
   <body onload="fireEvent(event, 'list-use-cases')">
-    <div class="main" class="read-only">
+    <div class="main read-only">
       <hce-collapsible class="horizontal">
         <div class="expanded sidebar">
           <div class="hce-body">
@@ -18,7 +18,7 @@
               <div class="top-header">Mock Responses</div>
               <br/>
               <h3>Use Cases</h3>
-              <input id="use-cases" placeholder="Search use cases" onchange="UseCase.list(this.value)">
+              <input class="public" id="use-cases" placeholder="Search use cases" onchange="UseCase.list(this.value)">
               <button class="icon" title="create a new use case" onclick="fireEvent(event, 'new-use-case')">
                 <i class="fas fa-plus-circle"></i>
               </button>
@@ -26,10 +26,10 @@
               <hce-list id="use-cases">
                 <div class="use-case" onclick="this.classList.toggle('expanded')">
                   <div class="name">
-                    <button class="icon" style="float:right">
+                    <b class="name-text">{{name}}</b>
+                    <button class="icon public" style="float:right">
                       <i class="fa fa-play" onclick="fireEvent(event, 'edit-use-case', {{id}})"></i>
                     </button>
-                    <b>{{name}}</b>
                   </div>
                   <div class="description">{{description}}</div>
                 </div>
@@ -46,7 +46,7 @@
           <div class="top-header">
             Welcome To Mock Responses
             <a class="icon" href="https://github.com/allenhwkim/mock-responses"><i class="fab fa-github"></i></a>
-            <button class="icon" style="float:right" onclick="fireEvent('', 'list-mock-responses', '')">
+            <button class="icon public" style="float:right" onclick="fireEvent('', 'list-mock-responses', '')">
               <i class="fas fa-list"></i>
             </button>
           </div>

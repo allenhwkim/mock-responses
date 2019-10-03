@@ -1,11 +1,16 @@
 <style>
 .mock-responses { width: 100%; table-layout: fixed;}
 .mock-responses .header { background: #ccc }
+.mock-responses .id { width: 40px; }
 .mock-responses .active { width: 40px; }
+.mock-responses .name { width: 120px; }
 .mock-responses .method { width: 80px; }
+.mock-responses .payload { width: 120px; }
 .mock-responses .status { width: 40px; }
 .mock-responses .delay_sec { width: 40px; }
-.mock-responses .content_type { width: 80px; }
+.mock-responses .content_type { width: 120px; }
+.mock-responses .url { width: 320px; }
+.mock-responses .url .icon { float: right; }
 td {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -21,7 +26,7 @@ td {
 
 <h2> Mock Responses </h2>
 
-<input class="mock-response-search" size="40" 
+<input class="mock-response-search public" size="40" 
    placeholder="Type to search mock responses" 
    onchange="fireEvent(event, 'list-mock-responses', this.value)">
 <button title="create a new mock response" onclick="fireEvent(event, 'new-mock-response')">+</button>
@@ -37,7 +42,7 @@ td {
       <td class="payload">payload</td>
       <td class="status">status</td>
       <td class="delay_sec">delay sec</td>
-      <td class="content type">content type</td>
+      <td class="content_type">content type</td>
       <td class="body">body</td>
     </tr>
   <thead>
@@ -48,7 +53,14 @@ td {
         <td class="active">{{this.active}}</td>
         <td class="name">{{this.name}}</td>
         <td class="method">{{this.req_method}}</td>
-        <td class="url">{{this.req_url}}</td>
+        <td class="url">
+          {{#if this.active}}
+          <button class="icon" onclick="fireEvent(event, 'play-mock-response', {{this.id}})">
+            <i class="fa fa-play"></i>
+          </button>
+          {{/if}}
+          {{this.req_url}}
+        </td>
         <td class="payload">{{this.req_payload}}</td>
         <td class="status">{{this.res_status}}</td>
         <td class="delay_sec">{{this.res_delay_sec}}</td>

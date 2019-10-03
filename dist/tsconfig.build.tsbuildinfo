@@ -1358,11 +1358,11 @@
         "signature": "9ce593cca8e70a0eac6a1ff818deb467644ef5dd24561154332abcefeee90989"
       },
       "../src/common/mock-response.middleware.ts": {
-        "version": "fd6ee44a6d86c174152b5fe29d0ce4f1d9987b2c60cef41f5e400290ea7aee16",
+        "version": "8f867b30b9cc2b07bccfa0d94eb1ddc7728bfe4755a079cba084d7f646f35f34",
         "signature": "6785fefdc71fc060a31c47698916d860ede70db6477b46b45a0623ddd2e8e5ce"
       },
       "../src/main.ts": {
-        "version": "ca19ba704c82e8d076b43fd8211cf3aee64e89e798ddc7e4eede1ebc0b1ece1c",
+        "version": "92760961d3c7205fcee49f789cf4515ee57459721776472568c20d2cafc3bb4f",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
       },
       "../node_modules/@types/anymatch/index.d.ts": {
@@ -3557,6 +3557,7 @@
         "../node_modules/@types/express/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/yargs/index.d.ts",
+        "../node_modules/@types/body-parser/index.d.ts",
         "../node_modules/@nestjs/core/index.d.ts",
         "../node_modules/@nestjs/platform-express/index.d.ts",
         "../src/app.module.ts",

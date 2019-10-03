@@ -9,12 +9,11 @@ body {
   box-sizing: border-box;
   min-width: 1200px;
 }
-.main {
-  height: 100%;
-}
-.main > * {
-  height: 100%;
-}
+.main { height: 100%; }
+.main > * { height: 100%; }
+.main.read-only button:not(.public) {display: none;}
+.main.read-only input:not(.public) {pointer-events: none; border: none;}
+.main.read-only textarea:not(.public) {pointer-events: none; border: none;}
 .main .top-header {
   margin: -12px; /* to expand full width */
   height: 56px;
@@ -30,18 +29,12 @@ body {
   line-height: 56px;
   padding: 0 12px;
 }
+.main .dialog { max-width: calc(100% - 48px); }
+.main .dialog pre { width: 100%; overflow: auto; }
 .main .hce.horizontal .sidebar .hce-body .more,
-.main .hce.horizontal .sidebar .hce-body .less {
-  display: none;
-}
-.main .hce.horizontal .sidebar:not(.expanded) .hce-body {
-  width: auto;
-  height: auto;
-}
-.horizontal.horizontal :not(.expanded) .hce-body {
-  transform: translateX(0);
-}
-
+.main .hce.horizontal .sidebar .hce-body .less { display: none; }
+.main .hce.horizontal .sidebar:not(.expanded) .hce-body { width: auto; height: auto;
+} .horizontal.horizontal :not(.expanded) .hce-body { transform: translateX(0); }
 .main .hce.horizontal .sidebar.expanded .hce-body .more {
   display: block;
   padding: 12px;
@@ -80,10 +73,14 @@ input:invalid, textarea:invalid {
 }
 #use-cases .list .use-case .name {
   display: block;
+  border: 1px solid #eee;
+}
+#use-cases .list .use-case .name  .name-text {
+  display: inline-block;
+  width: calc(100% - 24px);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  border: 1px solid #eee;
 }
 #use-cases .list .use-case .description { 
   display: none;

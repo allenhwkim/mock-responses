@@ -6,6 +6,7 @@ const express = require("express");
 const morgan = require("morgan");
 const fs = require("fs");
 const yargs = require("yargs");
+const bodyParser = require("body-parser");
 const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const better_sqlite3_1 = require("./common/better-sqlite3");
@@ -27,6 +28,7 @@ async function bootstrap() {
         httpsOptions: config.httpsOptions
     });
     app.use(morgan('[mock-responses] :method :url :status :res[content-length] - :response-time ms'));
+    app.use(bodyParser.json());
     app.use(mock_response_middleware_1.serveMockResponse);
     app.use(express.static(path.join(__dirname, 'assets')));
     app.setBaseViewsDir(path.join(__dirname, 'assets', 'views'));

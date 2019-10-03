@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', event => {
+  document.body.addEventListener('enable-edit-mode', handleCustomEvents);
+
   document.body.addEventListener('list-use-cases', handleCustomEvents);
   document.body.addEventListener('new-use-case', handleCustomEvents);
   document.body.addEventListener('create-use-case', handleCustomEvents);
@@ -13,6 +15,8 @@ document.addEventListener('DOMContentLoaded', event => {
   document.body.addEventListener('update-mock-response', handleCustomEvents);
   document.body.addEventListener('delete-mock-response', handleCustomEvents);
   document.body.addEventListener('play-mock-response', handleCustomEvents);
+
+  enableEditMode();
 });
 
 function autoGrow(element) {
@@ -47,21 +51,27 @@ function fireEvent(event, type, data) {
   event && event.stopPropagation();
 }
 
+function enableEditMode(data) {
+  data && window.localStorage.setItem('edit-mode', data);
+  const func = window.localStorage.getItem('edit-mode') == 1 ? 'remove' : 'add';
+  document.querySelector('.main').classList[func]('read-only');
+}
+
 function handleCustomEvents(event) {
   const type = event.type;
   const data = event.detail;
 
   console.log('[mock-responses]  handling custom event', type, data, event);
   switch(type) {
+    case 'enable-edit-mode': enableEditMode(data); break;
+
     case 'list-use-cases':  UseCase.list(data); break;
     case 'new-use-case':    UseCase.new(); break;
     case 'edit-use-case':   UseCase.edit(data); break;
     case 'create-use-case': UseCase.create(data); break;
     case 'update-use-case': UseCase.update(data); break;
     case 'delete-use-case': UseCase.delete(data); break;
-  }
 
-  switch(type) {
     case 'list-mock-responses':  MockResponse.list(data); break;
     case 'new-mock-response':    MockResponse.new(); break;
     case 'edit-mock-response':   MockResponse.edit(data); break;

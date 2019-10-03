@@ -5,7 +5,8 @@ function getFormData() {
       acc[el.id] = el.value;
       return acc;
     }, {})
-  data.active = document.querySelectorAll('.mock-response [id=active]').checked;
+  data.active = document.querySelector('.mock-response [id=active]').checked ? 1 : 0;
+  console.log('>>>>>>>>>>>>>>>>', data );
   return data;
 }
 </script>
@@ -46,7 +47,7 @@ function getFormData() {
 
   <div class="active column">
     <label for="active">Active</label>
-    <input id="active" type="checkbox" value="1" checked="{{mockResponse.active}}" />
+    <input id="active" type="checkbox" value="1" />
   </div>
 
   <fieldset class="request-group">
@@ -64,7 +65,7 @@ function getFormData() {
 
     <div class="req_url column">
       <label for="req_payload">Payload</label>
-      <input id="req_payload" pattern="^(\S,\b?)*\/\S+$" value="{{mockResponse.req_payload}}" />
+      <input id="req_payload" pattern="^(\S+,\s?)*\S+$" value="{{mockResponse.req_payload}}" />
     </div>
   </fieldset>
 
