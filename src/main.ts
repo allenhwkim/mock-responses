@@ -3,7 +3,7 @@ import * as hbs from 'hbs';
 import * as express from 'express';
 import * as morgan from 'morgan';
 import * as fs from 'fs';
-import { argv } from 'yargs';
+import * as yargs from 'yargs';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
@@ -13,6 +13,12 @@ import { ErrorFilter } from './common/error.filter';
 
 import { serveMockResponse } from './common/mock-response.middleware';
 
+const argv = yargs
+  .usage('Usage: $0 --https --db-path [path] --port [num]')
+  .describe('db-path', 'Sqlite3 file path')
+  .describe('https', 'is secure server')
+  .describe('port', 'port number')
+  .help('h').argv;
 const config = getConfig(argv);
 console.log('[mock-responses] yargs argv', argv, config);
 if (!config.dbPath) throw `Invalid sqlite3 path ${argv['db-path']}`;
