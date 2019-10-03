@@ -1,9 +1,9 @@
 {
   "name": "mock-responses",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "espress-kind http request middleware",
   "main": "dist/main.js",
-  "bin" : "dist/main.js",
+  "bin": "dist/main.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/allenhwkim/mock-responses.git"
