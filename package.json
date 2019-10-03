@@ -21,7 +21,8 @@
   "homepage": "https://github.com/allenhwkim/mock-responses#readme",
   "scripts": {
     "prepublish": "npm run build",
-    "build": "rimraf dist && tsc -p tsconfig.build.json",
+    "build": "rimraf dist && tsc -p tsconfig.build.json && npm run build:copy-assets",
+    "build:copy-assets": "cp -R src/assets demo dist",
     "format": "prettier --write \"src/**/*.ts\"",
     "start": "npm run start:copy-assets && ts-node -r tsconfig-paths/register src/main.ts",
     "start:dev": "tsc-watch -p tsconfig.build.json --onSuccess \"node dist/main.js\"",

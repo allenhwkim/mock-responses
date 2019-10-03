@@ -16,7 +16,7 @@ export class UseCasesController {
   ) {}
 
   @Get('edit/:id')
-  @Render('use-cases/edit')
+  @Render('use-cases-edit')
   edit(@Param() params) {
     const useCase: UseCase = this.useCase.find(params.id);
     const mockRespIds = useCase.mock_responses.split(',').map(id => parseInt(id));
@@ -25,7 +25,7 @@ export class UseCasesController {
   }
 
   @Get('new')
-  @Render('use-cases/edit')
+  @Render('use-cases-edit')
   new(@Param() params) {
     const useCase: UseCase = {id: undefined, name: '', description: '', mock_responses: ''};
     const mockResponses = [];

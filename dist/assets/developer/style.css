@@ -70,15 +70,31 @@ input:invalid, textarea:invalid {
 #use-cases .list {
   padding: 12px 0;
 }
-#use-cases .list div:nth-child(even) {
+#use-cases .list .use-case {
+  outline: none;
+  margin: 4px 0;
+  padding: 4px 0 0;
+}
+#use-cases .list .use-case:nth-child(even) {
   background: #eee;
 }
-#use-cases .list div {
+#use-cases .list .use-case .name {
   display: block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  border: 1px solid #eee;
 }
+#use-cases .list .use-case .description { 
+  display: none;
+  background: #FFF;
+  opacity: 0.8;
+  padding: 4px 0 0 8px;
+}
+#use-cases .list .use-case.expanded .description { 
+  display: block;
+}
+
 input, textarea {
   padding: 4px;
   border: 1px solid #ccc;

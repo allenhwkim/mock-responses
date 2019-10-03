@@ -14,7 +14,7 @@ import { ErrorFilter } from './common/error.filter';
 import { serveMockResponse } from './common/mock-response.middleware';
 
 const argv = yargs
-  .usage('Usage: $0 --https --db-path [path] --port [num]')
+  .usage('Usage: $0 --https --db-path [path] --port [num] --assets')
   .describe('db-path', 'Sqlite3 file path')
   .describe('https', 'is secure server')
   .describe('port', 'port number')
@@ -30,12 +30,12 @@ async function bootstrap() {
   });
 
   app.use(morgan('[mock-responses] :method :url :status :res[content-length] - :response-time ms'));
-  app.useStaticAssets(path.join(__dirname, '..', 'assets'));
   app.use(serveMockResponse);
-  app.use(express.static(path.join(__dirname, '/assets')));
+  app.use(express.static(path.join(__dirname, 'assets')));
 
-  app.setBaseViewsDir(__dirname);
-  hbs.registerPartials(__dirname); 
+  // app.useStaticAssets(path.join(__dirname, 'assets'));
+  app.setBaseViewsDir(path.join(__dirname, 'assets', 'views')); // views for nestjs
+  hbs.registerPartials(path.join(__dirname, 'assets', 'views'));  // views for hbs
 
   app.setViewEngine('hbs');
   app.useGlobalFilters(new ErrorFilter())
@@ -46,8 +46,11 @@ async function bootstrap() {
 
 function getConfig(argv) {
   const config: any = {};
+  const demoDirPath = 
+    fs.existsSync(path.join(__dirname, 'demo')) ? path.join(__dirname, 'demo') :
+    fs.existsSync(path.join(__dirname, '..', 'demo')) ? path.join(__dirname, '..', 'demo') : path.join(__dirname);
 
-  const usrPath = path.resolve(<string>(argv['db-path']) || path.join(__dirname, '..', 'demo'));
+  const usrPath = path.resolve(<string>(argv['db-path']) || demoDirPath);
   if (fs.existsSync(usrPath) && fs.lstatSync(usrPath).isDirectory()) {
     const dbPath = path.join(usrPath, 'mock-responses.sqlite3');
     config.dbPath = fs.existsSync(dbPath) ? dbPath : null;

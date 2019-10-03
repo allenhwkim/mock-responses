@@ -62,7 +62,7 @@ let MockResponsesController = class MockResponsesController {
 };
 __decorate([
     common_1.Get('index'),
-    common_1.Render('mock-responses/index'),
+    common_1.Render('mock-responses-list'),
     __param(0, common_1.Query('q')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -70,7 +70,7 @@ __decorate([
 ], MockResponsesController.prototype, "index", null);
 __decorate([
     common_1.Get('edit/:id'),
-    common_1.Render('mock-responses/edit'),
+    common_1.Render('mock-responses-edit'),
     __param(0, common_1.Param()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -78,7 +78,7 @@ __decorate([
 ], MockResponsesController.prototype, "edit", null);
 __decorate([
     common_1.Get('new'),
-    common_1.Render('mock-responses/edit'),
+    common_1.Render('mock-responses-edit'),
     __param(0, common_1.Param()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

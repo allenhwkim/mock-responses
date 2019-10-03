@@ -13,21 +13,21 @@ export class MockResponsesController {
   }
 
   @Get('index')
-  @Render('mock-responses/index')
+  @Render('mock-responses-list')
   index(@Query('q') key) {
     const mockResponses = this.mockResp.findAll(key);
     return { mockResponses };
   }
 
   @Get('edit/:id')
-  @Render('mock-responses/edit')
+  @Render('mock-responses-edit')
   edit(@Param() params) {
     const mockResponse: MockResponse = this.mockResp.find(params.id);
     return { mockResponse };
   }
 
   @Get('new')
-  @Render('mock-responses/edit')
+  @Render('mock-responses-edit')
   new(@Param() params) {
     return { 
       mockResponse: {

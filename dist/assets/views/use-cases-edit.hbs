@@ -137,20 +137,23 @@ function searchMockResponses(keyword) {
     </div>
   </div>
 
-  {{#if useCase.id}}
-    <button onclick="fireEvent(event, 'update-use-case', getFormData())">
-      <i class="fas fa-edit"></i>
-      Update Use Case
-    </button>
-    <button onclick="fireEvent(event, 'delete-use-case', {{useCase.id}})">
-      <i class="fas fa-trash-alt"></i>
-      Delete Use Case
-    </button>
-  {{else}}
-    <button onclick="fireEvent(event, 'create-use-case', getFormData())">
-      <i class="fas fa-plus-circle"></i>
-      Create Use Case
-    </button>
-  {{/if}}
+  <br/>
+  <div class="buttons">
+    {{#if useCase.id}}
+      <button onclick="fireEvent(event, 'update-use-case', getFormData())">
+        <i class="fas fa-edit"></i>
+        Update Use Case
+      </button>
+      <button onclick="fireEvent(event, 'delete-use-case', {{useCase.id}})">
+        <i class="fas fa-trash-alt"></i>
+        Delete Use Case
+      </button>
+    {{else}}
+      <button onclick="fireEvent(event, 'create-use-case', getFormData())">
+        <i class="fas fa-plus-circle"></i>
+        Create Use Case
+      </button>
+    {{/if}}
+  </div>
 </div>
 

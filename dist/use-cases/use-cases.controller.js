@@ -52,7 +52,7 @@ let UseCasesController = class UseCasesController {
 };
 __decorate([
     common_1.Get('edit/:id'),
-    common_1.Render('use-cases/edit'),
+    common_1.Render('use-cases-edit'),
     __param(0, common_1.Param()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -60,7 +60,7 @@ __decorate([
 ], UseCasesController.prototype, "edit", null);
 __decorate([
     common_1.Get('new'),
-    common_1.Render('use-cases/edit'),
+    common_1.Render('use-cases-edit'),
     __param(0, common_1.Param()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
