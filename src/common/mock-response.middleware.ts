@@ -6,11 +6,11 @@ import { Request, Response } from 'express';
 import { BetterSqlite3 } from './better-sqlite3';
 import { MockResponse } from './interfaces/mock-response.interface';
 
-function hasAllPayload(req, payload) {
+function hasAllPayload(body, payload) {
   const payloads = payload.split(',');
   for (var i=0; i < payloads.length; i++) {
     var el = payloads[i].trim();
-    if (el && typeof req.body[el] === 'undefined') {
+    if (el && typeof body[el] === 'undefined') {
       return false;
     }
   }
@@ -70,7 +70,7 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
     await delay(delaySec * 1000);
   }
 
-  if (row.req_payload && !hasAllPayload(req, row.req_payload)) {
+  if (row.req_payload && !hasAllPayload(req.body, row.req_payload)) {
     res.statusCode = 422;
     res.write(`payload not matching, ${row.req_payload}`);
     res.end();
@@ -82,6 +82,11 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
       path.dirname(BetterSqlite3.dbPath),
       row.res_body.replace('file://', '')
     );
+    if (!fs.existsSync(filePath)) {
+      res.statusCode = 404;
+      res.end();
+      return;
+    }
     res.setHeader('Content-Type', row.res_content_type);
     res.write(fs.readFileSync(filePath, 'utf8'));
     res.statusCode = row.res_status;

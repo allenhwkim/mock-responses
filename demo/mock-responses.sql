@@ -21,28 +21,18 @@ INSERT INTO "mock_responses" VALUES(1,NULL,1,'/api/hello',NULL,200,NULL,'applica
   "hello GET API request"
 ]',NULL,NULL,1537137745509,'allen.kim',NULL);
 INSERT INTO "mock_responses" VALUES(2,NULL,1,'/api/world',NULL,200,NULL,'text/javascript','file://foo.js',NULL,NULL,1559167349451,'allen.kim','');
-INSERT INTO "mock_responses" VALUES(3,NULL,0,'/api/foo','POST',200,1,'text/plain','{
+INSERT INTO "mock_responses" VALUES(3,'test',1,'/api/foo','POST',200,1,'text/plain','{
   "foo": "this is foo.json One"
-}',NULL,NULL,1562268657126,'allen.kim','abc,def');
-INSERT INTO "mock_responses" VALUES(4,'',1,'/api/foo','GET',200,NULL,'application/json','{
+}',NULL,NULL,1570126785972,'allen.kim','abc,def');
+INSERT INTO "mock_responses" VALUES(4,'test',0,'/api/foo','GET',200,0,'application/json','{
   "foo": "this is foo.json Two"
-}',NULL,NULL,NULL,NULL,NULL);
+}',NULL,NULL,1570128050101,'allen.kim','');
 INSERT INTO "mock_responses" VALUES(5,'',0,'/api/foo','GET',200,NULL,'application/json','{
   "foo": "this is foo.json Three"
 }',NULL,NULL,NULL,NULL,NULL);
 INSERT INTO "mock_responses" VALUES(6,NULL,0,'/api/hello','POST',200,NULL,'application/json','[
   "hello POST API request"
 ]',1537137462311,'allen.kim',1559163936174,'allen.kim','foo,bar');
-INSERT INTO "mock_responses" VALUES(7,NULL,0,'/api/func',NULL,200,NULL,'application/json','["function response ONE"]',1537150686178,'allen.kim',1537150744918,'allen.kim',NULL);
-INSERT INTO "mock_responses" VALUES(8,NULL,0,'/api/func',NULL,200,NULL,'application/json','["function response TWO"]',1537150711619,'allen.kim',1537150740359,'allen.kim',NULL);
-INSERT INTO "mock_responses" VALUES(9,NULL,0,'/api/func',NULL,200,NULL,'application/json','["function response THREE"]
-',1537150735675,'allen.kim',1537150763456,'allen.kim',NULL);
-INSERT INTO "mock_responses" VALUES(10,'Test',1,'/api/func',NULL,200,NULL,'text/javascript','function(req, res, next) {
-  if (req.query.foo == 1) return serveResponse(7);
-  else if (req.query.foo == 2) return serveResponse(8);
-  else if (req.query.foo == 3) return serveResponse(9);
-  else return false;
-}',1537151086419,'allen.kim',1555448814836,'allen.kim',NULL);
 INSERT INTO "mock_responses" VALUES(11,'Long name Long nameLong name Long nameLong name Long nameLong name Long nameLong name Long name',1,'/payload/test/foo/bar/payload/test/foo/bar/payload/test/foo/bar/payload/test/foo/bar/payload/test/foo/bar/payload/test/foo/bar/payload/test/foo/bar',NULL,200,NULL,'application/json','[]',1559154964262,'allen.kim',1559237881327,'allen.kim','foo, bar, xxxx, yyy, accountNumber, ctn');
 INSERT INTO "mock_responses" VALUES(12,NULL,1,'/cors/options/call','OPTIONS',200,NULL,'application/json','{}',1563894834295,'allen.kim',1563894834295,'allen.kim','');
 INSERT INTO "mock_responses" VALUES(13,'test',0,'test','POST',200,0,'application/json','test',1570031706413,'allen.kim',1570031706413,'allen.kim','');

@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', event => {
   document.body.addEventListener('edit-mock-response', handleCustomEvents);
   document.body.addEventListener('update-mock-response', handleCustomEvents);
   document.body.addEventListener('delete-mock-response', handleCustomEvents);
+  document.body.addEventListener('play-mock-response', handleCustomEvents);
 });
 
 function autoGrow(element) {
@@ -43,6 +44,7 @@ function fireEvent(event, type, data) {
   const srcEl = (event && event.target) instanceof HTMLElement ? event.target : document.body;
   console.log('[mock-responses]  firing custom event', custEvent);
   srcEl.dispatchEvent(custEvent);
+  event && event.stopPropagation();
 }
 
 function handleCustomEvents(event) {
@@ -66,6 +68,7 @@ function handleCustomEvents(event) {
     case 'create-mock-response': MockResponse.create(data); break;
     case 'update-mock-response': MockResponse.update(data); break;
     case 'delete-mock-response': MockResponse.delete(data); break;
+    case 'play-mock-response': MockResponse.play(event, data); break;
   }
 }
 
@@ -126,9 +129,8 @@ var UseCase = {
 
 var MockResponse = {
   isValid: function(mockResp) {
-    console.log('mockResp', mockResp)
     return mockResp.name &&
-      ['1',undefined].includes(mockResp.active) &&
+      [1,0].includes(mockResp.active) &&
       mockResp.req_url &&
       mockResp.res_status &&
       mockResp.res_delay_sec > -1 &&
@@ -151,7 +153,6 @@ var MockResponse = {
     window.location.href = '#' + url;
   },
   create: function(mockResponse) {
-    console.log('>>>>>>>>>>>>>>>>>>>>>>> create mock resp', mockResponse )
     if (!MockResponse.isValid(mockResponse)) {
       Main.dialogEl.open({title: 'Error', body: 'Invalid Mock Response Data'});
     } else {
@@ -164,11 +165,47 @@ var MockResponse = {
       Main.dialogEl.open({title: 'Error', body: 'Invalid Mock Response Data'});
     } else {
       fetchUrl(`/mock-responses/${mockResponse.id}`, {method: 'PUT', body: JSON.stringify(mockResponse)})
-        .then(resp => Main.dialogEl.open({title: 'Success', body: 'Mock Response Updated!'}));
+        .then(resp => Main.dialogEl.open({title: 'Success', body: `
+          <div>Mock Response Updated!</div>
+          <button onclick="fireEvent('', 'list-mock-responses', '')">List Mock Responses</button>
+        `}));
     }  
   },
   delete: function(id) {
     fetchUrl(`/mock-responses/${id}`, {method: 'DELETE'})
       .then(resp => fireEvent(null, 'list-mock-responses', ''));  
+  },
+  play: function(event, id) {
+    const req = {};
+    let respStatus, respType;
+    event.stopPropagation();
+    fetchUrl(`/mock-responses/${id}`)
+      .then(resp => {
+        req.url = resp.req_url;
+        req.method = resp.req_method || 'POST';
+        req.body = req.method !== 'GET' && resp.req_payload ? `{
+          ${resp.req_payload.trim().split(',').map(el => `"${el.trim()}":""`).join(",")}
+        }` : undefined;
+        return window.fetch(req.url, {method: req.method, body: req.body, headers: {
+          'Accept': resp.res_content_type,
+          'Content-Type': 'application/json' 
+        }});
+      }).then( resp => {
+        respStatus = resp.status;
+        respType = resp.headers.get('Content-Type');
+        return resp.text();
+      }).then(resp => {
+        const bodyHTML = `
+          <fieldset><legend>Request</legend>
+            <div>method: ${req.method}</div>
+            <div>payloads: ${req.body}</div>
+          </fieldset>
+          <fieldset><legend>Response</legend>
+            <div>status Code: ${respStatus}</div>
+            <div>Content-Type: ${respType}</div>
+            <pre>${resp}</pre>
+          </fieldset>`;
+        Main.dialogEl.open({title: req.url, body: bodyHTML});
+      });
   }
 };

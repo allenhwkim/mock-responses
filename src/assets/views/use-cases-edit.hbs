@@ -14,7 +14,6 @@ function getFormData() {
 
 // add selected mock response into form section
 function addMockResponse(data) {
-console.log('data...', data);
   const listEl = document.querySelector('.edit-mock-responses');
   const mockResp = data.detail;
   listEl.insertAdjacentHTML('beforeend', `
@@ -37,7 +36,7 @@ function searchMockResponses(keyword) {
     .then(resp => {
       if (!resp.ok) throw Error(resp); 
       return resp.json();
-    }).then(resp => {console.log('xxxx', resp); return resp;});
+    });
 }
 </script>
 <style>
@@ -116,7 +115,9 @@ function searchMockResponses(keyword) {
     </div>
     <div class="right">
       <div class="search">
-        <input size="30" placeholder="Type to search mock-responses" onchange="searchMockResponses(this.value)" />
+        <input size="30" class="public" 
+          placeholder="Type to search mock-responses"
+          onchange="searchMockResponses(this.value)" />
       </div>
       <div class="header row">
         <div class="id">id</div>

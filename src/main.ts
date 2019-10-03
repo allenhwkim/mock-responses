@@ -4,6 +4,7 @@ import * as express from 'express';
 import * as morgan from 'morgan';
 import * as fs from 'fs';
 import * as yargs from 'yargs';
+import * as bodyParser from 'body-parser';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
@@ -30,6 +31,7 @@ async function bootstrap() {
   });
 
   app.use(morgan('[mock-responses] :method :url :status :res[content-length] - :response-time ms'));
+  app.use(bodyParser.json());
   app.use(serveMockResponse);
   app.use(express.static(path.join(__dirname, 'assets')));
 
