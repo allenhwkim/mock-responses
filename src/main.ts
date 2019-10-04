@@ -49,7 +49,6 @@ async function bootstrap() {
 
     if (argv.cookie) {
       const [_, name, value] = (<string>argv.cookie).match(/^([a-z_]+)=(.*)/i);
-      console.log('>>>>>>>>> cookieSession', { name, value });
       if (!req.cookies[name]) {
         res.setHeader('Set-Cookie', `${name}=${value}`);
       }

@@ -12,7 +12,7 @@
   <body onload="fireEvent(event, 'list-use-cases')">
     <div class="main read-only">
       <hce-collapsible class="horizontal">
-        <div class="expanded sidebar">
+        <div class="sidebar">
           <div class="hce-body">
             <div class="more">
               <div class="top-header">Mock Responses</div>
@@ -36,7 +36,7 @@
               </hce-list>
             </div>
             <div class="less" onclick="this.closest('.sidebar').classList.add('expanded')">
-              USE CASES
+               &nbsp; &nbsp; USE CASES
             </div>
           </div>
           <!-- when .hce-header clicks .hce-body collapse/expands -->
@@ -52,14 +52,16 @@
             <input class="passcode public" title="Enter passcode here to enable edit mode"
               onkeyup="fireEvent(event, 'enable-edit-mode', this.value)"/>
           </div>
-          <hce-routes class="hce-routes" src="/mock-responses/index">
-            <div route-match="/use-cases/new" import="/use-cases/new"> </div>
-            <div route-match="/use-cases/edit/(\d+)" import="/use-cases/edit/{{1}}"></div>
+          <div>
+            <hce-routes class="hce-routes" src="/mock-responses/index">
+              <div route-match="/use-cases/new" import="/use-cases/new"> </div>
+              <div route-match="/use-cases/edit/(\d+)" import="/use-cases/edit/{{1}}"></div>
 
-            <div route-match="/mock-responses/new" import="/mock-responses/new"></div>
-            <div route-match="/mock-responses/edit/(\d+)" import="/mock-responses/edit/{{1}}"></div>
-            <div route-match="/mock-responses/index(.*)" import="/mock-responses/index{{1}}"></div>
-          </hce-routes>
+              <div route-match="/mock-responses/new" import="/mock-responses/new"></div>
+              <div route-match="/mock-responses/edit/(\d+)" import="/mock-responses/edit/{{1}}"></div>
+              <div route-match="/mock-responses/index(.*)" import="/mock-responses/index{{1}}"></div>
+            </hce-routes>
+          </div>
         </div>
       </hce-collapsible>
     </div>

@@ -1362,7 +1362,7 @@
         "signature": "6785fefdc71fc060a31c47698916d860ede70db6477b46b45a0623ddd2e8e5ce"
       },
       "../src/main.ts": {
-        "version": "fa7c667492f49b02a53e36c09d329a74ac16707364bfb5b568446d4929d270b6",
+        "version": "9e2d4225372bfc342714c4191bb35d85bb8927f53315e15efb656ddba9fab168",
         "signature": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
       },
       "../node_modules/@types/anymatch/index.d.ts": {

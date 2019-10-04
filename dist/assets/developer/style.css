@@ -9,7 +9,7 @@ body {
   box-sizing: border-box;
   min-width: 1200px;
 }
-.main { height: 100%; }
+.main { min-height: 100%; } 
 .main > * { height: 100%; }
 .main.read-only button:not(.public) {display: none;}
 .main.read-only input:not(.public) {pointer-events: none; border: none;}
@@ -38,10 +38,11 @@ body {
 }
 .main .dialog { max-width: calc(100% - 48px); }
 .main .dialog pre { width: 100%; overflow: auto; }
+.main .hce.horizontal { min-height: 100vh; } 
 .main .hce.horizontal .sidebar .hce-body .more,
 .main .hce.horizontal .sidebar .hce-body .less { display: none; }
-.main .hce.horizontal .sidebar:not(.expanded) .hce-body { width: auto; height: auto;
-} .horizontal.horizontal :not(.expanded) .hce-body { transform: translateX(0); }
+.main .hce.horizontal .sidebar:not(.expanded) .hce-body { width: auto; height: auto; } 
+.horizontal.horizontal :not(.expanded) .hce-body { transform: translateX(0); }
 .main .hce.horizontal .sidebar.expanded .hce-body .more {
   display: block;
   padding: 12px;
