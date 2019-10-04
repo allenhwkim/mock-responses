@@ -32,13 +32,6 @@ async function serveMockResponse(req, res, next) {
         next();
         return false;
     }
-    const origin = req.headers['origin'];
-    if (origin) {
-        res.setHeader('Access-Control-Allow-Origin', origin);
-        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, OPTIONS');
-        res.setHeader('Access-Control-Allow-Credentials', 'true');
-    }
     const now = Date.now();
     const row = findByUrlMethod(req.url, req.method);
     if (!row) {

@@ -39,15 +39,6 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
     return false; // next();
   } 
 
-  // enable CORS
-  const origin = req.headers['origin'];
-  if (origin) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, OPTIONS');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-  }
-
   const now = Date.now();
   const row: MockResponse = findByUrlMethod(req.url, req.method);
 

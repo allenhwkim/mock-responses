@@ -49,6 +49,8 @@
             <button class="icon public" style="float:right" onclick="fireEvent('', 'list-mock-responses', '')">
               <i class="fas fa-list"></i>
             </button>
+            <input class="passcode public" title="Enter passcode here to enable edit mode"
+              onkeyup="fireEvent(event, 'enable-edit-mode', this.value)"/>
           </div>
           <hce-routes class="hce-routes" src="/mock-responses/index">
             <div route-match="/use-cases/new" import="/use-cases/new"> </div>
