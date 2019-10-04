@@ -19,7 +19,7 @@ function getFormData() {
 .mock-response.form .column #req_payload { width: 400px; }
 .mock-response.form .column #res_status { width: 6em; }
 .mock-response.form .column #res_delay_sec { width: 6em; }
-.mock-response.form .column #res_body { width: calc(100% - 100px - 12px); }
+.mock-response.form .column #res_body { width: calc(100% - 100px - 12px); resize: vertical; }
 .request-group, .response-group {
   margin: 12px 0;
   border: 1px solid #ccc;
@@ -108,4 +108,5 @@ function getFormData() {
       Create Mock Response 
     </button>
   {{/if}}
-</div>
+</div> 
+ <script>autoGrow(document.querySelector('.mock-response.form #res_body'));</script>

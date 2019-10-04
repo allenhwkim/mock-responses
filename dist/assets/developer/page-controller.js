@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', event => {
   document.body.addEventListener('new-use-case', handleCustomEvents);
   document.body.addEventListener('create-use-case', handleCustomEvents);
   document.body.addEventListener('edit-use-case', handleCustomEvents);
+  document.body.addEventListener('activate-use-case', handleCustomEvents);
   document.body.addEventListener('update-use-case', handleCustomEvents);
   document.body.addEventListener('delete-use-case', handleCustomEvents);
 
@@ -48,12 +49,11 @@ function fireEvent(event, type, data) {
   const srcEl = (event && event.target) instanceof HTMLElement ? event.target : document.body;
   console.log('[mock-responses]  firing custom event', custEvent);
   srcEl.dispatchEvent(custEvent);
-  event && event.stopPropagation();
 }
 
 function enableEditMode(data) {
   data && window.localStorage.setItem('edit-mode', data);
-  const func = window.localStorage.getItem('edit-mode') == 1 ? 'remove' : 'add';
+  const func = window.localStorage.getItem('edit-mode') == 2 ? 'remove' : 'add';
   document.querySelector('.main').classList[func]('read-only');
 }
 
@@ -67,7 +67,8 @@ function handleCustomEvents(event) {
 
     case 'list-use-cases':  UseCase.list(data); break;
     case 'new-use-case':    UseCase.new(); break;
-    case 'edit-use-case':   UseCase.edit(data); break;
+    case 'edit-use-case':   UseCase.edit(event, data); break;
+    case 'activate-use-case': UseCase.activate(event, data); break;
     case 'create-use-case': UseCase.create(data); break;
     case 'update-use-case': UseCase.update(data); break;
     case 'delete-use-case': UseCase.delete(data); break;
@@ -105,12 +106,20 @@ var UseCase = {
     Main.routesEl.setAttribute('src', url);
     window.location.href = '#' + url;
   },
-  edit: function(id) { // show form for edit
+  edit: function(event, useCase) { // show form for edit
+    const url = `/use-cases/edit/${useCase.id}`;
+    Main.routesEl.setAttribute('src', url )
+    window.location.href = '#' + url;
+  },
+  activate: function(event, id) { // show form for edit
+    const prevActivatedEl = document.querySelector('.use-case.active');
+    prevActivatedEl && prevActivatedEl.classList.remove('active');
     fetchUrl(`/use-cases/${id}/activate`, {method: 'PUT'})
       .then(resp => {
         const url = `/use-cases/edit/${id}`;
         Main.routesEl.setAttribute('src', url )
         window.location.href = '#' + url;
+        event.target.closest('.use-case').classList.add('active');
       });
   },
   create: function(useCase) {
@@ -150,6 +159,7 @@ var MockResponse = {
   list: function (key) {
     const url = `/mock-responses/index?q=${key||''}`;
     Main.routesEl.setAttribute('src', url);
+    Main.dialogEl.close();
     window.location.href = '#' + url;
   },
   new: function(data) { 
@@ -167,7 +177,7 @@ var MockResponse = {
       Main.dialogEl.open({title: 'Error', body: 'Invalid Mock Response Data'});
     } else {
       fetchUrl('/mock-responses', {method: 'POST', body: JSON.stringify(mockResponse)})
-        .then(resp => fireEvent(null, 'list-mock-resonses', ''));
+        .then(resp => fireEvent(null, 'list-mock-responses', ''));
     }
   },
   update: function(mockResponse) {

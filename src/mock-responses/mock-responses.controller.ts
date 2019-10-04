@@ -55,7 +55,7 @@ export class MockResponsesController {
   }
 
   @Post()
-  create(@Body() data: MockResponse, @Res() res) {
+  create(@Body() data: MockResponse) {
     return this.mockResp.create(data);
   }
 

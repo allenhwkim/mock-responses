@@ -19,16 +19,14 @@
               <br/>
               <h3>Use Cases</h3>
               <input class="public" id="use-cases" placeholder="Search use cases" onchange="UseCase.list(this.value)">
-              <button class="icon" title="create a new use case" onclick="fireEvent(event, 'new-use-case')">
-                <i class="fas fa-plus-circle"></i>
-              </button>
+              <button title="create a new use case" onclick="fireEvent(event, 'new-use-case')">+</button>
               <br>
-              <hce-list id="use-cases">
+              <hce-list id="use-cases" (selected)="fireEvent(event, 'edit-use-case')">
                 <div class="use-case" onclick="this.classList.toggle('expanded')">
                   <div class="name">
                     <b class="name-text">{{name}}</b>
                     <button class="icon public" style="float:right">
-                      <i class="fa fa-play" onclick="fireEvent(event, 'edit-use-case', {{id}})"></i>
+                      <i class="fa fa-play" onclick="fireEvent(event, 'activate-use-case', {{id}})"></i>
                     </button>
                   </div>
                   <div class="description">{{description}}</div>

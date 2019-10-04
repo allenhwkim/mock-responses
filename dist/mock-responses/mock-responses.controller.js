@@ -47,7 +47,7 @@ let MockResponsesController = class MockResponsesController {
     findOne(params) {
         return this.mockResp.find(params.id);
     }
-    create(data, res) {
+    create(data) {
         return this.mockResp.create(data);
     }
     update(data) {
@@ -100,9 +100,9 @@ __decorate([
 ], MockResponsesController.prototype, "findOne", null);
 __decorate([
     common_1.Post(),
-    __param(0, common_1.Body()), __param(1, common_1.Res()),
+    __param(0, common_1.Body()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], MockResponsesController.prototype, "create", null);
 __decorate([

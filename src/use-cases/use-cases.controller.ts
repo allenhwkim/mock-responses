@@ -15,7 +15,7 @@ export class UseCasesController {
     private mockResp: MockResponsesService
   ) {}
 
-  @Get('edit/:id')
+  @Get(':id/edit')
   @Render('use-cases-edit')
   edit(@Param() params) {
     const useCase: UseCase = this.useCase.find(params.id);

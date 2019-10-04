@@ -24,7 +24,7 @@ export declare class MockResponsesController {
     };
     findAll(key: any): string;
     findOne(params: any): string;
-    create(data: MockResponse, res: any): void;
+    create(data: MockResponse): void;
     update(data: MockResponse): void;
     activate(params: any): void;
     delete(params: any): void;

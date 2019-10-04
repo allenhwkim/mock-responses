@@ -34,12 +34,12 @@ async function serveMockResponse(req, res, next) {
     }
     const now = Date.now();
     const row = findByUrlMethod(req.url, req.method);
-    if (!row) {
-        next();
-        return;
-    }
     if (req.method === 'OPTIONS') {
         res.end();
+        return;
+    }
+    if (!row) {
+        next();
         return;
     }
     const delaySec = row.res_delay_sec || 0;

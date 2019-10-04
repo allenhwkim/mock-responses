@@ -42,15 +42,15 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
   const now = Date.now();
   const row: MockResponse = findByUrlMethod(req.url, req.method);
 
-  // if not found in DB, continue
-  if (!row) {
-    next();
-    return;
-  }
-
   // ignore all OPTIONS call
   if (req.method === 'OPTIONS') {
     res.end();
+    return;
+  }
+
+  // if not found in DB, continue
+  if (!row) {
+    next();
     return;
   }
 

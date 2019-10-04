@@ -99,6 +99,11 @@ input:invalid, textarea:invalid {
 #use-cases .list .use-case.expanded .description { 
   display: block;
 }
+#use-cases .list .use-case.active .name { 
+  background-color: #2188E5;
+  color: #FFF;
+  border-color: transparent;
+}
 
 input, textarea {
   padding: 4px;
