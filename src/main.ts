@@ -4,10 +4,8 @@ import * as fs from 'fs';
 import * as yargs from 'yargs';
 
 import * as express from 'express';
-import * as cors from 'cors';
-// import * as cookieSession from 'cookie-session';
-import * as bodyParser from 'body-parser';
 import * as morgan from 'morgan';
+import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
 
 import { NestFactory } from '@nestjs/core';
@@ -40,18 +38,26 @@ async function bootstrap() {
   app.use(morgan('[mock-responses] :method :url :status :res[content-length] - :response-time ms'));
   app.use(bodyParser.json());
   app.use(cookieParser());
-  app.use(cors());
-  if (argv.cookie) {
-    app.use( function(req, res, next) { 
+  app.use( function(req, res, next) { 
+    const origin = req.headers['origin'];
+    if (origin) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, OPTIONS');
+      res.setHeader('Access-Control-Allow-Credentials', true);
+    }
+
+    if (argv.cookie) {
       const [_, name, value] = (<string>argv.cookie).match(/^([a-z_]+)=(.*)/i);
       console.log('>>>>>>>>> cookieSession', { name, value });
       if (!req.cookies[name]) {
         res.setHeader('Set-Cookie', `${name}=${value}`);
       }
-      next();
-      return;
-    });
-  }
+    }
+
+    next();
+    return;
+  });
   app.use(serveMockResponse);
   app.use(express.static(path.join(__dirname, 'assets')));
 
