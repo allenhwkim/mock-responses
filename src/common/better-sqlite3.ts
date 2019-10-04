@@ -25,7 +25,7 @@ export class BetterSqlite3 {
 
     console.log('[mock-responses] .................... constructing BetterSqlite3')
     const sqlPath = dbPath.replace(/\.sqlite3$/, '.sql'); 
-    const sqlite3Path = dbPath.replace(/\.sql$/, '.sqlte3'); 
+    const sqlite3Path = dbPath.replace(/\.sql$/, '.sqlite3'); 
 
     if (fs.existsSync(sqlPath)) {
       BetterSqlite3.importFromSql(sqlPath, sqlite3Path);
