@@ -19,7 +19,7 @@ export class MockResponsesController {
     return { mockResponses };
   }
 
-  @Get('edit/:id')
+  @Get(':id/edit')
   @Render('mock-responses-edit')
   edit(@Param() params) {
     const mockResponse: MockResponse = this.mockResp.find(params.id);

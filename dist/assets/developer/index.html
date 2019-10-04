@@ -53,10 +53,10 @@
           <div classs="main-route">
             <hce-routes class="hce-routes" src="/mock-responses/index">
               <div route-match="/use-cases/new" import="/use-cases/new"> </div>
-              <div route-match="/use-cases/edit/(\d+)" import="/use-cases/edit/{{1}}"></div>
+              <div route-match="/use-cases/(\d+)/edit" import="/use-cases/{{1}}/edit"></div>
 
               <div route-match="/mock-responses/new" import="/mock-responses/new"></div>
-              <div route-match="/mock-responses/edit/(\d+)" import="/mock-responses/edit/{{1}}"></div>
+              <div route-match="/mock-responses/(\d+)/edit" import="/mock-responses/{{1}}/edit"></div>
               <div route-match="/mock-responses/index(.*)" import="/mock-responses/index{{1}}"></div>
             </hce-routes>
           </div>

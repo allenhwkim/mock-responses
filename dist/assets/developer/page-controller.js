@@ -107,7 +107,7 @@ var UseCase = {
     window.location.href = '#' + url;
   },
   edit: function(event, useCase) { // show form for edit
-    const url = `/use-cases/edit/${useCase.id}`;
+    const url = `/use-cases/${useCase.id}/edit`;
     Main.routesEl.setAttribute('src', url )
     window.location.href = '#' + url;
   },
@@ -116,7 +116,7 @@ var UseCase = {
     prevActivatedEl && prevActivatedEl.classList.remove('active');
     fetchUrl(`/use-cases/${id}/activate`, {method: 'PUT'})
       .then(resp => {
-        const url = `/use-cases/edit/${id}`;
+        const url = `/use-cases/${id}/edit`;
         Main.routesEl.setAttribute('src', url )
         window.location.href = '#' + url;
         event.target.closest('.use-case').classList.add('active');
@@ -168,7 +168,7 @@ var MockResponse = {
     window.location.href = '#' + url;
   },
   edit: function(id) {
-    const url = `/mock-responses/edit/${id}`;
+    const url = `/mock-responses/${id}/edit`;
     Main.routesEl.setAttribute('src', url );
     window.location.href = '#' + url;
   },
@@ -185,10 +185,13 @@ var MockResponse = {
       Main.dialogEl.open({title: 'Error', body: 'Invalid Mock Response Data'});
     } else {
       fetchUrl(`/mock-responses/${mockResponse.id}`, {method: 'PUT', body: JSON.stringify(mockResponse)})
-        .then(resp => Main.dialogEl.open({title: 'Success', body: `
-          <div>Mock Response Updated!</div>
-          <button onclick="fireEvent('', 'list-mock-responses', '')">List Mock Responses</button>
-        `}));
+        .then(resp => { 
+          const body = `<div>Mock Response Updated!</div>
+            <button onclick="fireEvent('', 'list-mock-responses', '')">List Mock Responses</button>`;
+          Main.dialogEl.open({title: 'Success', body});
+          Main.dialogEl.style.display = 'block';
+          Main.dialogEl.style.opacity = 1;
+        });
     }  
   },
   delete: function(id) {

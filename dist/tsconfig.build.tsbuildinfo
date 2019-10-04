@@ -1238,7 +1238,7 @@
         "signature": "d4c0680e1671ad3e6a5ccd44e08f0b5eb6844c9caab74d5af53af722078ae250"
       },
       "../src/mock-responses/mock-responses.controller.ts": {
-        "version": "f50ea9fcffc4a0c0e141ef135c0651cd6cd7fab44b01803b4b47d4950c6059a3",
+        "version": "eaf7ffd8c8c6a1e3a0308ab6c238f2af142df338bb9ea55b85366633b72e4c36",
         "signature": "5d1db23ed8af6227dda29d17b9963b0f60c23bb3fd8f5ff4a4606fd12cf3b60b"
       },
       "../src/use-cases/use-cases.service.ts": {
