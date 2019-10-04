@@ -34,19 +34,19 @@ function delay(ms) {
 }
 
 export async function serveMockResponse(req: Request, res: Response, next: Function) {
-  if (req.url === "/" || req.url.startsWith("/developer") || req.url.startsWith("/mock-responses")) {
-    next();
-    return false; // next();
-  } 
-
-  const now = Date.now();
-  const row: MockResponse = findByUrlMethod(req.url, req.method);
-
   // ignore all OPTIONS call
   if (req.method === 'OPTIONS') {
     res.end();
     return;
   }
+
+  // if (req.url === "/" || req.url.startsWith("/developer") || req.url.startsWith("/mock-responses")) {
+  //   next();
+  //   return false; // next();
+  // } 
+
+  const now = Date.now();
+  const row: MockResponse = findByUrlMethod(req.url, req.method);
 
   // if not found in DB, continue
   if (!row) {
