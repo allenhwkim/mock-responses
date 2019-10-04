@@ -53,7 +53,7 @@ function fireEvent(event, type, data) {
 
 function enableEditMode(data) {
   data && window.localStorage.setItem('edit-mode', data);
-  const func = window.localStorage.getItem('edit-mode') == 1 ? 'remove' : 'add';
+  const func = window.localStorage.getItem('edit-mode') == 2 ? 'remove' : 'add';
   document.querySelector('.main').classList[func]('read-only');
 }
 
