@@ -1,6 +1,7 @@
 node_modules
 nohup.out
 *.log
+dist
 mockserver
 initial-load.js
 .DS_Store
