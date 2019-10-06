@@ -19,8 +19,20 @@ td {
 .mock-responses {
   padding: 12px 0;
 }
-.mock-responses .list > tr:nth-child(even) {
+.mock-responses .list .group-header .group {
+  padding: 0 12px;
+  background: #EEE;
+  border: 1px outset #EEE;
+  cursor: pointer;
+}
+.mock-responses .list .group-header ~ .mock-response {
+  display: none;
+}
+.mock-responses .list .group-header ~ .mock-response:nth-child(odd) {
   background: #eee;
+}
+.mock-responses .list .group-header.expanded ~ .mock-response {
+  display: table-row;
 }
 </style>
 
@@ -46,27 +58,40 @@ td {
       <td class="body">body</td>
     </tr>
   <thead>
-  <tbody class="list">
-    {{#each mockResponses}}
-      <tr class="mock-response" tabindex="0" onclick="fireEvent('', 'edit-mock-response', {{this.id}})">
-        <td class="id">{{this.id}}</td>
-        <td class="active">{{this.active}}</td>
-        <td class="name">{{this.name}}</td>
-        <td class="method">{{this.req_method}}</td>
-        <td class="url">
-          {{#if this.active}}
-          <button class="icon" onclick="fireEvent(event, 'play-mock-response', {{this.id}})">
-            <i class="fa fa-play"></i>
+    {{#each grouped}}
+    <tbody class="list">
+      <tr class="group-header" onclick="this.classList.toggle('expanded')">
+        <td class="group" colspan="10">
+          {{this.count}} row(s)
+          <b>{{@key}}</b> 
+          <button class="create-from icon" title="create a new mock response"
+            onclick="event.stopPropagation();fireEvent(event, 'new-mock-response', {{this.id}})">
+            <i class="fa fa-plus"></i>
           </button>
-          {{/if}}
-          {{this.req_url}}
+          <sub>Update at {{this.updated_at}}</sub>
         </td>
-        <td class="payload">{{this.req_payload}}</td>
-        <td class="status">{{this.res_status}}</td>
-        <td class="delay_sec">{{this.res_delay_sec}}</td>
-        <td class="content type">{{this.res_content_type}}</td>
-        <td class="body">{{this.res_body}}</td>
       </tr>
+      {{#each this.data}}
+        <tr class="mock-response" tabindex="0" onclick="fireEvent('', 'edit-mock-response', {{this.id}})">
+          <td class="id">{{this.id}}</td>
+          <td class="active">{{this.active}}</td>
+          <td class="name">{{this.name}}</td>
+          <td class="method">{{this.req_method}}</td>
+          <td class="url">
+            {{#if this.active}}
+            <button class="icon" onclick="event.stopPropagation();fireEvent(event, 'play-mock-response', {{this.id}})">
+              <i class="fa fa-play"></i>
+            </button>
+            {{/if}}
+            {{this.req_url}}
+          </td>
+          <td class="payload">{{this.req_payload}}</td>
+          <td class="status">{{this.res_status}}</td>
+          <td class="delay_sec">{{this.res_delay_sec}}</td>
+          <td class="content type">{{this.res_content_type}}</td>
+          <td class="body">{{this.res_body}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
     {{/each}}
-  </tbody>
 </ul>

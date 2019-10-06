@@ -15,8 +15,8 @@ export class MockResponsesController {
   @Get('index')
   @Render('mock-responses-list')
   index(@Query('q') key) {
-    const mockResponses = this.mockResp.findAll(key);
-    return { mockResponses };
+    const grouped = this.findAllBy(key);
+    return { grouped };
   }
 
   @Get(':id/edit')
@@ -28,29 +28,39 @@ export class MockResponsesController {
 
   @Get('new')
   @Render('mock-responses-edit')
-  new(@Param() params) {
+  new(@Query('from') from) {
+    const row = from ? this.mockResp.find(from) : {};
     return { 
       mockResponse: {
-        name: '',
-        active: false,
-        req_url: '',
-        req_method: 'POST',
-        req_payload: '',
-        res_status: 200,
-        res_delay_sec: 0,
-        res_content_type: 'application/json',
-        res_body: ''
+        name: row.name || '',
+        active: row.active || false,
+        req_url: row.req_url || '',
+        req_method: row.req_method || 'POST',
+        req_payload: row.req_payload || '',
+        res_status: row.res_status || 200,
+        res_delay_sec: row.res_delay_sec || 0,
+        res_content_type: row.res_content_type || 'application/json',
+        res_body: row.res_body || ''
       } 
     };
   }
 
   @Get()
-  findAll(@Query('q') key): string {
-    return this.mockResp.findAll(key);
+  findAllBy(@Query('q') key) {
+    const mockResponses = {};
+
+    const apiGrouped = this.mockResp.findAllBy({ apiGroup: 1, key });
+    apiGrouped.forEach(({req_url, updated_at, count}) => {
+      const data = this.mockResp.findAllBy({req_url});
+      const id = data[0].id;
+      mockResponses[req_url] = { id, updated_at: new Date(updated_at), count, data };
+    })
+
+    return mockResponses;
   }
 
   @Get(':id')
-  findOne(@Param() params): string {
+  findOne(@Param() params) {
     return this.mockResp.find(params.id);
   }
 

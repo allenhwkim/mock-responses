@@ -1527,13 +1527,17 @@ function (_HTMLCustomElement) {
     // actions
     // contentHTML
     value: function connectedCallback() {
-      this.renderWith(html, _dialog_css__WEBPACK_IMPORTED_MODULE_6___default.a).then(function (_) {// console.log(this.title, this.options);
+      var _this = this;
+
+      this.renderWith(html, _dialog_css__WEBPACK_IMPORTED_MODULE_6___default.a).then(function (_) {
+        // console.log(this.title, this.options);
+        _this.querySelector('.title').innerHTML = _this.dialogTitle;
       });
     }
   }, {
     key: "open",
     value: function open(options) {
-      var _this = this;
+      var _this2 = this;
 
       if (options && options.title) {
         this.dialogTitle = options.title;
@@ -1551,17 +1555,19 @@ function (_HTMLCustomElement) {
         this.actions.forEach(function (action) {
           var buttonEl = document.createElement('button');
           buttonEl.innerHTML = action.text;
-          buttonEl.addEventListener('click', action.handler.bind(_this));
+          buttonEl.addEventListener('click', action.handler.bind(_this2));
           actionsEl.appendChild(buttonEl);
         });
       }
 
-      this.appear();
+      this.classList.add('visible');
+      document.body.style.overflow = 'hidden';
     }
   }, {
     key: "close",
     value: function close() {
-      this.disappear();
+      this.classList.remove('visible');
+      document.body.style.overflow = 'initial';
     }
   }]);
 
@@ -1573,7 +1579,7 @@ HCEDialog.define('hce-dialog', HCEDialog);
 /* 32 */
 /***/ (function(module, exports) {
 
-module.exports = ":root {\n  position: fixed;\n  display: block;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 24;\n  display: none;\n}\n\n> .page-blocker {\n  position: absolute; /* fixed */\n  background-color: #000;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  opacity: .5;\n  top: 0;\n}\n\n> .dialog {\n  padding: 24px;\n  position: absolute; /* fixed */\n  left: 50%;\n  top: 50%;\n  -ms-transform: translate(-50%,-50%);\n  -moz-transform:translate(-50%,-50%);\n  -webkit-transform: translate(-50%,-50%);\n  transform: translate(-50%,-50%);\n  min-width: 280px; /* 56 x 5 */\n  max-width: calc(100% - 80px);\n  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0  6px  6px rgba(0,0,0,0.23);\n  border: 1px solid #eeeeee;\n  border-radius: 2px;\n  background-color: #ffffff;\n}\n\n> .dialog > .close {\n  border: none;\n  font-size: 1.5em;\n  position: absolute;\n  top: 0;\n  right: 0;\n  color: #999;\n}\n\n> .dialog > .divider {\n  display: block;\n  margin: 0px -24px;\n  height: 1px;\n  border: 1px solid #ccc;\n  border-width: 0 0 1px 0;\n}\n\n> .dialog > .title {\n  color: #212121;\n  padding-bottom: 20px;\n  font-size: 20px;\n  font-weight: 500;\n  margin: 0;\n}\n\n> .dialog > .content {\n  padding-bottom: 24px;\n  color: #9e9e9e;\n}\n\n> .dialog > .actions {\n  padding: 8px;\n  margin-right: -16px;\n  margin-bottom: -16px;\n  text-align: center;\n}\n\n> .dialog > .actions:empty {\n  display: none;\n}\n\n> .dialog > .actions > * {\n  height: 32px;\n}\n  "
+module.exports = ":root {\n  position: fixed;\n  display: none;\n  top: 0;\n  left: 0;\n  width: 100%;\n  height: 100%;\n  z-index: 24;\n}\n\n:root.visible {\n  display: block;\n}\n\n> .page-blocker {\n  position: absolute; /* fixed */\n  background-color: #000;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  opacity: .5;\n  top: 0;\n}\n\n> .dialog {\n  padding: 24px;\n  position: absolute; /* fixed */\n  left: 50%;\n  top: 50%;\n  -ms-transform: translate(-50%,-50%);\n  -moz-transform:translate(-50%,-50%);\n  -webkit-transform: translate(-50%,-50%);\n  transform: translate(-50%,-50%);\n  min-width: 280px; /* 56 x 5 */\n  max-width: calc(100vw - 96px);\n  max-height: calc(100vh - 96px);\n  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0  6px  6px rgba(0,0,0,0.23);\n  border: 1px solid #eeeeee;\n  border-radius: 2px;\n  background-color: #ffffff;\n}\n\n> .dialog > .close {\n  border: none;\n  font-size: 1.5em;\n  position: absolute;\n  top: 0;\n  right: 0;\n  color: #999;\n}\n\n> .dialog > .divider {\n  display: block;\n  margin: 0px -24px;\n  height: 1px;\n  border: 1px solid #ccc;\n  border-width: 0 0 1px 0;\n}\n\n> .dialog > .title {\n  color: #212121;\n  padding-bottom: 20px;\n  font-size: 20px;\n  font-weight: 500;\n  margin: 0;\n  text-overflow: ellipsis;\n  overflow: hidden;\n}\n> .dialog > .body {\n  overflow: auto;\n  max-height: calc(100vh - 160px);\n}\n\n> .dialog > .content {\n  padding-bottom: 24px;\n  color: #9e9e9e;\n}\n\n> .dialog > .actions {\n  padding: 8px;\n  margin-right: -16px;\n  margin-bottom: -16px;\n  text-align: center;\n}\n\n> .dialog > .actions:empty {\n  display: none;\n}\n\n> .dialog > .actions > * {\n  height: 32px;\n}\n  "
 
 /***/ }),
 /* 33 */

@@ -7,10 +7,22 @@ import { MockResponsesService } from '../mock-responses/mock-responses.service';
 
 @Injectable()
 export class UseCasesService {
-  db;
+  db = BetterSqlite3.db;
 
-  constructor(private mockResp: MockResponsesService) {
-    this.db =  BetterSqlite3.db;
+  constructor(private mockResp: MockResponsesService) {}
+
+  find(id: number) {
+    const row = this.db.prepare(`SELECT * FROM use_cases WHERE id = ${id}`);
+    return row.get();
+  }
+
+  findAllBy(by?) {
+    const sqlByKey = by && by.key && `
+      SELECT * FROM use_cases WHERE name like '%${by.key}%' OR description like '%${by.key}%'`;
+    const sqlByDefault = `SELECT * FROM use_cases`;
+    const sql = sqlByKey || sqlByDefault;
+    console.log('[mock-responses] UseCaseService', sql);
+    return this.db.prepare(sql).all();
   }
 
   create(data: UseCase) {
@@ -24,25 +36,7 @@ export class UseCasesService {
         VALUES ('${name}', '${description}', '${mockResponses}');
       `;
     console.log('[mock-responses] UseCaseService use_cases create', sql);
-    if (this.db.exec(sql)) {
-      BetterSqlite3.backupToSql();
-    } else {
-      throw '[mock-responses] error create use_cases'
-    }
-  }
-
-  find(id: number) {
-    const row = this.db.prepare(`SELECT * FROM use_cases WHERE id = ${id}`);
-    return row.get();
-  }
-
-  findAll(key?) {
-    const whereSql = key ?
-      `name like '%${key}%' OR description like '%${key}%'` : `1=1`;
-
-    const sql = `SELECT * FROM use_cases WHERE ${whereSql}`;
-    console.log('[mock-responses] UseCaseService', sql);
-    return this.db.prepare(sql).all();
+    return this.db.exec(sql) && BetterSqlite3.backupToSql();
   }
 
   update(data: UseCase) {
@@ -59,11 +53,7 @@ export class UseCasesService {
       `;
     console.log('[mock-responses] UseCaseService', sql);
     const result = this.db.exec(sql);
-    if (this.db.exec(sql)) {
-      BetterSqlite3.backupToSql();
-    } else {
-      throw '[mock-responses] error update use_cases'
-    }
+    return this.db.exec(sql) && BetterSqlite3.backupToSql();
   }
 
   delete(id) {
@@ -71,19 +61,15 @@ export class UseCasesService {
 
     console.log('[mock-responses] UseCaseService', sql);
     const result = this.db.exec(sql);
-    if (this.db.exec(sql)) {
-      BetterSqlite3.backupToSql();
-    } else {
-      throw '[mock-responses] error delete use_cases'
-    }
+    return this.db.exec(sql) && BetterSqlite3.backupToSql();
   }
 
   activate(id) {
     const useCase = this.find(id);
-    const mockRespIds = useCase.mock_responses.split(',').map(el => parseInt(el));
-    console.log('[mock-responses] UseCaseService activate mock_responses with ids', mockRespIds);
+    const ids = useCase.mock_responses.split(',').map(el => parseInt(el));
+    console.log('[mock-responses] UseCaseService activate mock_responses with ids', ids);
 
-    const mockResponses = this.mockResp.findByIds(mockRespIds);
+    const mockResponses = this.mockResp.findAllBy({ids});
     mockResponses.forEach(mockResp => {
       this.mockResp.activate(mockResp.id);
     });

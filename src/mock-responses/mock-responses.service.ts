@@ -14,13 +14,15 @@ function getJSON(data) {
 
 function getWhereFromBy(by) {
   const res = [];
+  by.key && 
+    res.push(`name like '%${by.key}%' OR req_url like '%${by.key}%' OR res_body like '%${by.key}%'`);
   by.active && res.push(`active = ${by.active}`);
-  by.url && res.push(`req_url = '${by.url}'`);
-  by.method && res.push(`req_method = '${by.method}'`);
-  by.payload && res.push(`req_payload LIKE '%${by.payload}%'`);
-  by.status && res.push(`req_status = ${by.status}`);
-  by.delay_sec && res.push(`req_delay_sec = ${by.delay_sec}`);
-  by.content_type && res.push(`req_content_type = ${by.content_type}`);
+  by.req_url && res.push(`req_url = '${by.req_url}'`);
+  by.req_method && res.push(`req_method = '${by.req_method}'`);
+  by.req_payload && res.push(`req_payload LIKE '%${by.req_payload}%'`);
+  by.res_status && res.push(`req_status = ${by.res_status}`);
+  by.res_delay_sec && res.push(`req_delay_sec = ${by.res_delay_sec}`);
+  by.res_content_type && res.push(`req_content_type = ${by.res_content_type}`);
 
   const where = res.length ? res.join(' AND ') : '1=1';
   return where;
@@ -28,10 +30,33 @@ function getWhereFromBy(by) {
 
 @Injectable()
 export class MockResponsesService {
-  db;
+  db = BetterSqlite3.db;
 
-  constructor() {
-    this.db =  BetterSqlite3.db;
+  find(id: number) {
+    const row = this.db.prepare(`SELECT * FROM mock_responses WHERE id = ${id}`);
+    return row.get();
+  }
+
+  findAllBy(by?) {
+    const sqlByApiGroup = by && by.apiGroup && `
+      SELECT req_url, MAX(updated_at) updated_at, COUNT(req_url) count
+      FROM mock_responses
+      WHERE ${ getWhereFromBy(by) }
+      GROUP BY req_url
+      ORDER BY MAX(updated_at) DESC`;
+    const sqlByIds = by && by.ids && `
+      SELECT * FROM mock_responses WHERE id IN (${by.ids.join(',')}) ORDER BY id`;
+    const sqlByAny = by && `
+      SELECT * FROM mock_responses
+      WHERE ${ getWhereFromBy(by) }
+      ORDER BY active DESC, updated_at DESC`;
+    const sqlByDefault = `
+      SELECT * FROM mock_responses 
+      ORDER BY req_url, updated_at DESC`;
+
+    const sql = sqlByApiGroup || sqlByIds || sqlByAny || sqlByDefault;
+    console.log('[mock-responses] MockResponseService.findAllBy', sql);
+    return this.db.prepare(sql).all();
   }
 
   create(data: MockResponse) {
@@ -58,41 +83,7 @@ export class MockResponsesService {
       `;
 
     console.log('[mock-responses] MockResponseService create', sql);
-    if (this.db.exec(sql)) {
-      BetterSqlite3.backupToSql();
-    } else {
-      throw '[mock-responses] error create mock_responses'
-    }
-  }
-
-  find(id: number) {
-    const row = this.db.prepare(`SELECT * FROM mock_responses WHERE id = ${id}`);
-    return row.get();
-  }
-
-  findAll(key?) {
-    const whereSql = key ?
-      `name like '%${key}%' OR req_url like '%${key}%' OR res_body like '%${key}%'` : `1=1`;
-    const sql = `
-      SELECT * FROM mock_responses
-      WHERE ${whereSql}
-      ORDER BY req_url, updated_at DESC
-    `;
-
-    console.log('[mock-responses] MockResponseService', sql);
-    return this.db.prepare(sql).all();
-  }
-
-  findBy(by: any) {
-    const whereSql = getWhereFromBy(by);
-    const sql1 = `SELECT * FROM mock_responses WHERE ${whereSql} LIMIT 1`;
-    return this.db.prepare(sql1).get();
-  }
-
-  findByIds(ids: Array<number>) {
-    const whereSql = `id IN (${ids.join(',')})`;
-    const sql1 = `SELECT * FROM mock_responses WHERE ${whereSql}`;
-    return this.db.prepare(sql1).all();
+    this.db.exec(sql) && BetterSqlite3.backupToSql();
   }
 
   update(data) {

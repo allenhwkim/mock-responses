@@ -19,8 +19,8 @@ export class UseCasesController {
   @Render('use-cases-edit')
   edit(@Param() params) {
     const useCase: UseCase = this.useCase.find(params.id);
-    const mockRespIds = useCase.mock_responses.split(',').map(id => parseInt(id));
-    const mockResponses = this.mockResp.findByIds(mockRespIds);
+    const ids = useCase.mock_responses.split(',').map(id => parseInt(id));
+    const mockResponses = this.mockResp.findAllBy({ids});
     return { useCase, mockResponses };
   }
 
@@ -33,8 +33,9 @@ export class UseCasesController {
   }
 
   @Get()
-  findAll(@Query('q') key): string {
-    return this.useCase.findAll(key);
+  findAllBy(@Query('q') key): string {
+    const by = key && {key};
+    return this.useCase.findAllBy(by);
   }
 
   @Get(':id')

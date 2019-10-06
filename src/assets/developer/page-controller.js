@@ -74,12 +74,13 @@ function handleCustomEvents(event) {
     case 'delete-use-case': UseCase.delete(data); break;
 
     case 'list-mock-responses':  MockResponse.list(data); break;
-    case 'new-mock-response':    MockResponse.new(); break;
+    case 'new-mock-response':    MockResponse.new(data); break;
     case 'edit-mock-response':   MockResponse.edit(data); break;
     case 'create-mock-response': MockResponse.create(data); break;
     case 'update-mock-response': MockResponse.update(data); break;
     case 'delete-mock-response': MockResponse.delete(data); break;
     case 'play-mock-response': MockResponse.play(event, data); break;
+    default: throw `Unhandled custom events ${type} ${data}`;
   }
 }
 
@@ -163,7 +164,8 @@ var MockResponse = {
     window.location.href = '#' + url;
   },
   new: function(data) { 
-    const url = `/mock-responses/new`;
+    const qs = data ? `?from=${data}`: ''; // query string
+    const url = `/mock-responses/new${qs}`;
     Main.routesEl.setAttribute('src', url);
     window.location.href = '#' + url;
   },

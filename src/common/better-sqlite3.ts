@@ -57,7 +57,7 @@ export class BetterSqlite3 {
       const command = `sqlite3 ${BetterSqlite3.dbPath} .dump > ${sqlPath}`;
       runCommand(command);
       console.log('[mock-responses] writing to .sql file', command);
-    }, 60*1000);
+    }, 5*1000);
   }
 
 }

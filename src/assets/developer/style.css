@@ -36,7 +36,7 @@ body {
   border: none;
   color: #FFF;
 }
-.main .dialog { max-width: calc(100% - 48px); }
+.main .dialog { max-width: calc(100vw - 120px); max-height: calc(100vh - 48px); }
 .main .dialog pre { width: 100%; overflow: auto; }
 .main .hce.horizontal { min-height: 100vh; } 
 .main .hce.horizontal .sidebar .hce-body .more,
@@ -103,6 +103,9 @@ input:invalid, textarea:invalid {
   background-color: #2188E5;
   color: #FFF;
   border-color: transparent;
+}
+hce-dialog .dialog .body {
+  min-width: 600px;
 }
 
 input, textarea {
