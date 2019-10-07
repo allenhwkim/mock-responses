@@ -1,6 +1,6 @@
 {
   "name": "mock-responses",
-  "version": "2.0.15",
+  "version": "2.0.17",
   "description": "espress-kind http request middleware",
   "main": "dist/main.js",
   "bin": "index.js",
@@ -35,7 +35,10 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "dev:start": "npm run dev:stop && npm run dev:start",
+    "dev:stop": "kill-port 9300",
+    "dev:start": "ts-node -r tsconfig-paths/register src/main.ts --db-path=./mock-responses.sql --port=9300 --cookie='PLAY_SESSION=ACCTNBR=123456789; Path=/'"
   },
   "dependencies": {
     "@nestjs/common": "^6.7.2",
@@ -68,6 +71,7 @@
     "@types/node": "^12.7.5",
     "@types/supertest": "^2.0.8",
     "cryptiles": "^4.1.2",
+    "forever": "^1.0.0",
     "install": "^0.13.0",
     "jest": "^24.9.0",
     "kill-port": "^1.6.0",
