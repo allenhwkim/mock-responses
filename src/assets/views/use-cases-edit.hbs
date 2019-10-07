@@ -116,7 +116,7 @@ function searchMockResponses(keyword) {
           <div class="req_method">{{this.req_method}}</div>
           <div class="req_url">{{this.req_url}}</div>
           <div class="buttons">
-            <button onclick="fireEvent(event, 'play-mock-response', {{mockResp.id}})">
+            <button onclick="fireEvent(event, 'play-mock-response', {{this.id}})">
               <i class="fas fa-play"></i>
             </button>
             <button onclick="this.closest('.row').remove()">
