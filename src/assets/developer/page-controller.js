@@ -43,6 +43,7 @@ function fetchUrl(url, options) {
 }
 
 function fireEvent(event, type, data) {
+  event && event.stopPropagation();
   const detail = data || (event && event.detail) || undefined;
   const custEvent = new CustomEvent(type, {detail, bubbles: true});
 
@@ -137,7 +138,8 @@ var UseCase = {
       Main.dialogEl.open({title: 'Error', body: 'Invalid Use Case Data'});
     } else {
       fetchUrl(`/use-cases/${useCase.id}`, {method: 'PUT', body: JSON.stringify(useCase)})
-        .then(resp => fireEvent(null, 'list-use-cases', ''));
+        .then(resp => fireEvent(null, 'list-use-cases', ''))
+        .then(_ => Main.dialogEl.close());
     }
   },
   delete: function(id) {
@@ -179,7 +181,8 @@ var MockResponse = {
       Main.dialogEl.open({title: 'Error', body: 'Invalid Mock Response Data'});
     } else {
       fetchUrl('/mock-responses', {method: 'POST', body: JSON.stringify(mockResponse)})
-        .then(resp => fireEvent(null, 'list-mock-responses', ''));
+        .then(resp => fireEvent(null, 'list-mock-responses', ''))
+        .then(_ => Main.dialogEl.close());
     }
   },
   update: function(mockResponse) {
@@ -189,10 +192,8 @@ var MockResponse = {
       fetchUrl(`/mock-responses/${mockResponse.id}`, {method: 'PUT', body: JSON.stringify(mockResponse)})
         .then(resp => { 
           const body = `<div>Mock Response Updated!</div>
-            <button onclick="fireEvent('', 'list-mock-responses', '')">List Mock Responses</button>`;
+            <button onclick="fireEvent(event, 'list-mock-responses', '')">List Mock Responses</button>`;
           Main.dialogEl.open({title: 'Success', body});
-          Main.dialogEl.style.display = 'block';
-          Main.dialogEl.style.opacity = 1;
         });
     }  
   },
@@ -203,7 +204,6 @@ var MockResponse = {
   play: function(event, id) {
     const req = {};
     let respStatus, respType;
-    event.stopPropagation();
     fetchUrl(`/mock-responses/${id}`)
       .then(resp => {
         req.url = resp.req_url;
