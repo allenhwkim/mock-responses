@@ -36,9 +36,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "dev:start": "npm run dev:stop && npm run dev:start",
+    "dev:start": "npm run dev:stop && npm run dev:start:src",
     "dev:stop": "kill-port 9300",
-    "dev:start": "ts-node -r tsconfig-paths/register src/main.ts --db-path=./mock-responses.sql --port=9300 --cookie='PLAY_SESSION=ACCTNBR=123456789; Path=/'"
+    "dev:start:src": "ts-node -r tsconfig-paths/register src/main.ts --db-path=./mock-responses.sql --port=9300 --cookie='PLAY_SESSION=ACCTNBR=123456789; Path=/'"
   },
   "dependencies": {
     "@nestjs/common": "^6.7.2",
