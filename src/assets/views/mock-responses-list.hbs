@@ -1,38 +1,25 @@
 <style>
+td { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mock-responses { width: 100%; table-layout: fixed;}
 .mock-responses .header { background: #ccc }
-.mock-responses .id { width: 40px; }
-.mock-responses .active { width: 40px; }
-.mock-responses .name { width: 120px; }
-.mock-responses .method { width: 80px; }
-.mock-responses .payload { width: 120px; }
+.mock-responses .collapse { width: 16px; }
+.mock-responses .id-name { width: 200px; }
+.mock-responses .active { width: 16px; }
+.mock-responses .method { width: 4em; }
+.mock-responses .payload { width: 6em; }
 .mock-responses .status { width: 40px; }
 .mock-responses .delay_sec { width: 40px; }
 .mock-responses .content_type { width: 120px; }
 .mock-responses .url { width: 320px; }
-.mock-responses .url .icon { float: right; }
-td {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.mock-responses {
-  padding: 12px 0;
-}
-.mock-responses .list .group-header .group {
-  padding: 0 12px;
-  background: #EEE;
-  border: 1px outset #EEE;
-  cursor: pointer;
-}
-.mock-responses .list .group-header ~ .mock-response {
+.mock-responses .actions { width: 60px; }
+.mock-responses { padding: 12px 0; }
+.mock-responses .group .mock-response:not(:first-child) .expand.icon,
+.mock-responses .group.count-1 .mock-response .expand.icon,
+.mock-responses .group:not(.expanded) .mock-response:not(:first-child) {
   display: none;
 }
-.mock-responses .list .group-header ~ .mock-response:nth-child(odd) {
-  background: #eee;
-}
-.mock-responses .list .group-header.expanded ~ .mock-response {
-  display: table-row;
+.mock-responses .group .mock-response:first-child {
+  background: #eee; border: 1px outset #eee;
 }
 </style>
 
@@ -46,9 +33,9 @@ td {
 <table class="mock-responses">
   <thead>
     <tr class="header">
-      <td class="id">id</td>
-      <td class="active">active</td>
-      <td class="name">name</td>
+      <td class="collapse"></td>
+      <td class="id-name">(id)name</td>
+      <td class="active" title="active"></td>
       <td class="method">method</td>
       <td class="url">url</td>
       <td class="payload">payload</td>
@@ -56,41 +43,42 @@ td {
       <td class="delay_sec">delay sec</td>
       <td class="content_type">content type</td>
       <td class="body">body</td>
+      <td class="actions">actions</td>
     </tr>
   <thead>
     {{#each grouped}}
-    <tbody class="list">
-      <tr class="group-header" onclick="this.classList.toggle('expanded')">
-        <td class="group" colspan="10">
-          {{this.count}} row(s)
-          <b>{{@key}}</b> 
-          <button class="create-from icon" title="create a new mock response"
-            onclick="event.stopPropagation();fireEvent(event, 'new-mock-response', {{this.id}})">
-            <i class="fa fa-plus"></i>
+    <tbody class="group count-{{this.count}}">
+      <!-- {{@key}} {{this.count}} {{this.updated_at}} -->
+      {{#each this.data}}
+      <tr class="mock-response">
+        <td class="collapse">
+          <button class="expand icon" onclick="this.closest('.group').classList.toggle('expanded')">
+            <i class="fas fa-angle-up"></i>
           </button>
-          <sub>Update at {{this.updated_at}}</sub>
+        </td>
+        <td class="id-name">({{this.id}}) {{this.name}}</td>
+        <td class="active">{{this.active}}</td>
+        <td class="method">{{this.req_method}}</td>
+        <td class="url">{{this.req_url}}</td>
+        <td class="payload">{{this.req_payload}}</td>
+        <td class="status">{{this.res_status}}</td>
+        <td class="delay_sec">{{this.res_delay_sec}}</td>
+        <td class="content type">{{this.res_content_type}}</td>
+        <td class="body">{{this.res_body}}</td>
+        <td>
+        {{#if this.active}}
+          <button class="icon" onclick="fireEvent(event, 'play-mock-response', {{this.id}})">
+            <i class="fas fa-play" title="run it"></i>
+          </button>
+          <button class="icon" onclick="fireEvent(event, 'new-mock-response', {{this.id}})">
+            <i class="fas fa-copy" title="duplicate it"></i>
+          </button>
+        {{/if}}
+          <button class="icon" onclick="fireEvent(event, 'edit-mock-response', {{this.id}})">
+            <i class="fas fa-edit" title="edit it"></i>
+          </button>
         </td>
       </tr>
-      {{#each this.data}}
-        <tr class="mock-response" tabindex="0" onclick="fireEvent('', 'edit-mock-response', {{this.id}})">
-          <td class="id">{{this.id}}</td>
-          <td class="active">{{this.active}}</td>
-          <td class="name">{{this.name}}</td>
-          <td class="method">{{this.req_method}}</td>
-          <td class="url">
-            {{#if this.active}}
-            <button class="icon" onclick="event.stopPropagation();fireEvent(event, 'play-mock-response', {{this.id}})">
-              <i class="fa fa-play"></i>
-            </button>
-            {{/if}}
-            {{this.req_url}}
-          </td>
-          <td class="payload">{{this.req_payload}}</td>
-          <td class="status">{{this.res_status}}</td>
-          <td class="delay_sec">{{this.res_delay_sec}}</td>
-          <td class="content type">{{this.res_content_type}}</td>
-          <td class="body">{{this.res_body}}</td>
-        </tr>
       {{/each}}
     </tbody>
     {{/each}}
