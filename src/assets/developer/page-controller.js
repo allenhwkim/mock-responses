@@ -34,17 +34,23 @@ function fetchUrl(url, options) {
       'Content-Type': 'application/json'
     }
   }
-  return window.fetch(url, options)
-    .then(resp => {
-      if (!resp.ok) throw Error(resp); 
-      const contentType = resp.headers.get('Content-Type');
-      return (contentType || '').match(/\/json/) ? resp.json() : resp.text();
-    });
+  return new Promise( (resolve, reject) => {
+    window.fetch(url, options)
+      .then(resp => {
+        if (!resp.ok) {
+          return reject(resp);
+        } else {
+          const contentType = resp.headers.get('Content-Type');
+          const content = (contentType || '').match(/\/json/) ? resp.json() : resp.text();
+          return resolve(content);
+        }
+      });
+  });
 }
 
 function fireEvent(event, type, data) {
   event && event.stopPropagation();
-  const detail = data || (event && event.detail) || undefined;
+  const detail = typeof data === undefined ? (event && event.detail) : data; 
   const custEvent = new CustomEvent(type, {detail, bubbles: true});
 
   const srcEl = (event && event.target) instanceof HTMLElement ? event.target : document.body;
@@ -99,21 +105,21 @@ var UseCase = {
     const validMockResp = useCase.mock_responses.match(/^(\d+,)*\d+$/);
     return useCase.name && useCase.description && validMockResp;
   },
-  list: function (keyword) {
+  list: function (keyword) { // list-use-cases
     const url = `/use-cases?q=${keyword||''}`;
     document.querySelector('hce-list#use-cases').source = fetchUrl(url);
   },
-  new: function() { // show form for create
+  new: function() { //  new-use-case
     const url = '/use-cases/new';
     Main.routesEl.setAttribute('src', url);
     window.location.href = '#' + url;
   },
-  edit: function(event, useCase) { // show form for edit
+  edit: function(event, useCase) { // edit-use-case
     const url = `/use-cases/${useCase.id}/edit`;
     Main.routesEl.setAttribute('src', url )
     window.location.href = '#' + url;
   },
-  activate: function(event, id) { // show form for edit
+  activate: function(event, id) { // activate-use-case 
     const prevActivatedEl = document.querySelector('.use-case.active');
     prevActivatedEl && prevActivatedEl.classList.remove('active');
     fetchUrl(`/use-cases/${id}/activate`, {method: 'PUT'})
@@ -124,7 +130,7 @@ var UseCase = {
         event.target.closest('.use-case').classList.add('active');
       });
   },
-  create: function(useCase) {
+  create: function(useCase) { // create-use-case
     if (!UseCase.isValid(useCase)) {
       Main.dialogEl.open({title: 'Error', body: 'Invalid Use Case Data'});
     } else {
@@ -133,7 +139,7 @@ var UseCase = {
         .then(resp => fireEvent(null, 'list-mock-responses', ''));
     }
   },
-  update: function(useCase) {
+  update: function(useCase) { // update-use-case
     if (!UseCase.isValid(useCase)) {
       Main.dialogEl.open({title: 'Error', body: 'Invalid Use Case Data'});
     } else {
@@ -142,7 +148,7 @@ var UseCase = {
         .then(_ => Main.dialogEl.close());
     }
   },
-  delete: function(id) {
+  delete: function(id) { // delete-use-case
     fetchUrl(`/use-cases/${id}`, {method: 'DELETE'})
       .then(resp => fireEvent(null, 'list-use-cases', ''))
       .then(resp => fireEvent(null, 'list-mock-responses', ''));
@@ -159,24 +165,24 @@ var MockResponse = {
       mockResp.res_content_type &&
       mockResp.res_body;
   },
-  list: function (key) {
+  list: function (key) { // list-mock-responses
     const url = `/mock-responses/index?q=${key||''}`;
     Main.routesEl.setAttribute('src', url);
     Main.dialogEl.close();
     window.location.href = '#' + url;
   },
-  new: function(data) { 
+  new: function(data) {  // new-mock-response
     const qs = data ? `?from=${data}`: ''; // query string
     const url = `/mock-responses/new${qs}`;
     Main.routesEl.setAttribute('src', url);
     window.location.href = '#' + url;
   },
-  edit: function(id) {
+  edit: function(id) { // edit-mock-response
     const url = `/mock-responses/${id}/edit`;
     Main.routesEl.setAttribute('src', url );
     window.location.href = '#' + url;
   },
-  create: function(mockResponse) {
+  create: function(mockResponse) { // create-mock-response
     if (!MockResponse.isValid(mockResponse)) {
       Main.dialogEl.open({title: 'Error', body: 'Invalid Mock Response Data'});
     } else {
@@ -185,23 +191,22 @@ var MockResponse = {
         .then(_ => Main.dialogEl.close());
     }
   },
-  update: function(mockResponse) {
+  update: function(mockResponse) { // update-mock-response
     if (!MockResponse.isValid(mockResponse)) {
       Main.dialogEl.open({title: 'Error', body: 'Invalid Mock Response Data'});
     } else {
       fetchUrl(`/mock-responses/${mockResponse.id}`, {method: 'PUT', body: JSON.stringify(mockResponse)})
-        .then(resp => { 
-          const body = `<div>Mock Response Updated!</div>
-            <button onclick="fireEvent(event, 'list-mock-responses', '')">List Mock Responses</button>`;
-          Main.dialogEl.open({title: 'Success', body});
-        });
+        .then(
+           resp => fireEvent(event, 'list-mock-responses', ''), 
+           async error => Main.dialogEl.open({title: `${error.status} Error` , body: await error.text()})
+        );
     }  
   },
-  delete: function(id) {
+  delete: function(id) { // delete-mock-response
     fetchUrl(`/mock-responses/${id}`, {method: 'DELETE'})
       .then(resp => fireEvent(null, 'list-mock-responses', ''));  
   },
-  play: function(event, id) {
+  play: function(event, id) { // play-mock-response
     const req = {};
     let respStatus, respType;
     fetchUrl(`/mock-responses/${id}`)
