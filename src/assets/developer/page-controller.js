@@ -50,7 +50,7 @@ function fetchUrl(url, options) {
 
 function fireEvent(event, type, data) {
   event && event.stopPropagation();
-  const detail = typeof data === undefined ? (event && event.detail) : data; 
+  const detail = typeof data === 'undefined' ? (event && event.detail) : data; 
   const custEvent = new CustomEvent(type, {detail, bubbles: true});
 
   const srcEl = (event && event.target) instanceof HTMLElement ? event.target : document.body;
