@@ -1,6 +1,5 @@
 # **Table of Contents**
 
-- [**Table of Contents**](#table-of-contents)
 - [How to install and start](#how-to-install-and-start)
     - [To Start With Forever](#to-start-with-forever)
     - [To Start Manally](#to-start-manally)
