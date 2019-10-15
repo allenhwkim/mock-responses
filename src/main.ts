@@ -47,6 +47,11 @@ async function bootstrap() {
       res.setHeader('Access-Control-Allow-Credentials', true);
     }
 
+    res.setHeader('Surrogate-Control', 'no-store');
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+
     if (argv.cookie) {
       const [_, name, value] = (<string>argv.cookie).match(/^([a-z_]+)=(.*)/i);
       if (!req.cookies[name]) {
