@@ -1,11 +1,43 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>
-        Mock Responses
-    </title>
-</head>
-<body>
-    <p>TODO</p>
+  <head>
+    <meta charset="utf-8" />
+    <title>App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="normalize.css">
+    <link rel="stylesheet" href="fontawesome/css/all.css">
+    <script src="html-custom-elements.umd.js"></script>
+    <script src="page-controller.js"></script>
+  </head>
+  <body onload="fireEvent(event, 'list-use-cases')">
+    <div class="main read-only">
+      <hce-collapsible class="horizontal">
+        <div class="contents">
+          <div class="top-header">
+            Welcome To Mock Responses
+            <a class="icon" href="https://github.com/allenhwkim/mock-responses"><i class="fab fa-github"></i></a>
+            <button class="icon public" style="float:right" onclick="fireEvent(event, 'list-mock-responses', '')">
+              <i class="fas fa-list"></i>
+            </button>
+            <input class="passcode public" title="Enter passcode here to enable edit mode"
+              onkeyup="fireEvent(event, 'enable-edit-mode', this.value)"/>
+          </div>
+          <div classs="main-route">
+            <hce-routes class="hce-routes" src="/mock-responses/index">
+              <div route-match="/use-cases/new" import="/use-cases/new"> </div>
+              <div route-match="/use-cases/(\d+)/edit" import="/use-cases/{{1}}/edit"></div>
+
+              <div route-match="/mock-responses/new" import="/mock-responses/new"></div>
+              <div route-match="/mock-responses/(\d+)/edit" import="/mock-responses/{{1}}/edit"></div>
+              <div route-match="/mock-responses/index(.*)" import="/mock-responses/index{{1}}"></div>
+            </hce-routes>
+          </div>
+        </div>
+      </hce-collapsible>
+    </div>
+
+    <div>
+        Put Links Here
+    </div>
 </body>
 </html>

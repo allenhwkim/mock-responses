@@ -1,5 +1,6 @@
 # **Table of Contents**
 
+- [**Table of Contents**](#table-of-contents)
 - [How to install and start](#how-to-install-and-start)
     - [To Start With Forever](#to-start-with-forever)
     - [To Start Manally](#to-start-manally)
@@ -23,7 +24,9 @@
 
 `$ kill-port 9300`
 
-`$ ts-node -r tsconfig-paths/register src/main.ts --db-path=./mock-responses.sql --port=9300 --cookie='PLAY_SESSION=ACCTNBR=123456789; Path=/'`
+`$ ts-node src/main.ts --db-path=demo/mock-responses.sql --port=9300 --cookie='PLAY_SESSION=ACCTNBR=123456789; Path=/'`
+
+**After Starting, go to** `http://localhost:3000/developer/#`
 
 <br>
 
@@ -31,36 +34,29 @@
 
 ## create mock-responses
 
-<img width="100" height="100" src="https://developer.apple.com/design/human-interface-guidelines/watchos/images/icon-and-image-small-icon-wallet_2x.jpg">
-
-Description: This is sample text
+<img src="./documentation/images/new-page.png">
 
 ## update mock-response
 
-<img width="100" height="100" src="https://developer.apple.com/design/human-interface-guidelines/watchos/images/icon-and-image-small-icon-wallet_2x.jpg">
-
-Description: This is sample text
+<img src="./documentation/images/edit-page.png">
 
 ## search mock-response
 
-<img width="100" height="100" src="https://developer.apple.com/design/human-interface-guidelines/watchos/images/icon-and-image-small-icon-wallet_2x.jpg">
+<img src="./documentation/images/home-page.png">
 
-Description: This is sample text
+Note: the search looks for matching strings in 'name', 'url', and 'body' column.
 
 ## create use-cases
 
-<img width="100" height="100" src="https://developer.apple.com/design/human-interface-guidelines/watchos/images/icon-and-image-small-icon-wallet_2x.jpg">
+<img src="./documentation/images/use-case-create-page.png">
 
-Description: This is sample text
 
 ## update use-case
 
-<img width="100" height="100" src="https://developer.apple.com/design/human-interface-guidelines/watchos/images/icon-and-image-small-icon-wallet_2x.jpg">
+<img src="./documentation/images/use-case-edit-page.png">
 
-Description: This is sample text
+Note: Use the search bar on the right side to search mock services, then click the service to add it to the use case. Click the trash can icon to remove the mock service from a use case.
 
 ## activate use-case
 
-<img width="100" height="100" src="https://developer.apple.com/design/human-interface-guidelines/watchos/images/icon-and-image-small-icon-wallet_2x.jpg">
-
-Description: This is sample text
+Activates all mock services under that use case.
