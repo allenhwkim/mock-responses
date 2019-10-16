@@ -391,7 +391,7 @@
 
 **Payload:** `N/A`
 
-**Sample Response:** `200 - OK, no payload in response`
+**Sample Response:** `200 - OK, no payload in response.`
 
 <hr><br>
 
