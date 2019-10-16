@@ -33,9 +33,9 @@
 
 # Documentation
 
-[Mock Response Documentation]("documentation/api/mock-responses.md)
+[Mock Response Documentation]("./../documentation/api/mock-responses.md)
 
-[Use Case Documentation]("documentation/api/use-cases.md)
+[Use Case Documentation]("./../documentation/api/use-cases.md)
 
 <br>
 
