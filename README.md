@@ -43,26 +43,26 @@
 
 ## create mock-responses
 
-<img src="./src/documentation/images/new-page.png">
+<img src="./documentation/images/new-page.png">
 
 ## update mock-response
 
-<img src="./src/documentation/images/edit-page.png">
+<img src="./documentation/images/edit-page.png">
 
 ## search mock-response
 
-<img src="./src/documentation/images/home-page.png">
+<img src="./documentation/images/home-page.png">
 
 Note: the search looks for matching strings in 'name', 'url', and 'body' column.
 
 ## create use-cases
 
-<img src="./src/documentation/images/use-case-create-page.png">
+<img src="./documentation/images/use-case-create-page.png">
 
 
 ## update use-case
 
-<img src="./src/documentation/images/use-case-edit-page.png">
+<img src="./documentation/images/use-case-edit-page.png">
 
 Note: Use the search bar on the right side to search mock services, then click the service to add it to the use case. Click the trash can icon to remove the mock service from a use case.
 

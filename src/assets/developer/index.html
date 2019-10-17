@@ -51,7 +51,7 @@
             <input class="passcode public" title="Enter passcode here to enable edit mode"
               onkeyup="fireEvent(event, 'enable-edit-mode', this.value)"/>
           </div>
-          <div classs="main-route">
+          <div class="main-route">
             <hce-routes class="hce-routes" src="/mock-responses/index">
               <div route-match="/use-cases/new" import="/use-cases/new"> </div>
               <div route-match="/use-cases/(\d+)/edit" import="/use-cases/{{1}}/edit"></div>
