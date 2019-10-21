@@ -15,6 +15,13 @@ export class UseCasesController {
     private mockResp: MockResponsesService
   ) {}
 
+  @Get('index')
+  @Render('use-cases-list')
+  index(@Query('q') key) {    
+    const grouped = this.findAllBy(key);
+    return { grouped };
+  }
+
   @Get(':id/edit')
   @Render('use-cases-edit')
   edit(@Param() params) {
@@ -26,16 +33,42 @@ export class UseCasesController {
 
   @Get('new')
   @Render('use-cases-edit')
-  new(@Param() params) {
-    const useCase: UseCase = {id: undefined, name: '', description: '', mock_responses: ''};
+  new(@Query('from') from) {
+    const row = from ? this.useCase.find(from) : {};
     const mockResponses = [];
-    return { useCase, mockResponses };
+    return { 
+      useCase: {
+        id: undefined, 
+        name: row.name || '', 
+        description: row.description || '',
+        category: row.category || '',
+        mock_responses: row.mock_responses || ''
+      }, 
+      mockResponses
+    };
   }
 
   @Get()
-  findAllBy(@Query('q') key): string {
-    const by = key && {key};
-    return this.useCase.findAllBy(by);
+  findAllBy(@Query('q') key) {
+    const mockResponses = {};
+
+    const apiGrouped = this.useCase.findAllBy({ apiGroup: 1, key });
+
+    if (key == undefined || key.trim() == "") {
+      apiGrouped.forEach(({category, count}) => {
+        const data = this.useCase.findAllBy({category: category});
+        const id = data[0].id;
+        mockResponses[category] = { id, count, data };
+      });
+    } else {
+      mockResponses['Search Results'] = {
+        'id': 0,
+        'count': apiGrouped.length,
+        'data': apiGrouped
+      }
+    }
+
+    return mockResponses;
   }
 
   @Get(':id')

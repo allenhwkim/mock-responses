@@ -17,21 +17,10 @@
             <div class="more">
               <div class="top-header">Mock Responses</div>
               <br/>
+              <!-- Use cases sidebar logic placed in use-cases-list.hbs file -->
               <h3>Use Cases</h3>
-              <input class="public" id="use-cases" placeholder="Search use cases" onchange="UseCase.list(this.value)">
-              <button title="create a new use case" onclick="fireEvent(event, 'new-use-case')">+</button>
-              <br>
-              <hce-list id="use-cases" (selected)="fireEvent(event, 'edit-use-case')">
-                <div class="use-case" onclick="this.classList.toggle('expanded')">
-                  <div class="name">
-                    <b class="name-text">{{name}}</b>
-                    <button class="icon public" style="float:right">
-                      <i class="fa fa-play" onclick="fireEvent(event, 'activate-use-case', {{id}})"></i>
-                    </button>
-                  </div>
-                  <div class="description">{{description}}</div>
-                </div>
-              </hce-list>
+              <hce-routes class="hce-routes" src="/use-cases/index">
+              </hce-routes>
             </div>
             <div class="less" onclick="this.closest('.sidebar').classList.add('expanded')">
                &nbsp; &nbsp; USE CASES
@@ -44,7 +33,6 @@
           <div class="top-header">
             Welcome To Mock Responses
             <a class="icon" href="https://github.com/allenhwkim/mock-responses"><i class="fab fa-github"></i></a>
-            <a class="icon" href="../../documentation/index.html"><i class="fas fa-file-alt"></i></a>
             <button class="icon public" style="float:right" onclick="fireEvent(event, 'list-mock-responses', '')">
               <i class="fas fa-list"></i>
             </button>

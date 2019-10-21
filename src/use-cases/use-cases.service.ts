@@ -5,6 +5,18 @@ import { UseCase, MockResponse } from '../common/interfaces';
 import { BetterSqlite3 } from '../common/better-sqlite3';
 import { MockResponsesService } from '../mock-responses/mock-responses.service';
 
+function getWhereFromBy(by) {
+  const res = [];
+
+  by.key && 
+    res.push(`name like '%${by.key}%' OR description like '%${by.key}%' OR category like '%${by.key}%'`);
+  by.category &&
+    res.push(`category = '${by.category}'`);
+
+  const where = res.length ? res.join(' AND ') : '1=1';
+  return where;
+}
+
 @Injectable()
 export class UseCasesService {
   db = BetterSqlite3.db;
@@ -17,23 +29,36 @@ export class UseCasesService {
   }
 
   findAllBy(by?) {
-    const sqlByKey = by && by.key && `
-      SELECT * FROM use_cases WHERE name like '%${by.key}%' OR description like '%${by.key}%'`;
-    const sqlByDefault = `SELECT * FROM use_cases`;
-    const sql = sqlByKey || sqlByDefault;
-    console.log('[mock-responses] UseCaseService', sql);
+    const sqlByApiGroup = by && by.apiGroup && `
+      SELECT category, COUNT(category) count
+      FROM use_cases
+      WHERE ${ getWhereFromBy(by) }
+      GROUP BY category
+      ORDER BY category`;
+    const sqlByParameter = by && (by.key || by.category) && `
+      SELECT *
+      FROM use_cases
+      WHERE ${ getWhereFromBy(by) }
+      ORDER BY category`;
+    const sqlByDefault = `
+      SELECT * FROM use_cases 
+      ORDER BY category;`;
+    const sql = sqlByParameter || sqlByApiGroup || sqlByDefault;
+    console.log('[mock-responses] UseCaseService.findAllBy', sql);
+
     return this.db.prepare(sql).all();
   }
 
   create(data: UseCase) {
     const name = data.name.trim().replace(/'/g, '\'\'');
     const description = data.description.trim().replace(/'/g, '\'\'');
+    const category = data.category.trim().replace(/'/g, '\'\'');
     const mockResponses = data.mock_responses.trim().replace(/'/g, '\'\'');;
 
     const sql = `
       INSERT INTO use_cases 
-        (name, description, mock_responses)
-        VALUES ('${name}', '${description}', '${mockResponses}');
+        (name, description, category, mock_responses)
+        VALUES ('${name}', '${description}', '${category}', '${mockResponses}');
       `;
     console.log('[mock-responses] UseCaseService use_cases create', sql);
     return this.db.exec(sql) && BetterSqlite3.backupToSql();
@@ -42,12 +67,14 @@ export class UseCasesService {
   update(data: UseCase) {
     const name = data.name.trim().replace(/'/g, '\'\'');
     const description = data.description.trim().replace(/'/g, '\'\'');
+    const category = data.category.trim().replace(/'/g, '\'\'');
     const mockResponses = data.mock_responses.trim().replace(/'/g, '\'\'');;
 
     const sql = `
       UPDATE use_cases SET
         name = '${name}',
         description = '${description}',
+        category = '${category}',
         mock_responses = '${mockResponses}'
       WHERE id = ${data.id};
       `;
