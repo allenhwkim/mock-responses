@@ -1,0 +1,80 @@
+<style>
+  td {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .use-cases {
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .use-cases .header {
+    background: rgb(187, 185, 185)
+  }
+
+  .use-cases .collapse {
+    width: 16px;
+  }
+
+  .use-cases {
+    padding: 12px 0;
+  }
+
+  .use-cases .id-name {
+    width: 190px;
+  }
+
+  .use-cases .actions {
+    width: 60px;
+    align: right;
+  }
+
+  .use-cases .group .use-case:not(:first-child) .expand.icon,
+  .use-cases .group:not(.expanded) .use-case:not(:first-child) {
+    display: none;
+    border-top: 40px solid white;
+  }
+
+  tbody tr.use-case:nth-child(odd) {
+    background-color: rgb(230, 230, 230);
+  }
+
+  button.mainIcon {
+    padding: 5px;
+  }
+</style>
+
+{{!-- Use cases get populated below --}}
+<table class="use-cases">
+  {{#each grouped}}
+  <tbody class="group sidebar">
+    <!-- {{@key}} {{this.count}} -->
+    <td class="collapse">
+      <button class="expand icon" onclick="this.closest('.group').classList.toggle('expanded')">
+        <i class="fas fa-angle-up"></i>
+      </button>
+    </td>
+    <td class="id-name"><b>{{@key}} ({{this.count}})</b></td>
+    <td></td>
+    {{#each this.data}}
+    <tr class="use-case">
+      <td></td>
+      <td class="id-name {{this.id}}">({{this.id}}) {{this.name}}</td>
+      <td class="actions">
+        <button class="icon" onclick="fireEvent(event, 'activate-use-case', {{this.id}})">
+          <i class="fas fa-play" title="run it"></i>
+        </button>
+        <button class="icon" onclick="fireEvent(event, 'new-use-case', {{this.id}})">
+          <i class="fas fa-copy" title="duplicate it"></i>
+        </button>
+        <button class="icon" onclick="fireEvent(event, 'edit-use-case', {{this.id}})">
+          <i class="fas fa-edit" title="edit it"></i>
+        </button>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+  {{/each}}

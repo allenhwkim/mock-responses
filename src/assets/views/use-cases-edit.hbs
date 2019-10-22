@@ -86,14 +86,21 @@ function searchMockResponses(keyword) {
   {{/if}}
 
   <div class="name column">
-    <label for="name">Name</label>
+    <label for="name">Name *</label>
     <input id="name" value="{{useCase.name}}" />
   </div>
 
   <div class="description column">
-    <label for="description">Description</label>
+    <label for="description">Description *</label>
     <input id="description" size="40" value="{{useCase.description}}" />
   </div>
+
+  <div class="category column">
+    <label for="category">Category *</label>
+    <input id="category" value="{{useCase.category}}" placeholder="HUP, FRAUD, etc."/>
+  </div>
+
+  <p>* indicates required fields.</p>
 
   <h3>Mock Responses</h3>
   <div class="mock-responses">
