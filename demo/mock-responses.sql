@@ -7,9 +7,9 @@ CREATE TABLE IF NOT EXISTS "mock_responses" (
 	`req_url`	TEXT,
 	`req_method`	TEXT DEFAULT 'GET',
 	`res_status`	INTEGET DEFAULT 200,
-	`res_delay_sec`	integer,
+	`res_delay_sec`	INTEGER,
 	`res_content_type`	TEXT DEFAULT 'application/json',
-	`res_body`	    BLOB,
+	`res_body`	BLOB,
 	`created_at`	INTEGER,
 	`created_by`	string,
 	`updated_at`	INTEGER,
@@ -31,11 +31,11 @@ INSERT INTO mock_responses VALUES(16,'test2',0,'est','POST',200,0,'application/j
 INSERT INTO mock_responses VALUES(17,'update',0,'test','POST',200,0,'application/json','test',1570212065007,'allen.kim',1570212161466,'allen.kim','');
 INSERT INTO mock_responses VALUES(18,'create',1,'flasker','POST',200,0,'application/json','fdasf',1570212192308,'allen.kim',1571770027677,'raj.pandya','');
 CREATE TABLE use_cases (
-          id  INTEGER PRIMARY KEY,
-          name  TEXT NOT NULL,
-          description TEXT NOT NULL,
-          mock_responses TEXT,
-		  category TEXT NOT NULL
+	id  INTEGER PRIMARY KEY,
+        name  TEXT NOT NULL,
+        description TEXT NOT NULL,
+        mock_responses TEXT,
+	category TEXT NOT NULL
         );
 INSERT INTO use_cases VALUES(1,'fraud bad long desc long desc long desc long desc long desc long desc long desc','fdsaf long desc long desc long desc long desc long desc long desc long desc long desc','3,8,10','FRAUD');
 INSERT INTO use_cases VALUES(2,'tssshuper','222 hups','4','OTHER');
