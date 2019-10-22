@@ -29,6 +29,11 @@ function findByUrlMethod(url, method) {
   return BetterSqlite3.db.prepare(sql1).get();
 }
 
+function findById(id) {
+  const sql1 = `SELECT * FROM mock_responses WHERE id = ${id} LIMIT 1`;
+  return BetterSqlite3.db.prepare(sql1).get();
+}
+
 function delay(ms) {
   return new Promise(resolve => setTimeout(_ => resolve(), ms));
 }
@@ -46,7 +51,7 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
   // } 
 
   const now = Date.now();
-  const row: MockResponse = findByUrlMethod(req.url, req.method);
+  const row: MockResponse = findByUrlMethod(req.path, req.method);
 
   // if not found in DB, continue
   if (!row) {
@@ -83,6 +88,20 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
     res.statusCode = row.res_status;
     res.end();
     return;
+  }  // `return req.query.foo === 1 ? 10 : 12;`
+  else if (row.res_content_type === 'function') {
+    console.log('[mock-responses] Serving from function' , row.res_body);
+    const rowId = (new Function('req', 'res', 'next', row.res_body))(req, res, next);
+    const dynRow = findById(rowId);
+    if (dynRow) {
+      res.setHeader('Content-Type', dynRow.res_content_type);
+      res.write(dynRow.res_body);
+      res.statusCode = dynRow.res_status;
+      res.end();
+      return;
+    } else {
+      console.log('[mock-responses] Cannot find id', rowId);
+    }
   }  // if serve from body contents
   else if (row) {
     res.setHeader('Content-Type', row.res_content_type);

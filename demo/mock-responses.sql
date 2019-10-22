@@ -40,6 +40,9 @@ INSERT INTO "mock_responses" VALUES(15,'test222',0,'test','POST',200,0,'applicat
 INSERT INTO "mock_responses" VALUES(16,'test2',0,'est','POST',200,0,'application/json','test',1570211999314,'allen.kim',1570211999314,'allen.kim','');
 INSERT INTO "mock_responses" VALUES(17,'update',0,'test','POST',200,0,'application/json','test',1570212065007,'allen.kim',1570212161466,'allen.kim','');
 INSERT INTO "mock_responses" VALUES(18,'create',0,'fdasf','POST',200,0,'application/json','fdasf',1570212192308,'allen.kim',1570212277990,'allen.kim','');
+INSERT INTO "mock_responses" VALUES(19,'function row',1,'/api/func',NULL,200,0,'function','return req.query.foo == 1 ? 20 : 21;',1571758912499,'allen.kim',1571759272930,'allen.kim','');
+INSERT INTO "mock_responses" VALUES(20,'with ?foo=1',0,'/api/func',NULL,200,0,'text/plain','this is from /api/func?foo=1',1571759051272,'allen.kim',1571759960626,'allen.kim','');
+INSERT INTO "mock_responses" VALUES(21,'with ?foo=2',0,'/api/func',NULL,200,0,'text/plain','this is from /api/func?foo=2',1571759059184,'allen.kim',1571759946567,'allen.kim','');
 CREATE TABLE use_cases (
           id  INTEGER PRIMARY KEY,
           name  TEXT NOT NULL,
