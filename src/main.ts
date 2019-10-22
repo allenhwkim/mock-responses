@@ -85,7 +85,7 @@ function getConfig(argv) {
 
   const usrPath = path.resolve(<string>(argv['db-path']) || demoDirPath);
   if (fs.existsSync(usrPath) && fs.lstatSync(usrPath).isDirectory()) {
-    const dbPath = path.join(usrPath, 'mock-responses.sqlite3');
+    const dbPath = path.join(usrPath, 'mock-responses.sql');
     config.dbPath = fs.existsSync(dbPath) ? dbPath : null;
   } else if (fs.existsSync(usrPath) && fs.lstatSync(usrPath).isFile()) {
     config.dbPath = usrPath;
