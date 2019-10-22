@@ -14,7 +14,7 @@ export class MockResponsesController {
 
   @Get('index')
   @Render('mock-responses-list')
-  index(@Query('q') key) {    
+  index(@Query('q') key) {
     const grouped = this.findAllBy(key);
     return { grouped };
   }
