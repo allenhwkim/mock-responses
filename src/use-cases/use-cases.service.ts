@@ -9,7 +9,7 @@ function getWhereFromBy(by) {
   const res = [];
 
   by.key && 
-    res.push(`name like '%${by.key}%' OR description like '%${by.key}%' OR category like '%${by.key}%'`);
+    res.push(`(name like '%${by.key}%' OR description like '%${by.key}%')`);
   by.category &&
     res.push(`category = '${by.category}'`);
 
@@ -31,18 +31,14 @@ export class UseCasesService {
   findAllBy(by?) {
     const sqlByApiGroup = by && by.apiGroup && `
       SELECT category, COUNT(category) count
-      FROM use_cases
-      WHERE ${ getWhereFromBy(by) }
-      GROUP BY category
-      ORDER BY category`;
+      FROM use_cases WHERE ${ getWhereFromBy(by) }
+      GROUP BY category ORDER BY category`;
     const sqlByParameter = by && (by.key || by.category) && `
-      SELECT *
-      FROM use_cases
+      SELECT * FROM use_cases
       WHERE ${ getWhereFromBy(by) }
       ORDER BY category`;
     const sqlByDefault = `
-      SELECT * FROM use_cases 
-      ORDER BY category;`;
+      SELECT * FROM use_cases ORDER BY category;`;
     const sql = sqlByParameter || sqlByApiGroup || sqlByDefault;
     console.log('[mock-responses] UseCaseService.findAllBy', sql);
 
@@ -52,13 +48,13 @@ export class UseCasesService {
   create(data: UseCase) {
     const name = data.name.trim().replace(/'/g, '\'\'');
     const description = data.description.trim().replace(/'/g, '\'\'');
-    const category = data.category.trim().replace(/'/g, '\'\'');
     const mockResponses = data.mock_responses.trim().replace(/'/g, '\'\'');;
+    const category = data.category.trim().replace(/'/g, '\'\'');
 
     const sql = `
       INSERT INTO use_cases 
-        (name, description, category, mock_responses)
-        VALUES ('${name}', '${description}', '${category}', '${mockResponses}');
+        (name, description, mock_responses, category)
+        VALUES ('${name}', '${description}', '${mockResponses}', '${category}');
       `;
     console.log('[mock-responses] UseCaseService use_cases create', sql);
     return this.db.exec(sql) && BetterSqlite3.backupToSql();
@@ -67,15 +63,15 @@ export class UseCasesService {
   update(data: UseCase) {
     const name = data.name.trim().replace(/'/g, '\'\'');
     const description = data.description.trim().replace(/'/g, '\'\'');
-    const category = data.category.trim().replace(/'/g, '\'\'');
     const mockResponses = data.mock_responses.trim().replace(/'/g, '\'\'');;
+    const category = data.category.trim().replace(/'/g, '\'\'');
 
     const sql = `
       UPDATE use_cases SET
         name = '${name}',
         description = '${description}',
-        category = '${category}',
-        mock_responses = '${mockResponses}'
+        mock_responses = '${mockResponses}',
+        category = '${category}'
       WHERE id = ${data.id};
       `;
     console.log('[mock-responses] UseCaseService', sql);

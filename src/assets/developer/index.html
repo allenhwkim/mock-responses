@@ -2,10 +2,10 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>App</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="normalize.css">
-    <link rel="stylesheet" href="fontawesome/css/all.css">
+    <title>Mock Responses</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="normalize.css" />
+    <link rel="stylesheet" href="fontawesome/css/all.css" />
     <script src="html-custom-elements.umd.js"></script>
     <script src="page-controller.js"></script>
   </head>
@@ -19,15 +19,22 @@
               <br/>
               <!-- Use cases sidebar logic placed in use-cases-list.hbs file -->
               <h3>Use Cases</h3>
+              <input class="public" id="use-cases" placeholder="Search use cases"
+                onkeypress="fireEvent(event, 'list-use-cases', this.value)"/>
+              <button class="mainIcon" title="Create New Use Case"
+                onclick="fireEvent(event, 'new-use-case', 0)">
+                <i class="fas fa-plus"></i>
+              </button>
+              <br/>
               <hce-routes class="hce-routes" src="/use-cases/index">
               </hce-routes>
             </div>
             <div class="less" onclick="this.closest('.sidebar').classList.add('expanded')">
-               &nbsp; &nbsp; USE CASES
+              &nbsp; &nbsp; USE CASES
             </div>
           </div>
           <!-- when .hce-header clicks .hce-body collapse/expands -->
-          <div class="hce-header"></div> 
+          <div class="hce-header"></div>
         </div>
         <div class="contents">
           <div class="top-header">

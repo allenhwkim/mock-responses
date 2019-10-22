@@ -10,6 +10,7 @@ export class BetterSqlite3Migration {
     this.addCreatedAtUpdatedAt();
     this.addReqPayload();
     this.createUseCases();
+    this.addCategoryToUseCases();
   }
 
   addResDelaySec() {
@@ -59,7 +60,15 @@ export class BetterSqlite3Migration {
       this.db.exec(sql);
       this.db.exec(`INSERT INTO use_cases (name, description, mock_responses) VALUES ('test', 'desc', '1,2,3')`);
     }
+  }
 
+  addCategoryToUseCases() {
+    try {
+      this.db.exec('SELECT category FROM use_cases LIMIT 1');
+    } catch(e) {
+      console.log('[mock-responses] running migration for use_cases column: category');
+      this.db.exec('ALTER TABLE use_cases ADD COLUMN category TEXT NOT NULL DEFAULT(\'Uncategorized\')');
+    }
   }
 
 }

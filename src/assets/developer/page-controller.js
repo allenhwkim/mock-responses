@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', event => {
   document.body.addEventListener('update-mock-response', handleCustomEvents);
   document.body.addEventListener('delete-mock-response', handleCustomEvents);
   document.body.addEventListener('play-mock-response', handleCustomEvents);
-
+  
   enableEditMode();
 });
 
@@ -106,24 +106,34 @@ var Main = {
 var UseCase = {
   isValid: function(useCase) {
     const validMockResp = useCase.mock_responses.match(/^(\d+,)*\d+$/);
-    return useCase.name && useCase.description && validMockResp;
+    return useCase.name && useCase.description && validMockResp && useCase.category;
   },
   list: function (keyword) { // list-use-cases
     const url = `/use-cases/index?q=${keyword||''}`;
     Main.sidebarEl.setAttribute('src', url);
-    Main.dialogEl.close();
     window.location.href = '#' + url;
-    //document.querySelector('hce-list#use-cases').source = fetchUrl(url);
   },
   new: function(data) { //  new-use-case
     const qs = data ? `?from=${data}`: ''; // query string
     const url = `/use-cases/new${qs}`;
+
+    // clear input fields if new case
+    if (data == 0) {
+      var inputFields = document.getElementsByTagName("input");
+      for (var i=0; i < inputFields.length; i++) {
+        if (inputFields[i].type == "text") {
+          inputFields[i].value = "";
+        }
+      }    
+    }
+
     Main.routesEl.setAttribute('src', url);
     window.location.href = '#' + url;
   },
   edit: function(event, useCase) { // edit-use-case
     const url = `/use-cases/${useCase}/edit`;
-    Main.routesEl.setAttribute('src', url )
+    Main.routesEl.setAttribute('src', url);
+    Main.dialogEl.close();
     window.location.href = '#' + url;
   },
   activate: function(event, id) { // activate-use-case 
@@ -142,8 +152,8 @@ var UseCase = {
       Main.dialogEl.open({title: 'Error', body: 'Invalid Use Case Data'});
     } else {
       fetchUrl('/use-cases', {method: 'POST', body: JSON.stringify(useCase)})
-        .then(resp => fireEvent(null, 'list-use-cases', ' '))
-        .then(resp => fireEvent(null, 'list-mock-responses', ' '));
+      .then(resp => fireEvent(null, 'list-mock-responses', ''))
+      .then(resp => fireEvent(null, 'list-use-cases', ' '));
     }
   },
   update: function(useCase) { // update-use-case
@@ -151,14 +161,14 @@ var UseCase = {
       Main.dialogEl.open({title: 'Error', body: 'Invalid Use Case Data'});
     } else {
       fetchUrl(`/use-cases/${useCase.id}`, {method: 'PUT', body: JSON.stringify(useCase)})
-        .then(resp => fireEvent(null, 'list-use-cases', ' '))
-        .then(_ => Main.dialogEl.close());
+      .then(resp => fireEvent(null, 'list-use-cases', ' '))
+      .then(_ => Main.dialogEl.close());
     }
   },
   delete: function(id) { // delete-use-case
     fetchUrl(`/use-cases/${id}`, {method: 'DELETE'})
-      .then(resp => fireEvent(null, 'list-use-cases', ' '))
-      .then(resp => fireEvent(null, 'list-mock-responses', ' '));
+    .then(resp => fireEvent(null, 'list-mock-responses', ''))
+    .then(resp => fireEvent(null, 'list-use-cases', ' '));
   }
 }
 
