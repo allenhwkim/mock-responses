@@ -36,18 +36,30 @@ export class UseCasesController {
   @Get('new')
   @Render('use-cases-edit')
   new(@Query('from') from) {
-    const row = from ? this.useCase.find(from) : {};
-    const mockResponses = [];
-    return {
-      useCase: {
-        id: undefined,
-        name: row.name || '',
-        description: row.description || '',
-        mock_responses: row.mock_responses || '',
-        category: row.category || ''
-      },
-      mockResponses
+    var useCase = {
+      id: undefined,
+      name: '',
+      description: '',
+      mock_responses: '',
+      category: ''
     };
+    var mockResponses = [];
+  
+    // for duplicating an existing use case
+    if (from) {
+      const row = this.useCase.find(from);
+      const ids = row.mock_responses.split(',').map(id => parseInt(id));
+      mockResponses = this.mockResp.findAllBy({ids});
+
+      useCase.name = row.name;
+      useCase.description = row.description;
+      useCase.mock_responses = row.mock_responses;
+      useCase.category = row.category;
+      return { useCase, mockResponses }
+    } else {
+      return { useCase, mockResponses }
+
+    }
   }
 
   // Return all use cases or search by query
