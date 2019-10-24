@@ -7,10 +7,9 @@ import { MockResponsesService } from '../mock-responses/mock-responses.service';
 import { UseCase } from '../common/interfaces/use-case.interface';
 
 function groupBy(allUseCases) {
-  return allUseCases.reduce(function (r, a) {
-    r[a.category] = r[a.category] || [];
-    r[a.category].push(a);
-    return r;
+  return allUseCases.reduce(function (acc, data) {
+    (acc[data.category] = acc[data.category] || []).push(data);
+    return acc;
   }, {});
 }
 
