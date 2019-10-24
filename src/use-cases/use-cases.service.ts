@@ -5,18 +5,6 @@ import { UseCase, MockResponse } from '../common/interfaces';
 import { BetterSqlite3 } from '../common/better-sqlite3';
 import { MockResponsesService } from '../mock-responses/mock-responses.service';
 
-function getWhereFromBy(by) {
-  const res = [];
-
-  by.key && 
-    res.push(`(name like '%${by.key}%' OR description like '%${by.key}%')`);
-  by.category &&
-    res.push(`category = '${by.category}'`);
-
-  const where = res.length ? res.join(' AND ') : '1=1';
-  return where;
-}
-
 @Injectable()
 export class UseCasesService {
   db = BetterSqlite3.db;
@@ -29,17 +17,13 @@ export class UseCasesService {
   }
 
   findAllBy(by?) {
-    const sqlByApiGroup = by && by.apiGroup && `
-      SELECT category, COUNT(category) count
-      FROM use_cases WHERE ${ getWhereFromBy(by) }
-      GROUP BY category ORDER BY category`;
-    const sqlByParameter = by && (by.key || by.category) && `
-      SELECT * FROM use_cases
-      WHERE ${ getWhereFromBy(by) }
-      ORDER BY category`;
+    const sqlByApiGroup = by && by.key && `
+      SELECT * FROM use_cases 
+      WHERE name like '%${by.key}%' OR description like '%${by.key}%' OR category like '%${by.key}%'
+      ORDER BY category ASC`;
     const sqlByDefault = `
-      SELECT * FROM use_cases ORDER BY category;`;
-    const sql = sqlByParameter || sqlByApiGroup || sqlByDefault;
+      SELECT * FROM use_cases ORDER BY category ASC`;
+    const sql = sqlByApiGroup || sqlByDefault;
     console.log('[mock-responses] UseCaseService.findAllBy', sql);
 
     return this.db.prepare(sql).all();

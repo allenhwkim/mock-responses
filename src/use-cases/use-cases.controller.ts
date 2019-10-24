@@ -6,6 +6,14 @@ import { UseCasesService } from './use-cases.service';
 import { MockResponsesService } from '../mock-responses/mock-responses.service';
 import { UseCase } from '../common/interfaces/use-case.interface';
 
+function groupBy(allUseCases) {
+  return allUseCases.reduce(function (r, a) {
+    r[a.category] = r[a.category] || [];
+    r[a.category].push(a);
+    return r;
+  }, {});
+}
+
 @Controller('use-cases')
 export class UseCasesController {
 
@@ -65,29 +73,15 @@ export class UseCasesController {
   // Return all use cases or search by query
   @Get()
   findAllBy(@Query('q') key) {
-    const mockResponses = {};
 
-    // Gets a json object of all use cases, grouped into their category
-    const apiGrouped = this.useCase.findAllBy({ apiGroup: 1 });
-
-    if (key == undefined || key.trim() == "") {
-      apiGrouped.forEach(({ category, count }) => {
-        const data = this.useCase.findAllBy({ category: category });
-        const id = data[0].id;
-        mockResponses[category] = { id, count, data };
-      });
-    } else {
-      apiGrouped.forEach(({ category, count }) => {
-        const data = this.useCase.findAllBy({ 
-          key: key, 
-          category: category
-        });
-        if (data.length > 0) {
-          const id = data[0].id;
-          count = data.length;
-          mockResponses[category] = { id, count, data };
-        }
-      });
+    const apiGrouped = this.useCase.findAllBy({ key });
+    var mockResponses = groupBy(apiGrouped);
+    
+    for (var category in mockResponses) {
+      mockResponses[category] = {
+        count: mockResponses[category].length,
+        data: mockResponses[category]
+      }
     }
 
     return mockResponses;

@@ -22,11 +22,12 @@
               <input class="public" id="use-cases" placeholder="Search use cases"
                 onkeypress="fireEvent(event, 'list-use-cases', this.value)"/>
               <button class="mainIcon" title="Create New Use Case"
-                onclick="fireEvent(event, 'new-use-case', 0)">
+                onclick="fireEvent(event, 'new-use-case', '')">
                 <i class="fas fa-plus"></i>
               </button>
               <br/>
               <hce-routes class="hce-routes" src="/use-cases/index">
+                <div route-match="/use-cases/index" import="/use-cases/index"> </div>
               </hce-routes>
             </div>
             <div class="less" onclick="this.closest('.sidebar').classList.add('expanded')">
