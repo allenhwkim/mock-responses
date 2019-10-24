@@ -17,11 +17,15 @@ export class UseCasesService {
   }
 
   findAllBy(by?) {
-    const sqlByKey = by && by.key && `
-      SELECT * FROM use_cases WHERE name like '%${by.key}%' OR description like '%${by.key}%'`;
-    const sqlByDefault = `SELECT * FROM use_cases`;
-    const sql = sqlByKey || sqlByDefault;
-    console.log('[mock-responses] UseCaseService', sql);
+    const sqlByApiGroup = by && by.key && `
+      SELECT * FROM use_cases 
+      WHERE name like '%${by.key}%' OR description like '%${by.key}%' OR category like '%${by.key}%'
+      ORDER BY category ASC`;
+    const sqlByDefault = `
+      SELECT * FROM use_cases ORDER BY category ASC`;
+    const sql = sqlByApiGroup || sqlByDefault;
+    console.log('[mock-responses] UseCaseService.findAllBy', sql);
+
     return this.db.prepare(sql).all();
   }
 
@@ -29,11 +33,12 @@ export class UseCasesService {
     const name = data.name.trim().replace(/'/g, '\'\'');
     const description = data.description.trim().replace(/'/g, '\'\'');
     const mockResponses = data.mock_responses.trim().replace(/'/g, '\'\'');;
+    const category = data.category.trim().replace(/'/g, '\'\'');
 
     const sql = `
       INSERT INTO use_cases 
-        (name, description, mock_responses)
-        VALUES ('${name}', '${description}', '${mockResponses}');
+        (name, description, mock_responses, category)
+        VALUES ('${name}', '${description}', '${mockResponses}', '${category}');
       `;
     console.log('[mock-responses] UseCaseService use_cases create', sql);
     return this.db.exec(sql) && BetterSqlite3.backupToSql();
@@ -43,12 +48,14 @@ export class UseCasesService {
     const name = data.name.trim().replace(/'/g, '\'\'');
     const description = data.description.trim().replace(/'/g, '\'\'');
     const mockResponses = data.mock_responses.trim().replace(/'/g, '\'\'');;
+    const category = data.category.trim().replace(/'/g, '\'\'');
 
     const sql = `
       UPDATE use_cases SET
         name = '${name}',
         description = '${description}',
-        mock_responses = '${mockResponses}'
+        mock_responses = '${mockResponses}',
+        category = '${category}'
       WHERE id = ${data.id};
       `;
     console.log('[mock-responses] UseCaseService', sql);

@@ -38,7 +38,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "dev:start": "npm run dev:stop && npm run dev:start:src",
     "dev:stop": "kill-port 9300",
-    "dev:start:src": "ts-node -r tsconfig-paths/register src/main.ts --db-path=./mock-responses.sql --port=9300 --cookie='PLAY_SESSION=ACCTNBR=123456789; Path=/'"
+    "dev:start:src": "ts-node src/main.ts --db-path=demo/mock-responses.sql --port=9300 --cookie='PLAY_SESSION=ACCTNBR=123456789; Path=/'"
   },
   "dependencies": {
     "@nestjs/common": "^6.7.2",
@@ -68,7 +68,7 @@
     "@nestjs/testing": "^6.7.1",
     "@types/express": "^4.17.1",
     "@types/jest": "^24.0.18",
-    "@types/node": "^12.7.5",
+    "@types/node": "^12.7.12",
     "@types/supertest": "^2.0.8",
     "cryptiles": "^4.1.2",
     "forever": "^1.0.0",

@@ -46,7 +46,7 @@ body {
 .main .hce.horizontal .sidebar.expanded .hce-body .more {
   display: block;
   padding: 12px;
-  width: 240px;
+  width: 300px;
 }
 .main .hce.horizontal .sidebar:not(.expanded) .hce-body .less {
   display: block;
@@ -68,42 +68,7 @@ input:invalid, textarea:invalid {
   color: red;
   border: 1px solid red;
 }
-#use-cases .list {
-  padding: 12px 0;
-}
-#use-cases .list .use-case {
-  outline: none;
-  margin: 4px 0;
-  padding: 4px 0 0;
-}
-#use-cases .list .use-case:nth-child(even) {
-  background: #eee;
-}
-#use-cases .list .use-case .name {
-  display: block;
-  border: 1px solid #eee;
-}
-#use-cases .list .use-case .name  .name-text {
-  display: inline-block;
-  width: calc(100% - 24px);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-#use-cases .list .use-case .description { 
-  display: none;
-  background: #FFF;
-  opacity: 0.8;
-  padding: 4px 0 0 8px;
-}
-#use-cases .list .use-case.expanded .description { 
-  display: block;
-}
-#use-cases .list .use-case.active .name { 
-  background-color: #2188E5;
-  color: #FFF;
-  border-color: transparent;
-}
+
 hce-dialog .dialog .body {
   min-width: 600px;
 }

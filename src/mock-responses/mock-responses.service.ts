@@ -5,7 +5,7 @@ import { BetterSqlite3 } from '../common/better-sqlite3';
 
 function getJSON(data) {
   try {
-    return JSON.stringify(JSON.parse(data.res_doby), null, '  ');
+    return JSON.stringify(JSON.parse(data.res_body), null, '  ');
   } catch (e) {
     // EMPTY
   }
@@ -121,7 +121,7 @@ export class MockResponsesService {
     const deactivateSql = `UPDATE mock_responses SET active = 0 WHERE id <> ${id} AND req_url = '${data.req_url}'`;
     const activateSql = `UPDATE mock_responses SET active = 1 WHERE id = ${id}`;
 
-    console.log('[mock-responses] MockResponseServivce', deactivateSql, activateSql);
+    console.log('[mock-responses] MockResponseService', deactivateSql, activateSql);
     const result = this.db.exec(deactivateSql) && this.db.exec(activateSql);
 
     if (result) {
@@ -137,7 +137,7 @@ export class MockResponsesService {
     if (this.db.exec(sql)) {
       BetterSqlite3.backupToSql();
     } else {
-      throw '[mock-responses] error deleete mock_responses'
+      throw '[mock-responses] error delete mock_responses'
     }
   }
 

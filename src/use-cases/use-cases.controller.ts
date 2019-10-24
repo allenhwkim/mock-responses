@@ -1,11 +1,17 @@
 import {
-  Body, Controller, Delete, Get, Header,
-  HttpException, HttpStatus, Param, Post,
-  Put, Query, Render, Redirect, Request, Res,
+  Body, Controller, Delete, Get,
+  Param, Post, Put, Query, Render,
 } from '@nestjs/common';
 import { UseCasesService } from './use-cases.service';
 import { MockResponsesService } from '../mock-responses/mock-responses.service';
 import { UseCase } from '../common/interfaces/use-case.interface';
+
+function groupBy(allUseCases) {
+  return allUseCases.reduce(function (acc, data) {
+    (acc[data.category] = acc[data.category] || []).push(data);
+    return acc;
+  }, {});
+}
 
 @Controller('use-cases')
 export class UseCasesController {
@@ -15,6 +21,15 @@ export class UseCasesController {
     private mockResp: MockResponsesService
   ) {}
 
+  // Render the list of all use cases in sidebar
+  @Get('index')
+  @Render('use-cases-list')
+  index(@Query('q') key) {
+    const grouped = this.findAllBy(key);
+    return { grouped };
+  }
+
+  // Render the Edit Page
   @Get(':id/edit')
   @Render('use-cases-edit')
   edit(@Param() params) {
@@ -24,18 +39,51 @@ export class UseCasesController {
     return { useCase, mockResponses };
   }
 
+  // Render the New Page or Duplicate Page based on data provided.
   @Get('new')
   @Render('use-cases-edit')
-  new(@Param() params) {
-    const useCase: UseCase = {id: undefined, name: '', description: '', mock_responses: ''};
-    const mockResponses = [];
-    return { useCase, mockResponses };
+  new(@Query('from') from) {
+    var useCase = {
+      id: undefined,
+      name: '',
+      description: '',
+      mock_responses: '',
+      category: ''
+    };
+    var mockResponses = [];
+  
+    // for duplicating an existing use case
+    if (from) {
+      const row = this.useCase.find(from);
+      const ids = row.mock_responses.split(',').map(id => parseInt(id));
+      mockResponses = this.mockResp.findAllBy({ids});
+
+      useCase.name = row.name;
+      useCase.description = row.description;
+      useCase.mock_responses = row.mock_responses;
+      useCase.category = row.category;
+      return { useCase, mockResponses }
+    } else {
+      return { useCase, mockResponses }
+
+    }
   }
 
+  // Return all use cases or search by query
   @Get()
-  findAllBy(@Query('q') key): string {
-    const by = key && {key};
-    return this.useCase.findAllBy(by);
+  findAllBy(@Query('q') key) {
+
+    const apiGrouped = this.useCase.findAllBy({ key });
+    var mockResponses = groupBy(apiGrouped);
+    
+    for (var category in mockResponses) {
+      mockResponses[category] = {
+        count: mockResponses[category].length,
+        data: mockResponses[category]
+      }
+    }
+
+    return mockResponses;
   }
 
   @Get(':id')

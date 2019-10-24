@@ -1,13 +1,13 @@
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
-CREATE TABLE "mock_responses" (
+CREATE TABLE IF NOT EXISTS "mock_responses" (
 	`id`	INTEGER,
 	`name`	TEXT DEFAULT 'Unnamed',
 	`active`	INTEGER DEFAULT 1,
 	`req_url`	TEXT,
 	`req_method`	TEXT DEFAULT 'GET',
 	`res_status`	INTEGET DEFAULT 200,
-	`res_delay_sec`	integer,
+	`res_delay_sec`	INTEGER,
 	`res_content_type`	TEXT DEFAULT 'application/json',
 	`res_body`	BLOB,
 	`created_at`	INTEGER,
@@ -44,18 +44,16 @@ INSERT INTO "mock_responses" VALUES(19,'function row',1,'/api/func',NULL,200,0,'
 INSERT INTO "mock_responses" VALUES(20,'with ?foo=1',0,'/api/func',NULL,200,0,'text/plain','this is from /api/func?foo=1',1571759051272,'allen.kim',1571759960626,'allen.kim','');
 INSERT INTO "mock_responses" VALUES(21,'with ?foo=2',0,'/api/func',NULL,200,0,'text/plain','this is from /api/func?foo=2',1571759059184,'allen.kim',1571759946567,'allen.kim','');
 CREATE TABLE use_cases (
-          id  INTEGER PRIMARY KEY,
-          name  TEXT NOT NULL,
-          description TEXT NOT NULL,
-          mock_responses TEXT
+	id  INTEGER PRIMARY KEY,
+        name  TEXT NOT NULL,
+        description TEXT NOT NULL,
+        mock_responses TEXT,
+	category TEXT NOT NULL
         );
-INSERT INTO "use_cases" VALUES(1,'test','desc','1,2,3');
-INSERT INTO "use_cases" VALUES(2,'fdsaf  long desc long desc long desc long desc long desc long desc long desc','fdsaf long desc long desc long desc long desc long desc long desc long desc long desc','3,8,10');
-INSERT INTO "use_cases" VALUES(3,'111','222','4,10');
-INSERT INTO "use_cases" VALUES(4,'yyy','yyy','10');
-INSERT INTO "use_cases" VALUES(5,'yyy','yyy','10');
-INSERT INTO "use_cases" VALUES(6,'zzz','zzz','10');
-INSERT INTO "use_cases" VALUES(7,'aaa','aaa','10,7');
-INSERT INTO "use_cases" VALUES(8,'bbb','vvv','4,7');
-INSERT INTO "use_cases" VALUES(9,'allen kim','fdasf','10,5');
+INSERT INTO use_cases VALUES(1,'fraud bad long desc long desc long desc long desc long desc long desc long desc','fdsaf long desc long desc long desc long desc long desc long desc long desc long desc','3,8,10','FRAUD');
+INSERT INTO use_cases VALUES(2,'tssshuper','222 hups','4','OTHER');
+INSERT INTO use_cases VALUES(3,'hup downgrade','users can downgrade their account','10','HUP');
+INSERT INTO use_cases VALUES(5,'hup all the way','hardware upgrades for all','17','HUP');
+INSERT INTO use_cases VALUES(12,'woo','owo','17','Uncategorized');
+INSERT INTO use_cases VALUES(13,'polls','canada huper','17','Uncategorized');
 COMMIT;
