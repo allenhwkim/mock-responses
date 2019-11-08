@@ -76,6 +76,7 @@ hce-dialog .dialog .body {
 input, textarea {
   padding: 4px;
   border: 1px solid #ccc;
+  background-color: whitesmoke;
 }
 button {
   background-color: #2188e5;
