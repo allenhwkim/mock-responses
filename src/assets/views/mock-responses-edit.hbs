@@ -6,9 +6,14 @@ function getFormData() {
       return acc;
     }, {})
   data.active = document.querySelector('.mock-response [id=active]').checked ? 1 : 0;
-  console.log('>>>>>>>>>>>>>>>>', data );
   return data;
 }
+
+function beautifyJSON() {
+  document.getElementById("res_body").value = JSON.stringify(JSON.parse(document.getElementById("res_body").value), null, 4);
+  document.getElementById('res_body').style.height = document.getElementById('res_body').scrollHeight + "px";
+}
+
 </script>
 <style>
 .mock-response.form .column  { padding: 4px 0; }
@@ -24,6 +29,7 @@ function getFormData() {
   margin: 12px 0;
   border: 1px solid #ccc;
 }
+#beautify { float: right; margin-right: 10px; color: blue; }
 </style>
 
 <h3>
@@ -85,6 +91,7 @@ function getFormData() {
     <div class="res_content_type column">
       <label for="res_content_type">Content Type</label>
       <input id="res_content_type" pattern="^\S+\/\S+$" value="{{mockResponse.res_content_type}}" />
+      <a id="beautify" onclick="beautifyJSON()">Beautify JSON</a>
     </div>
 
     <div class="res_body column">
