@@ -64,7 +64,7 @@ async function bootstrap() {
     if (argv.headers) {
       argv.headers.forEach((header: string) => {
         const [key, value] = header.split('=');
-        res.setHeader(key, value);
+        value && res.setHeader(key, value);
       })
     }
 
