@@ -10,8 +10,9 @@ function getFormData() {
 }
 
 function beautifyJSON() {
-  document.getElementById("res_body").value = JSON.stringify(JSON.parse(document.getElementById("res_body").value), null, 4);
-  document.getElementById('res_body').style.height = document.getElementById('res_body').scrollHeight + "px";
+  const textArea = document.getElementById("res_body");
+  textArea.value = JSON.stringify(JSON.parse(textArea.value), null, 2);
+  textArea.style.height = textArea.scrollHeight + "px";
 }
 
 </script>
@@ -29,7 +30,7 @@ function beautifyJSON() {
   margin: 12px 0;
   border: 1px solid #ccc;
 }
-#beautify { float: right; margin-right: 10px; color: blue; }
+.beautify-button { float: right; margin-right: 10px; color: blue; }
 </style>
 
 <h3>
@@ -91,7 +92,7 @@ function beautifyJSON() {
     <div class="res_content_type column">
       <label for="res_content_type">Content Type</label>
       <input id="res_content_type" pattern="^\S+\/\S+$" value="{{mockResponse.res_content_type}}" />
-      <a id="beautify" onclick="beautifyJSON()">Beautify JSON</a>
+      <a class="beautify-button" onclick="beautifyJSON()">Beautify JSON</a>
     </div>
 
     <div class="res_body column">
