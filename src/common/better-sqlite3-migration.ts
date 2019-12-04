@@ -18,7 +18,7 @@ export class BetterSqlite3Migration {
       this.db.exec('select res_delay_sec from mock_responses limit 1');
     } catch(e) {
       console.log('[mock-responses] running migration for res_delay_sec');
-      this.db.exec('ALTER TABLE mock_responses ADD COLUMN res_delay_sec integer');
+      this.db.exec('ALTER TABLE mock_responses ADD COLUMN res_delay_sec integer DEFAULT 0');
     }
   }
 

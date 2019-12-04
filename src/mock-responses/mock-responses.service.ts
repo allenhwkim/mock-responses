@@ -5,7 +5,7 @@ import { BetterSqlite3 } from '../common/better-sqlite3';
 
 function getJSON(data) {
   try {
-    return JSON.stringify(JSON.parse(data.res_body), null, '  ');
+    return JSON.stringify(JSON.parse(data));
   } catch (e) {
     // EMPTY
   }

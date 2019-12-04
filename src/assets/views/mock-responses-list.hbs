@@ -1,15 +1,20 @@
 <style>
-td { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.mock-responses { width: 100%; table-layout: fixed;}
+td { 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  white-space: nowrap; 
+  padding: 10px;
+}
+.mock-responses { width: 100%; table-layout: fixed; padding:}
 .mock-responses .header { background: #ccc }
-.mock-responses .collapse { width: 16px; }
+.mock-responses .collapse { width: 10px; }
 .mock-responses .id-name { width: 200px; }
-.mock-responses .active { width: 16px; }
-.mock-responses .method { width: 4em; }
-.mock-responses .payload { width: 6em; }
-.mock-responses .status { width: 40px; }
-.mock-responses .delay_sec { width: 40px; }
-.mock-responses .content_type { width: 120px; }
+.mock-responses .active { width: 2em; }
+.mock-responses .method { width: 3em; }
+.mock-responses .payload { width: 5em; }
+.mock-responses .status { width: 45px; }
+.mock-responses .delay_sec { width: 45px; }
+.mock-responses .content_type { width: 100px; }
 .mock-responses .url { width: 320px; }
 .mock-responses .actions { width: 60px; }
 .mock-responses { padding: 12px 0; }
@@ -21,6 +26,14 @@ td { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mock-responses .group .mock-response:first-child {
   background: #eee; border: 1px outset #eee;
 }
+.actionIcons {
+  display: flex;
+  justify-content: space-around;
+  padding: 0px;
+}
+.collapse, .active { text-align: center; }
+.header { font-weight: bold; }
+
 </style>
 
 <h2> Mock Responses </h2>
@@ -34,16 +47,16 @@ td { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   <thead>
     <tr class="header">
       <td class="collapse"></td>
-      <td class="id-name">(id)name</td>
+      <td class="id-name">(id) Name</td>
+      <td class="method">Method</td>
+      <td class="url">URL</td>
+      <td class="actions">Actions</td>
       <td class="active" title="active"></td>
-      <td class="method">method</td>
-      <td class="url">url</td>
-      <td class="payload">payload</td>
-      <td class="status">status</td>
-      <td class="delay_sec">delay sec</td>
-      <td class="content_type">content type</td>
-      <td class="body">body</td>
-      <td class="actions">actions</td>
+      <td class="payload">Payload</td>
+      <td class="status">Status</td>
+      <td class="delay_sec">Delay Sec</td>
+      <td class="content_type">Content Type</td>
+      {{!-- <td class="body">body</td> --}}
     </tr>
   <thead>
     {{#each grouped}}
@@ -57,27 +70,35 @@ td { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
           </button>
         </td>
         <td class="id-name">({{this.id}}) {{this.name}}</td>
-        <td class="active">{{this.active}}</td>
         <td class="method">{{this.req_method}}</td>
         <td class="url">{{this.req_url}}</td>
-        <td class="payload">{{this.req_payload}}</td>
-        <td class="status">{{this.res_status}}</td>
-        <td class="delay_sec">{{this.res_delay_sec}}</td>
-        <td class="content type">{{this.res_content_type}}</td>
-        <td class="body">{{this.res_body}}</td>
         <td>
         {{#if this.active}}
+        <div class="actionIcons">
           <button class="icon" onclick="fireEvent(event, 'play-mock-response', {{this.id}})">
             <i class="fas fa-play" title="run it"></i>
-          </button>
+          </button>&nbsp;
           <button class="icon" onclick="fireEvent(event, 'new-mock-response', {{this.id}})">
             <i class="fas fa-copy" title="duplicate it"></i>
-          </button>
+          </button>&nbsp;
         {{/if}}
           <button class="icon" onclick="fireEvent(event, 'edit-mock-response', {{this.id}})">
             <i class="fas fa-edit" title="edit it"></i>
           </button>
+          </div>
         </td>
+        <td class="active">
+          {{#if this.active}}
+          <i style="color:green;">ON</i>
+          {{else}}
+          <i style="color:#CCC;">OFF</i>
+          {{/if}}
+        </td>
+        <td class="payload">{{this.req_payload}}</td>
+        <td class="status">{{this.res_status}}</td>
+        <td class="delay_sec">{{this.res_delay_sec}}</td>
+        <td class="content type">{{this.res_content_type}}</td>
+        {{!-- <td class="body">{{this.res_body}}</td> --}}
       </tr>
       {{/each}}
     </tbody>
