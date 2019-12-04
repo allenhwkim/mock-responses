@@ -36,7 +36,7 @@ async function bootstrap() {
   });
 
   app.use(morgan('[mock-responses] :method :url :status :res[content-length] - :response-time ms'));
-  app.use(bodyParser.json());
+  app.use(bodyParser.json({limit: '50mb'}));
   app.use(cookieParser());
   app.use( function(req, res, next) { 
     const origin = req.headers['origin'];
