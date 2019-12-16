@@ -5,7 +5,7 @@ import { BetterSqlite3 } from '../common/better-sqlite3';
 
 function getJSON(data) {
   try {
-    return JSON.stringify(JSON.parse(data));
+    return JSON.stringify(JSON.parse(data)).replace(/'/g, '\'\'');
   } catch (e) {
     // EMPTY
   }
@@ -83,7 +83,13 @@ export class MockResponsesService {
       `;
 
     console.log('[mock-responses] MockResponseService create', sql);
-    this.db.exec(sql) && BetterSqlite3.backupToSql();
+    try {
+      this.db.exec(sql) && BetterSqlite3.backupToSql();
+    } catch (err) {
+      console.log("[mock-responses] MockResponseService failed to insert query\n", err);
+      
+    }
+    
   }
 
   update(data) {
