@@ -1,6 +1,6 @@
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
-CREATE TABLE IF NOT EXISTS "mock_responses" (
+CREATE TABLE "mock_responses" (
 	`id`	INTEGER,
 	`name`	TEXT DEFAULT 'Unnamed',
 	`active`	INTEGER DEFAULT 1,
@@ -43,6 +43,7 @@ INSERT INTO "mock_responses" VALUES(18,'create',0,'fdasf','POST',200,0,'applicat
 INSERT INTO "mock_responses" VALUES(19,'function row',1,'/api/func',NULL,200,0,'function','return req.query.foo == 1 ? 20 : 21;',1571758912499,'allen.kim',1571759272930,'allen.kim','');
 INSERT INTO "mock_responses" VALUES(20,'with ?foo=1',0,'/api/func',NULL,200,0,'text/plain','this is from /api/func?foo=1',1571759051272,'allen.kim',1571759960626,'allen.kim','');
 INSERT INTO "mock_responses" VALUES(21,'with ?foo=2',0,'/api/func',NULL,200,0,'text/plain','this is from /api/func?foo=2',1571759059184,'allen.kim',1571759946567,'allen.kim','');
+INSERT INTO "mock_responses" VALUES(22,'500 error',1,'/api/500','POST',500,0,'application/json','{"error": 500}',1574278844811,'allen.kim',1574278844811,'allen.kim','');
 CREATE TABLE use_cases (
 	id  INTEGER PRIMARY KEY,
         name  TEXT NOT NULL,
@@ -50,10 +51,10 @@ CREATE TABLE use_cases (
         mock_responses TEXT,
 	category TEXT NOT NULL
         );
-INSERT INTO use_cases VALUES(1,'fraud bad long desc long desc long desc long desc long desc long desc long desc','fdsaf long desc long desc long desc long desc long desc long desc long desc long desc','3,8,10','FRAUD');
-INSERT INTO use_cases VALUES(2,'tssshuper','222 hups','4','OTHER');
-INSERT INTO use_cases VALUES(3,'hup downgrade','users can downgrade their account','10','HUP');
-INSERT INTO use_cases VALUES(5,'hup all the way','hardware upgrades for all','17','HUP');
-INSERT INTO use_cases VALUES(12,'woo','owo','17','Uncategorized');
-INSERT INTO use_cases VALUES(13,'polls','canada huper','17','Uncategorized');
+INSERT INTO "use_cases" VALUES(1,'fraud bad long desc long desc long desc long desc long desc long desc long desc','fdsaf long desc long desc long desc long desc long desc long desc long desc long desc','3,8,10','FRAUD');
+INSERT INTO "use_cases" VALUES(2,'tssshuper','222 hups','4','OTHER');
+INSERT INTO "use_cases" VALUES(3,'hup downgrade','users can downgrade their account','10','HUP');
+INSERT INTO "use_cases" VALUES(5,'hup all the way','hardware upgrades for all','17','HUP');
+INSERT INTO "use_cases" VALUES(12,'woo','owo','17','Uncategorized');
+INSERT INTO "use_cases" VALUES(13,'polls','canada huper','17','Uncategorized');
 COMMIT;

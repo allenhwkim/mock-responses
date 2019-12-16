@@ -17,14 +17,22 @@ import { ErrorFilter } from './common/error.filter';
 
 import { serveMockResponse } from './common/mock-response.middleware';
 
-
 const argv = yargs
-  .usage('Usage: $0 --https --db-path [path] --port [num] --assets')
+  .usage(
+    `Usage: $0 --https --db-path [path] --port [num] --assets --ssl` +
+    ` --cookie='MY_SESSION=123456789; Path=/'` +
+    ` --headers='Access-Control-Allow-Headers=Content-Type, Authorization, X-Requested-With' `
+  )
   .describe('db-path', 'Sqlite3 file path')
   .describe('ssl', 'run https server')
   .describe('port', 'port number')
   .describe('cookie', 'response cookie value')
+  .option('headers', {
+    type: 'array',
+    desc: 'One or more custom headers'
+  })
   .help('h').argv;
+
 const config = getConfig(argv);
 console.log('[mock-responses] yargs argv', argv, config);
 if (!config.dbPath) throw `Invalid sqlite3 path ${argv['db-path']}`;
@@ -51,7 +59,16 @@ async function bootstrap() {
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
     res.setHeader('Pragma', 'no-cache');
     res.setHeader('Expires', '0');
+    
+    // ser custom headers
+    if (argv.headers) {
+      argv.headers.forEach((header: string) => {
+        const [key, value] = header.split('=');
+        value && res.setHeader(key, value);
+      })
+    }
 
+    // ser custom cookies
     if (argv.cookie) {
       const [_, name, value] = (<string>argv.cookie).match(/^([a-z_]+)=(.*)/i);
       if (!req.cookies[name]) {

@@ -67,9 +67,7 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
   }
 
   if (row.req_payload && !hasAllPayload(req.body, row.req_payload)) {
-    res.statusCode = 422;
-    res.write(`payload not matching, ${row.req_payload}`);
-    res.end();
+    res.status(422).send(`payload not matching, ${row.req_payload}`);
     return;
   } 
   // if serve from file
@@ -79,14 +77,12 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
       row.res_body.replace('file://', '')
     );
     if (!fs.existsSync(filePath)) {
-      res.statusCode = 404;
-      res.end();
+      res.status(404).send();
       return;
     }
     res.setHeader('Content-Type', row.res_content_type);
-    res.write(fs.readFileSync(filePath, 'utf8'));
-    res.statusCode = row.res_status;
-    res.end();
+    const body = fs.readFileSync(filePath, 'utf8');
+    res.status(row.res_status).send(body);
     return;
   }  // `return req.query.foo === 1 ? 10 : 12;`
   else if (row.res_content_type === 'function') {
@@ -95,9 +91,7 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
     const dynRow = findById(rowId);
     if (dynRow) {
       res.setHeader('Content-Type', dynRow.res_content_type);
-      res.write(dynRow.res_body);
-      res.statusCode = dynRow.res_status;
-      res.end();
+      res.status(dynRow.res_status).send(dynRow.res_body);
       return;
     } else {
       console.log('[mock-responses] Cannot find id', rowId);
@@ -105,9 +99,7 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
   }  // if serve from body contents
   else if (row) {
     res.setHeader('Content-Type', row.res_content_type);
-    res.write(row.res_body);
-    res.statusCode = row.res_status;
-    res.end();
+    res.status(row.res_status).send(row.res_body);
     return;
   }
 
