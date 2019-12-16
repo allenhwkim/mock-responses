@@ -86,7 +86,8 @@ export class MockResponsesService {
     try {
       this.db.exec(sql) && BetterSqlite3.backupToSql();
     } catch (err) {
-      console.log("[mock-responses] MockResponseService failed to insert query");
+      console.log("[mock-responses] MockResponseService failed to insert query\n", err);
+      
     }
     
   }
