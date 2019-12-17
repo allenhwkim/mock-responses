@@ -65,16 +65,17 @@ export class MockResponsesService {
     const reqName = data.name ? `'${data.name}'` : 'NULL';
     const resDelaySec = data.res_delay_sec ? data.res_delay_sec : 'NULL';
     const resBody = getJSON(data.res_body);
+    const UUID = require('uuid-int');
 
     const sql = `
-      INSERT INTO mock_responses(name, active,
+      INSERT INTO mock_responses(id, name, active,
         req_url, req_method, req_payload,
         res_status, res_delay_sec,
         res_content_type, res_body,
         created_at, created_by, updated_at, updated_by
         ) VALUES
         (
-         ${reqName}, ${data.active || 0},
+         ${UUID(0).uuid}, ${reqName}, ${data.active || 0},
         '${data.req_url}', ${reqMethod}, '${data.req_payload}',
          ${data.res_status}, ${resDelaySec},
         '${data.res_content_type}', '${resBody}',
