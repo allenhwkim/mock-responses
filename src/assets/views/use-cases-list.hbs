@@ -62,7 +62,7 @@
     {{#each this.data}}
     <tr class="use-case">
       <td></td>
-      <td class="id-name {{this.id}}">({{this.id}}) {{this.name}}</td>
+      <td class="id-name {{this.id}}">{{this.name}}</td>
       <td class="actions">
         <button class="icon" onclick="fireEvent(event, 'activate-use-case', {{this.id}})">
           <i class="fas fa-play" title="run it"></i>

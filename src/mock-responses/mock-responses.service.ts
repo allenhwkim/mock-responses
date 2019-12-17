@@ -75,7 +75,7 @@ export class MockResponsesService {
         created_at, created_by, updated_at, updated_by
         ) VALUES
         (
-         ${UUID(0).uuid}, ${reqName}, ${data.active || 0},
+         ${UUID(0).uuid()}, ${reqName}, ${data.active || 0},
         '${data.req_url}', ${reqMethod}, '${data.req_payload}',
          ${data.res_status}, ${resDelaySec},
         '${data.res_content_type}', '${resBody}',
