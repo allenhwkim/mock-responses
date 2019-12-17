@@ -34,11 +34,12 @@ export class UseCasesService {
     const description = data.description.trim().replace(/'/g, '\'\'');
     const mockResponses = data.mock_responses.trim().replace(/'/g, '\'\'');;
     const category = data.category.trim().replace(/'/g, '\'\'');
+    const UUID = require('uuid-int');
 
     const sql = `
       INSERT INTO use_cases 
-        (name, description, mock_responses, category)
-        VALUES ('${name}', '${description}', '${mockResponses}', '${category}');
+        (id, name, description, mock_responses, category)
+        VALUES (${UUID(0).uuid()}, '${name}', '${description}', '${mockResponses}', '${category}');
       `;
     console.log('[mock-responses] UseCaseService use_cases create', sql);
     return this.db.exec(sql) && BetterSqlite3.backupToSql();
