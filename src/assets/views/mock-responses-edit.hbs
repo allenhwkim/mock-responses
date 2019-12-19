@@ -54,7 +54,11 @@ function beautifyJSON() {
 
   <div class="active column">
     <label for="active">Active</label>
-    <input id="active" type="checkbox" value="1" checked />
+    {{#if mockResponse.active}}
+      <input id="active" type="checkbox" value="1" checked="checked" />
+    {{else}}
+      <input id="active" type="checkbox" value="1"/>
+    {{/if}}
   </div>
 
   <fieldset class="request-group">
