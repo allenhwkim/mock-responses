@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', event => {
   document.body.addEventListener('update-mock-response', handleCustomEvents);
   document.body.addEventListener('delete-mock-response', handleCustomEvents);
   document.body.addEventListener('play-mock-response', handleCustomEvents);
+  document.body.addEventListener('activate-mock-response', handleCustomEvents);
   
   enableEditMode();
 });
@@ -87,6 +88,7 @@ function handleCustomEvents(event) {
     case 'update-mock-response': MockResponse.update(data); break;
     case 'delete-mock-response': MockResponse.delete(data); break;
     case 'play-mock-response': MockResponse.play(event, data); break;
+    case 'activate-mock-response': MockResponse.activate(event, data); break;
     default: throw `Unhandled custom events ${type} ${data}`;
   }
 }
@@ -177,7 +179,12 @@ var MockResponse = {
     const url = `/mock-responses/index?q=${key||''}`;
     Main.routesEl.setAttribute('src', url);
     Main.dialogEl.close();
-    window.location.href = '#' + url;
+    const newUrl = '#' + url;
+    if (window.location.hash === newUrl) {
+      window.location.reload()
+    } else {
+      window.location.hash = newUrl;
+    }
   },
   new: function(data) {  // new-mock-response
     const qs = data ? `?from=${data}`: ''; // query string
@@ -212,6 +219,11 @@ var MockResponse = {
   },
   delete: function(id) { // delete-mock-response
     fetchUrl(`/mock-responses/${id}`, {method: 'DELETE'})
+      .then(resp => fireEvent(null, 'list-mock-responses', ''));  
+  },
+  activate: function(data) { // activate-mock-response
+    const id = data.detail;
+    fetchUrl(`/mock-responses/${id}/activate`, {method: 'PUT'})
       .then(resp => fireEvent(null, 'list-mock-responses', ''));  
   },
   play: function(event, id) { // play-mock-response

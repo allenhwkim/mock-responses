@@ -9,7 +9,7 @@ td {
 .mock-responses .header { background: #ccc }
 .mock-responses .collapse { width: 10px; }
 .mock-responses .id-name { width: 200px; }
-.mock-responses .active { width: 2em; }
+.mock-responses .active { width: 4em; }
 .mock-responses .method { width: 3em; }
 .mock-responses .payload { width: 5em; }
 .mock-responses .status { width: 45px; }
@@ -28,7 +28,7 @@ td {
 }
 .actionIcons {
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-end;
   padding: 0px;
 }
 .collapse, .active { text-align: center; }
@@ -60,7 +60,7 @@ td {
     </tr>
   <thead>
     {{#each grouped}}
-    <tbody class="group count-{{this.count}}">
+    <tbody class="group count-{{this.count}} expanded">
       <!-- {{@key}} {{this.count}} {{this.updated_at}} -->
       {{#each this.data}}
       <tr class="mock-response">
@@ -73,25 +73,27 @@ td {
         <td class="method">{{this.req_method}}</td>
         <td class="url">{{this.req_url}}</td>
         <td>
-        {{#if this.active}}
-        <div class="actionIcons">
-          <button class="icon" onclick="fireEvent(event, 'play-mock-response', {{this.id}})">
-            <i class="fas fa-play" title="run it"></i>
-          </button>&nbsp;
-          <button class="icon" onclick="fireEvent(event, 'new-mock-response', {{this.id}})">
-            <i class="fas fa-copy" title="duplicate it"></i>
-          </button>&nbsp;
-        {{/if}}
-          <button class="icon" onclick="fireEvent(event, 'edit-mock-response', {{this.id}})">
-            <i class="fas fa-edit" title="edit it"></i>
-          </button>
+          <div class="actionIcons">
+            {{#if this.active}}
+            <button class="icon" onclick="fireEvent(event, 'play-mock-response', {{this.id}})">
+              <i class="fas fa-play" title="run it"></i>
+            </button>&nbsp;
+            <button class="icon" onclick="fireEvent(event, 'new-mock-response', {{this.id}})">
+              <i class="fas fa-copy" title="duplicate it"></i>
+            </button>&nbsp;
+            {{/if}}
+            <button class="icon" onclick="fireEvent(event, 'edit-mock-response', {{this.id}})">
+              <i class="fas fa-edit" title="edit it"></i>
+            </button>
           </div>
         </td>
         <td class="active">
           {{#if this.active}}
-          <i style="color:green;">ON</i>
+          <i style="color:green;">Active</i>
           {{else}}
-          <i style="color:#CCC;">OFF</i>
+          <button onclick="fireEvent(event, 'activate-mock-response', {{this.id}})">
+            Activate
+          </button>
           {{/if}}
         </td>
         <td class="payload">{{this.req_payload}}</td>

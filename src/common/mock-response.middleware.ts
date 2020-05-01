@@ -18,14 +18,22 @@ function hasAllPayload(body, payload) {
 }
 
 function findByUrlMethod(url, method) {
+  // e.g.  /rogers_rest/documents/3293380-01020014588
+  const numExp = url.replace(/[0-9]+/g, '%');
+  // e.g.  /cms/UTE-iPhone-11-black-225x338-01.png
+  const extExp = url.replace(/([^\.\/]+)(\.[a-z]{2,4})$/, '%$2');
+
   const sql1 = `
     SELECT * 
     FROM mock_responses 
     WHERE req_url = '${url}' 
+      ${ numExp !== url ? "OR  req_url LIKE '" + numExp + "'" : '' }
+      ${ extExp !== url ? "OR  req_url LIKE '" + extExp + "'" : '' }
       AND (req_method = '${method}' OR req_method IS NULL)
       AND active = 1
     ORDER BY req_url is NULL
     LIMIT 1`;
+console.log('............', sql1);
   return BetterSqlite3.db.prepare(sql1).get();
 }
 
@@ -45,10 +53,14 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
     return;
   }
 
-  // if (req.url === "/" || req.url.startsWith("/developer") || req.url.startsWith("/mock-responses")) {
-  //   next();
-  //   return false; // next();
-  // } 
+  if ( // application-specific reserved urls e.g., /use-cases/index
+    req.url.startsWith('/developer/') || 
+    req.url.startsWith('/mock-responses/') ||
+    req.url.startsWith('/use-cases/') 
+  ) {
+    next();
+    return;
+  } 
 
   const now = Date.now();
   const row: MockResponse = findByUrlMethod(req.path, req.method);
