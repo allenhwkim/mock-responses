@@ -1,6 +1,6 @@
 {
   "name": "mock-responses",
-  "version": "2.2.7",
+  "version": "2.3.0",
   "description": "espress-kind http request middleware",
   "main": "dist/main.js",
   "bin": "index.js",
@@ -44,7 +44,7 @@
     "@nestjs/common": "^6.7.2",
     "@nestjs/core": "^6.7.2",
     "@nestjs/platform-express": "^6.7.2",
-    "better-sqlite3": "4.1.4",
+    "better-sqlite3": "^5.4.3",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
     "ejs": "^2.6.1",
