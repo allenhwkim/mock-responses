@@ -2,32 +2,28 @@ html, body {
   width: 100%;
   height: 100%;
 }
+* {
+  box-sizing: border-box;
+}
 body {
   font-size: 16px;
   font-family: sans-serif;
   color: #555;
   box-sizing: border-box;
-  min-width: 1200px;
 }
 .main { min-height: 100%; } 
 .main > * { height: 100%; }
-.main.read-only button:not(.public) {display: none;}
-.main.read-only input:not(.public) {pointer-events: none; border: none;}
-.main.read-only textarea:not(.public) {pointer-events: none; border: none;}
 .main .top-header {
-  margin: -12px; /* to expand full width */
-  height: 56px;
-  line-height: 56px;
-  padding: 0 12px;
+  display: flex;
+  justify-content: stretch;
+  align-items: center;
   font-size: 20px;
   background-color: #1F88E5;
   color: #FFF;
+  padding: 12px;
 }
-.main .top-header .icon {
+.main .top-header a {
   color: #FFF;
-  float: right;
-  line-height: 56px;
-  padding: 0 12px;
 }
 .main .top-header .passcode {
   width: 24px;
@@ -36,57 +32,55 @@ body {
   border: none;
   color: #FFF;
 }
-.main .dialog { max-width: calc(100vw - 120px); max-height: calc(100vh - 48px); }
-.main .dialog pre { width: 100%; overflow: auto; }
-.main .hce.horizontal { min-height: 100vh; } 
-.main .hce.horizontal .sidebar .hce-body .more,
-.main .hce.horizontal .sidebar .hce-body .less { display: none; }
-.main .hce.horizontal .sidebar:not(.expanded) .hce-body { width: auto; height: auto; } 
-.horizontal.horizontal :not(.expanded) .hce-body { transform: translateX(0); }
-.main .hce.horizontal .sidebar.expanded .hce-body .more {
-  display: block;
-  padding: 12px;
-  width: 300px;
-}
-.main .hce.horizontal .sidebar:not(.expanded) .hce-body .less {
-  display: block;
-  writing-mode: vertical-lr;
-  padding: 0;
-  height: 100%;
-  cursor: pointer;
-}
-.main .horizontal .contents {
-  padding: 12px;
-  flex: 1;
-  display: block;
-}
-.main .horizontal .contents hce-routes {
-  display: block;
-  padding-top: 12px;
-}
-input:invalid, textarea:invalid {
-  color: red;
-  border: 1px solid red;
+.main .main-route {
+  padding: 24px;
 }
 
-hce-dialog .dialog .body {
-  min-width: 600px;
+a {
+  text-decoration: none;
 }
 
-input, textarea {
-  padding: 4px;
-  border: 1px solid #ccc;
-  background-color: whitesmoke;
-}
+table { width: 100%; }
+td, th { padding: 10px; word-break: break-word; }
+tr:nth-child(odd) { background-color: rgb(230, 230, 230); }
+th { background: #ccc; font-weight: bold; }
+
+input, textarea { padding: 4px; border: 1px solid #ccc; background-color: whitesmoke; }
+input:invalid, textarea:invalid { color: red; border: 1px solid red; }
+input[readonly] { border: none; background: #FFF; outline: none; } 
+
+.button,
 button {
   background-color: #2188e5;
   padding: 8px;
   border-radius: 4px;
   color: #FFF;
+  display: inline-block;
 }
-button.icon {
+
+.icon {
   color: #2188E5;
   padding: 0;
   border: none;
   background: none;
 }
+
+hce-dialog .dialog { width: 100%; }
+hce-dialog .dialog pre { width: 100%; overflow: auto; }
+
+.for-list {display: none;}
+.for-dialog {display: none;}
+.for-edit {display: none;}
+.for-not-authorized {display: none;}
+.main:not(.not-authorized) .list .for-edit { display: none;}
+.main:not(.not-authorized) .list .for-dialog { display: none;}
+
+.list .for-list { display: initial; }
+.list .fa-search.for-list { cursor: pointer; }
+
+.dialog .for-dialog { display: initial; }
+
+.main:not(.not-authorized) .for-edit { display: initial; } /* hide any editable one for non-authorized users */
+.not-authorized input.for-edit { display: initial; border: #FFF; pointer-events: none;}
+.not-authorized textarea.for-edit { display: initial; border: #FFF; pointer-events: none;}
+.not-authorized .for-not-authorized { display: initial;}

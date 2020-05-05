@@ -16,7 +16,6 @@ function getWhereFromBy(by) {
   const res = [];
   by.key && 
     res.push(`name like '%${by.key}%' OR req_url like '%${by.key}%' OR res_body like '%${by.key}%'`);
-  by.active && res.push(`active = ${by.active}`);
   by.req_url && res.push(`req_url = '${by.req_url}'`);
   by.req_method && res.push(`req_method = '${by.req_method}'`);
   by.req_payload && res.push(`req_payload LIKE '%${by.req_payload}%'`);
@@ -24,7 +23,7 @@ function getWhereFromBy(by) {
   by.res_delay_sec && res.push(`req_delay_sec = ${by.res_delay_sec}`);
   by.res_content_type && res.push(`req_content_type = ${by.res_content_type}`);
 
-  const where = res.length ? res.join(' AND ') : '1=1';
+  const where = res.length ? res.join(' AND ') : undefined;
   return where;
 }
 
@@ -37,24 +36,30 @@ export class MockResponsesService {
     return row.get();
   }
 
-  findAllBy(by?) {
-    const sqlByApiGroup = by && by.apiGroup && `
-      SELECT req_url, MAX(updated_at) updated_at, COUNT(req_url) count
-      FROM mock_responses
-      WHERE ${ getWhereFromBy(by) }
-      GROUP BY req_url
-      ORDER BY MAX(updated_at) DESC`;
-    const sqlByIds = by && by.ids && `
-      SELECT * FROM mock_responses WHERE id IN (${by.ids.join(',')}) ORDER BY id`;
-    const sqlByAny = by && `
-      SELECT * FROM mock_responses
-      WHERE ${ getWhereFromBy(by) }
-      ORDER BY active DESC, updated_at DESC`;
-    const sqlByDefault = `
-      SELECT * FROM mock_responses 
-      ORDER BY req_url, updated_at DESC`;
+  findAllBy(by:any ={}) {
+    let sql;
+    console.log('xxxxxxxxxxxxx', by)
 
-    const sql = sqlByApiGroup || sqlByIds || sqlByAny || sqlByDefault;
+    if (by.ids !== undefined) {
+      sql = `
+        SELECT * FROM mock_responses
+        WHERE id IN (${by.ids}) 
+        ORDER BY updated_at DESC, id`;
+    } else if (by.active !== undefined) {
+      const useCase = this.db.prepare(`SELECT * FROM use_cases WHERE id = ${by.active}`).get();
+      const ids = useCase.mock_responses.split(',').map(el => +el);
+      sql = `
+        SELECT * FROM mock_responses
+        WHERE id IN (${ids}) 
+        ORDER BY updated_at DESC, id`;
+    } else {
+      const where = getWhereFromBy(by) || '1 = 1';
+      sql = `
+        SELECT * FROM mock_responses 
+        WHERE ${ where }
+        ORDER BY req_url, updated_at DESC`;
+    }
+    
     console.log('[mock-responses] MockResponseService.findAllBy', sql);
     return this.db.prepare(sql).all();
   }
@@ -68,14 +73,14 @@ export class MockResponsesService {
     const UUID = require('uuid-int');
 
     const sql = `
-      INSERT INTO mock_responses(id, name, active,
+      INSERT INTO mock_responses(id, name,
         req_url, req_method, req_payload,
         res_status, res_delay_sec,
         res_content_type, res_body,
         created_at, created_by, updated_at, updated_by
         ) VALUES
         (
-         ${UUID(0).uuid()}, ${reqName}, ${data.active || 0},
+         ${UUID(0).uuid()}, ${reqName},
         '${data.req_url}', ${reqMethod}, '${data.req_payload}',
          ${data.res_status}, ${resDelaySec},
         '${data.res_content_type}', '${resBody}',
@@ -102,7 +107,6 @@ export class MockResponsesService {
     const sql = `
       UPDATE mock_responses SET
         name = ${reqName},
-        active = ${data.active || 0},
         req_url = '${data.req_url}',
         req_method = ${reqMethod},
         req_payload = '${data.req_payload}',
@@ -120,21 +124,6 @@ export class MockResponsesService {
       BetterSqlite3.backupToSql();
     } else {
       throw '[mock-responses] error update mock_responses'
-    }
-  }
-
-  activate(id) {
-    const data = this.find(id);
-    const deactivateSql = `UPDATE mock_responses SET active = 0 WHERE id <> ${id} AND req_url = '${data.req_url}'`;
-    const activateSql = `UPDATE mock_responses SET active = 1 WHERE id = ${id}`;
-
-    console.log('[mock-responses] MockResponseService', deactivateSql, activateSql);
-    const result = this.db.exec(deactivateSql) && this.db.exec(activateSql);
-
-    if (result) {
-      BetterSqlite3.backupToSql();
-    } else {
-      throw '[mock-responses] error activate mock_responses'
     }
   }
 

@@ -9,57 +9,34 @@
     <script src="html-custom-elements.umd.js"></script>
     <script src="page-controller.js"></script>
   </head>
-  <body onload="fireEvent(event, 'list-use-cases')">
-    <div class="main read-only">
-      <hce-collapsible class="horizontal">
-        <div class="sidebar">
-          <div class="hce-body">
-            <div class="more">
-              <div class="top-header">Mock Responses</div>
-              <br/>
-              <!-- Use cases sidebar logic placed in use-cases-list.hbs file -->
-              <h3>Use Cases</h3>
-              <input class="public" id="use-cases" placeholder="Search use cases"
-                onkeypress="fireEvent(event, 'list-use-cases', this.value)"/>
-              <button class="mainIcon" title="Create New Use Case"
-                onclick="fireEvent(event, 'new-use-case', '')">
-                <i class="fas fa-plus"></i>
-              </button>
-              <br/>
-              <hce-routes class="hce-routes" src="/use-cases/index">
-                <div route-match="/use-cases/index" import="/use-cases/index"> </div>
-              </hce-routes>
-            </div>
-            <div class="less" onclick="this.closest('.sidebar').classList.add('expanded')">
-              &nbsp; &nbsp; USE CASES
-            </div>
-          </div>
-          <!-- when .hce-header clicks .hce-body collapse/expands -->
-          <div class="hce-header"></div>
-        </div>
-        <div class="contents">
-          <div class="top-header">
-            Welcome To Mock Responses
-            <a class="icon" href="https://github.com/allenhwkim/mock-responses"><i class="fab fa-github"></i></a>
-            <button class="icon public" style="float:right" onclick="fireEvent(event, 'list-mock-responses', '')">
-              <i class="fas fa-list"></i>
-            </button>
+  <body>
+    <div class="main not-authorized">
+      <div class="contents">
+        <div class="top-header">
+          <div class="left">
+            <a href="#/mock-responses/index?q=">Mock Responses</a> |
+            <a href="#/use-cases/index?q=">Use Cases</a>
             <input class="passcode public" title="Enter passcode here to enable edit mode"
               onkeyup="fireEvent(event, 'enable-edit-mode', this.value)"/>
           </div>
-          <div class="main-route">
-            <hce-routes class="hce-routes" src="/mock-responses/index">
-              <div route-match="/use-cases/new" import="/use-cases/new"> </div>
-              <div route-match="/use-cases/(\d+)/edit" import="/use-cases/{{1}}/edit"></div>
-
-              <div route-match="/mock-responses/new" import="/mock-responses/new"></div>
-              <div route-match="/mock-responses/(\d+)/edit" import="/mock-responses/{{1}}/edit"></div>
-              <div route-match="/mock-responses/index(.*)" import="/mock-responses/index{{1}}"></div>
-            </hce-routes>
+          <div class="right">
+            <a href="https://github.com/allenhwkim/mock-responses"><i class="fab fa-github"></i></a>
           </div>
         </div>
-      </hce-collapsible>
+        <div class="main-route">
+          <hce-routes class="hce-routes" src="/mock-responses/index">
+            <div route-match="/use-cases/index(.*)" import="/use-cases/index{{1}}"> </div>
+            <div route-match="/use-cases/new(.*)" import="/use-cases/new{{1}}"> </div>
+            <div route-match="/use-cases/(\d+)/edit" import="/use-cases/{{1}}/edit"></div>
+
+            <div route-match="/mock-responses/new(.*)" import="/mock-responses/new{{1}}"></div>
+            <div route-match="/mock-responses/(\d+)/edit" import="/mock-responses/{{1}}/edit"></div>
+            <div route-match="/mock-responses/index(.*)" import="/mock-responses/index{{1}}"></div>
+          </hce-routes>
+        </div>
+      </div>
     </div>
     <hce-dialog id="dialog"></hce-dialog>
+    <hce-snackbar></hce-snackbar>
   </body>
 </html>

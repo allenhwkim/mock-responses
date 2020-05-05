@@ -1,58 +1,4 @@
-<script>
-// return data for create / update
-function getFormData() {
-  const inputEls = document.querySelectorAll('.use-case input[id]');
-  const data = Array.from(inputEls).reduce( (acc, el) => {
-      acc[el.id] = el.value;
-      return acc;
-    }, {})
-  data['mock_responses'] = Array.from(document.querySelectorAll('.edit-mock-responses .mock-response.row .id'))
-    .map(el => el.innerHTML).join(',');
-
-  return data;
-}
-
-// add selected mock response into form section
-function addMockResponse(data) {
-  console.log('data', data);
-  const listEl = document.querySelector('.edit-mock-responses');
-  const mockResp = data.detail;
-  listEl.insertAdjacentHTML('beforeend', `
-    <div class="mock-response row">
-      <div class="id">${mockResp.id}</div>
-      <div class="active">${mockResp.active}</div>
-      <div class="name">${mockResp.name}</div>
-      <div class="req_method">${mockResp.req_method}</div>
-      <div class="req_url">${mockResp.req_url}</div>
-      <div class="buttons">
-        <button onclick="fireEvent(event, 'play-mock-response', ${mockResp.id})">
-          <i class="fas fa-play"></i>
-        </button>
-        <button onclick="this.closest('.row').remove()">
-          <i class="fas fa-trash-alt"></i>
-        </button>
-      </div>
-    </div>`);
-}
-
-// search mock responses and set it as hce-list source
-function searchMockResponses(keyword) {
-  const mockResponsesEl = document.querySelector('#search-mock-responses');
-  mockResponsesEl.source = window.fetch(`/mock-responses?q=${keyword||''}`)
-    .then(resp => {
-      if (!resp.ok) throw Error(resp); 
-      return resp.json();
-    }).then(resp => {
-      return Object.keys(resp).reduce((mockResponses, key) => {
-        const list = resp[key].data;
-        mockResponses = mockResponses.concat(list);
-        return mockResponses;
-      }, []);
-    });
-}
-</script>
 <style>
-.mock-responses { display: flex; }
 .mock-responses .left .desc {  height: 44px; padding: 4px; }
 .mock-responses .middle { width: 24px; text-align: center; font-size: 2em; padding-top: 80px; }
 .mock-responses .right .search { padding: 8px 0; text-align: right; }
@@ -62,7 +8,6 @@ function searchMockResponses(keyword) {
 .mock-responses .row.header > * { background: #CCC; padding: 4px;}
 .mock-responses .row.mock-response:nth-child(even) { background: #EEE;}
 .mock-responses .row .id { width: 48px; }
-.mock-responses .row .active { width: 50px; }
 .mock-responses .row .name {  width: 120px;  }
 .mock-responses .row .req_method { width: 80px;}
 .mock-responses .row .req_url { width: 240px; }
@@ -77,8 +22,6 @@ function searchMockResponses(keyword) {
 </h3>
 
 <div class="use-case form">
-  <input type="hidden" id="id" value="{{useCase.id}}">
-
   {{#if useCase.id}}
   <div class="id column">
     <label for="id">Id</label>
@@ -88,102 +31,53 @@ function searchMockResponses(keyword) {
 
   <div class="name column">
     <label for="name">Name *</label>
-    <input id="name" value="{{useCase.name}}" />
+    <input id="name" size="40" value="{{useCase.name}}" />
   </div>
 
   <div class="description column">
     <label for="description">Description *</label>
-    <input id="description" size="40" value="{{useCase.description}}" />
+    <input id="description" size="80" value="{{useCase.description}}" />
   </div>
 
-  <div class="category column">
-    <label for="category">Category *</label>
-    <input id="category" value="{{useCase.category}}" placeholder="HUP, FRAUD, etc."/>
-  </div>
+  <h4 class="list">
+    Use Cases
+    <i class="fas fa-search for-list" onclick="openSearchUseCasesDialog()"></i>
+    <input type="xhidden" id="use_cases" 
+      value="{{useCase.use_cases}}"
+      onchange="document.querySelector('#use-cases-list').setAttribute('src','/use-cases/index?ids='+this.value);"/>
+  </h4>
+  <hce-routes id="use-cases-list" class="list" src="/use-cases/index?ids={{useCase.use_cases}}">
+  </hce-routes>
 
-  <p>* indicates required fields.</p>
-
-  <h3>Mock Responses</h3>
-  <div class="mock-responses">
-    <div class="left">
-      <div class="desc"> Search and add mock responses from the left</div>
-      <div class="header row">
-        <div class="id">id</div>
-        <div class="active">active</div>
-        <div class="name">name</div>
-        <div class="req_method">method</div>
-        <div class="req_url">url</div>
-        <div class="action"> &nbsp; </div>
-      </div>
-      <div class="edit-mock-responses">
-      {{#each mockResponses}}
-        <div class="mock-response row">
-          <div class="id">{{this.id}}</div>
-          <div class="active">{{this.active}}</div>
-          <div class="name">{{this.name}}</div>
-          <div class="req_method">{{this.req_method}}</div>
-          <div class="req_url">{{this.req_url}}</div>
-          <div class="buttons">
-            <button onclick="fireEvent(event, 'play-mock-response', {{this.id}})">
-              <i class="fas fa-play"></i>
-            </button>
-            <button onclick="this.closest('.row').remove()">
-              <i class="fas fa-trash-alt"></i>
-            </button>
-          </div>
-        </div>
-      {{/each}}
-      </div>
-    </div>
-    <div class="middle">
-      <i class="fas fa-caret-left"></i>
-    </div>
-    <div class="right">
-      <div class="search">
-        <input size="30" class="public" 
-          placeholder="Type to search mock-responses"
-          onchange="searchMockResponses(this.value)" />
-      </div>
-      <div class="header row">
-        <div class="id">id</div>
-        <div class="active">active</div>
-        <div class="name">name</div>
-        <div class="req_method">method</div>
-        <div class="req_url">url</div>
-        <div></div>
-      </div>
-      <hce-list id="search-mock-responses" class="list" (selected)="addMockResponse(event)">
-        <div class="mock-response row">
-          <div class="id">[[id]]</div>
-          <div class="active">[[active]]</div>
-          <div class="name">[[name]]</div>
-          <div class="req_method">[[req_method]]</div>
-          <div class="req_url">[[req_url]]</div>
-          <div class="buttons">
-            <button onclick="fireEvent(event, 'play-mock-response', [[id]])">
-              <i class="fas fa-play"></i>
-            </button>
-          </div>
-        </div>
-      </hce-list>
-    </div>
-  </div>
+  <h4>
+    Mock Responses
+    <i class="fas fa-search for-list" onclick="openSearchMockResponsesDialog()"></i>
+    <input type="xhidden" size="100" id="mock_responses"
+      value="{{useCase.mock_responses}}"
+      onchange="document.querySelector('#mock-responses-list').setAttribute('src','/mock-responses/index?ids='+this.value);"
+    />
+  </h4>
+  <hce-routes id="mock-responses-list" class="list" src="/mock-responses/index?ids={{useCase.mock_responses}}">
+  </hce-routes>
 
   <br/>
-  <div class="buttons">
+  <div class="buttons for-edit">
     {{#if useCase.id}}
       <button onclick="fireEvent(event, 'update-use-case', getFormData())">
         <i class="fas fa-edit"></i>
-        Update Use Case
+        Update
       </button>
+      <a class="button" href="#/use-cases/new?from={{useCase.id}}">
+        Duplicate
+      </a>
       <button onclick="fireEvent(event, 'delete-use-case', {{useCase.id}})">
         <i class="fas fa-trash-alt"></i>
-        Delete Use Case
+        Delete 
       </button>
     {{else}}
       <button onclick="fireEvent(event, 'create-use-case', getFormData())">
         <i class="fas fa-plus-circle"></i>
-        Create Use Case
+        Create 
       </button>
     {{/if}}
   </div>

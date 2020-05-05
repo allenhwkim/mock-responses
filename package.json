@@ -24,7 +24,7 @@
     "build": "rimraf dist && tsc -p tsconfig.build.json && npm run build:copy-assets",
     "build:copy-assets": "cp -R src/assets demo dist",
     "format": "prettier --write \"src/**/*.ts\"",
-    "start": "npm run start:copy-assets && ts-node -r tsconfig-paths/register src/main.ts",
+    "start": "npm run start:copy-assets && nodemon",
     "start:dev": "tsc-watch -p tsconfig.build.json --onSuccess \"node dist/main.js\"",
     "start:debug": "tsc-watch -p tsconfig.build.json --onSuccess \"node --inspect-brk dist/main.js\"",
     "start:prod": "node dist/main.js",

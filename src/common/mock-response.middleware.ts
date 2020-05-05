@@ -30,7 +30,6 @@ function findByUrlMethod(url, method) {
       ${ numExp !== url ? "OR  req_url LIKE '" + numExp + "'" : '' }
       ${ extExp !== url ? "OR  req_url LIKE '" + extExp + "'" : '' }
       AND (req_method = '${method}' OR req_method IS NULL)
-      AND active = 1
     ORDER BY req_url is NULL
     LIMIT 1`;
 console.log('............', sql1);

@@ -1,23 +1,9 @@
 <style>
-td { 
-  overflow: hidden; 
-  text-overflow: ellipsis; 
-  white-space: nowrap; 
-  padding: 10px;
-}
-.mock-responses { width: 100%; table-layout: fixed; padding:}
-.mock-responses .header { background: #ccc }
-.mock-responses .collapse { width: 10px; }
+.mock-responses .id { width: 100px; }
 .mock-responses .id-name { width: 200px; }
-.mock-responses .active { width: 4em; }
-.mock-responses .method { width: 3em; }
-.mock-responses .payload { width: 5em; }
-.mock-responses .status { width: 45px; }
-.mock-responses .delay_sec { width: 45px; }
-.mock-responses .content_type { width: 100px; }
-.mock-responses .url { width: 320px; }
+.mock-responses .request { width: 25%; }
+.mock-responses .response { width: 25%; }
 .mock-responses .actions { width: 60px; }
-.mock-responses { padding: 12px 0; }
 .mock-responses .group .mock-response:not(:first-child) .expand.icon,
 .mock-responses .group.count-1 .mock-response .expand.icon,
 .mock-responses .group:not(.expanded) .mock-response:not(:first-child) {
@@ -26,83 +12,80 @@ td {
 .mock-responses .group .mock-response:first-child {
   background: #eee; border: 1px outset #eee;
 }
-.actionIcons {
-  display: flex;
-  justify-content: flex-end;
-  padding: 0px;
-}
-.collapse, .active { text-align: center; }
-.header { font-weight: bold; }
-
 </style>
 
-<h2> Mock Responses </h2>
-
-<input class="mock-response-search public" size="40" 
-   placeholder="Type to search mock responses" 
-   onchange="fireEvent(event, 'list-mock-responses', this.value)">
-<button title="create a new mock response" onclick="fireEvent(event, 'new-mock-response', '')">+</button>
+<div class="for-edit for-dialog">
+  <input class="mock-response-search" size="40" placeholder="Type to search mock responses" />
+  <button onclick="fireEvent(event, 'search-mock-response', {key: this.parentElement.querySelector('.mock-response-search').value})">
+    <i class="fas fa-search"></i> Search
+  </button> &nbsp;
+  <a class="button for-edit" href="#/mock-responses/new">
+    <i class="fas fa-plus"></i> New
+  </a>
+  <select class="use-cases for-edit" style="width: 200px;"
+    onchange="window.location.hash='#/mock-responses/index?active='+this.value">
+  {{#each useCases}}
+    {{#if this.active}}
+    <option value="{{this.id}}" selected>{{this.id}} - {{this.name}}</option>
+    {{else}}
+    <option value="{{this.id}}">{{this.id}} - {{this.name}}</option>
+    {{/if}}
+  {{/each}}
+  </select>
+  <span class="for-edit">
+    active use case: 
+    {{#if activeUseCase}} 
+      {{activeUseCase}} 
+    {{else}} 
+      none
+    {{/if}}
+  </span>
+</div>
 
 <table class="mock-responses">
   <thead>
     <tr class="header">
-      <td class="collapse"></td>
-      <td class="id-name">Name</td>
-      <td class="method">Method</td>
-      <td class="url">URL</td>
-      <td class="actions">Actions</td>
-      <td class="active" title="active"></td>
-      <td class="payload">Payload</td>
-      <td class="status">Status</td>
-      <td class="delay_sec">Delay Sec</td>
-      <td class="content_type">Content Type</td>
-      {{!-- <td class="body">body</td> --}}
+      <th class="id">ID</th>
+      <th class="id-name">Name</th>
+      <th class="request">Request</th>
+      <th class="response">Response</th>
+      <th class="actions"></th>
     </tr>
-  <thead>
-    {{#each grouped}}
-    <tbody class="group count-{{this.count}} expanded">
-      <!-- {{@key}} {{this.count}} {{this.updated_at}} -->
-      {{#each this.data}}
-      <tr class="mock-response">
-        <td class="collapse">
-          <button class="expand icon" onclick="this.closest('.group').classList.toggle('expanded')">
-            <i class="fas fa-angle-up"></i>
-          </button>
-        </td>
-        <td class="id-name">{{this.name}}</td>
-        <td class="method">{{this.req_method}}</td>
-        <td class="url">{{this.req_url}}</td>
-        <td>
-          <div class="actionIcons">
-            {{#if this.active}}
-            <button class="icon" onclick="fireEvent(event, 'play-mock-response', {{this.id}})">
-              <i class="fas fa-play" title="run it"></i>
-            </button>&nbsp;
-            <button class="icon" onclick="fireEvent(event, 'new-mock-response', {{this.id}})">
-              <i class="fas fa-copy" title="duplicate it"></i>
-            </button>&nbsp;
-            {{/if}}
-            <button class="icon" onclick="fireEvent(event, 'edit-mock-response', {{this.id}})">
-              <i class="fas fa-edit" title="edit it"></i>
-            </button>
-          </div>
-        </td>
-        <td class="active">
-          {{#if this.active}}
-          <i style="color:green;">Active</i>
-          {{else}}
-          <button onclick="fireEvent(event, 'activate-mock-response', {{this.id}})">
-            Activate
-          </button>
-          {{/if}}
-        </td>
-        <td class="payload">{{this.req_payload}}</td>
-        <td class="status">{{this.res_status}}</td>
-        <td class="delay_sec">{{this.res_delay_sec}}</td>
-        <td class="content type">{{this.res_content_type}}</td>
-        {{!-- <td class="body">{{this.res_body}}</td> --}}
-      </tr>
-      {{/each}}
-    </tbody>
-    {{/each}}
-</ul>
+  </thead>
+{{#each mockResponses}}
+  <tr class="mock-response">
+    <td class="id">
+      {{this.id}}
+    </td>
+    <td class="id-name">{{this.name}}</td>
+    <td class="request">
+      <div>Method: {{this.req_method}}</div>
+      <div>Url: {{this.req_url}}</div>
+      <div>Payload: {{this.req_payload}}</div>
+    </td>
+    <td class="response">
+      <div>Status: {{this.res_status}}</div>
+      <div>Delay: {{this.res_delay_sec}}</div>
+      <div>Type: {{this.res_content_type}}</div>
+    </td>
+    <td class="actions">
+      <button class="icon" onclick="fireEvent(event, 'play-mock-response', {{this.id}})">
+        <i class="fas fa-play" title="run it"></i>
+      </button>&nbsp;
+      <a class="button icon for-edit" href="#/mock-responses/{{this.id}}/edit">
+        <i class="fas fa-edit" title="edit it"></i>
+      </a>
+      <a class="button icon for-not-authorized" href="#/mock-responses/{{this.id}}/edit">
+        <i class="fas fa-file"></i>
+      </a>
+      <a class="button icon for-list delete"
+        onclick="fireEvent(event, 'unselect-mock-response', {{this.id}})">
+        <i class="fas fa-trash-alt"></i>
+      </a>
+      <button class="for-dialog" onclick="fireEvent(event, 'select-mock-response', {{this.id}})">
+        Select
+      </button>&nbsp;
+    </td>
+  </tr>
+{{/each}}
+</table>

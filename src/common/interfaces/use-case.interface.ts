@@ -3,5 +3,4 @@ export interface UseCase {
   name: string;
   description: string;
   mock_responses: string;
-  category: string;
 }

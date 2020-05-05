@@ -1,22 +1,40 @@
 import {
-  Body, Controller, Delete, Get, Header,
-  HttpException, HttpStatus, Param, Post,
-  Put, Query, Redirect, Render, Request, Res,
+  Body, Controller, Delete, Get, Param, Post, Put, Query, Render, Request,
 } from '@nestjs/common';
 import { MockResponsesService } from './mock-responses.service';
 import { MockResponse } from '../common/interfaces';
+import { UseCasesService } from '../use-cases/use-cases.service';
+
+function cookies(req) {
+  const cookies = {};
+  (req.headers.cookie || '').split('; ').forEach(el => {
+    const [k,v] = el.split('=');
+    cookies[k] = v;
+  });
+  return cookies;
+}
 
 @Controller('mock-responses')
 export class MockResponsesController {
 
-  constructor(private mockResp: MockResponsesService) {
-  }
+  constructor(
+    private useCase: UseCasesService, 
+    private mockResp: MockResponsesService
+  ) {}
 
   @Get('index')
   @Render('mock-responses-list')
-  index(@Query('q') key) {
-    const grouped = this.findAllBy(key);
-    return { grouped };
+  index(
+    @Query('q') key,
+    @Query('ids') ids,
+    @Query('active') active,
+    @Request() req
+  ) {
+    const activeUseCase = this.useCase.cookies(req, 'UCID');
+    const mockResponses = this.mockResp.findAllBy({key, ids, active});
+    const useCases = this.useCase.findAllBy({key: ''});
+    useCases.forEach(el => el.active = el.id === +active );
+    return { mockResponses, useCases, activeUseCase };
   }
 
   @Get(':id/edit')
@@ -33,30 +51,14 @@ export class MockResponsesController {
     return { 
       mockResponse: {
         name: row.name || '',
-        active: row.active || false,
         req_url: row.req_url || '',
         req_method: row.req_method || 'POST',
-        req_payload: row.req_payload || '',
-        res_status: row.res_status || 200,
+        req_payload: row.req_payload || '', res_status: row.res_status || 200,
         res_delay_sec: row.res_delay_sec || 0,
         res_content_type: row.res_content_type || 'application/json',
         res_body: row.res_body || ''
       } 
     };
-  }
-
-  @Get()
-  findAllBy(@Query('q') key) {
-    const mockResponses = {};
-
-    const apiGrouped = this.mockResp.findAllBy({ apiGroup: 1, key });
-    apiGrouped.forEach(({req_url, updated_at, count}) => {
-      const data = this.mockResp.findAllBy({req_url});
-      const id = data[0].id;
-      mockResponses[req_url] = { id, updated_at: new Date(updated_at), count, data };
-    })
-
-    return mockResponses;
   }
 
   @Get(':id')
@@ -74,13 +76,9 @@ export class MockResponsesController {
     return this.mockResp.update(data);
   }
 
-  @Put(':id/activate')
-  activate(@Param() params) {
-    return this.mockResp.activate(params.id);
-  }
-
   @Delete(':id')
   delete(@Param() params) {
     return this.mockResp.delete(params.id);
   }
+
 }

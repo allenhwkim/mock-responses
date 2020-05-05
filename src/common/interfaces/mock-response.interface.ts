@@ -1,7 +1,6 @@
 export interface MockResponse {
   id: number;
   name: string;
-  active: boolean;
   req_url: string;
   req_method: string;
   req_payload: string;

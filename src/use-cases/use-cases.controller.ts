@@ -1,17 +1,9 @@
 import {
-  Body, Controller, Delete, Get,
-  Param, Post, Put, Query, Render,
+  Body, Controller, Delete, Get, Request, Param, Post, Put, Query, Render, Response
 } from '@nestjs/common';
 import { UseCasesService } from './use-cases.service';
 import { MockResponsesService } from '../mock-responses/mock-responses.service';
 import { UseCase } from '../common/interfaces/use-case.interface';
-
-function groupBy(allUseCases) {
-  return allUseCases.reduce(function (acc, data) {
-    (acc[data.category] = acc[data.category] || []).push(data);
-    return acc;
-  }, {});
-}
 
 @Controller('use-cases')
 export class UseCasesController {
@@ -24,20 +16,32 @@ export class UseCasesController {
   // Render the list of all use cases in sidebar
   @Get('index')
   @Render('use-cases-list')
-  index(@Query('q') key) {
-    const grouped = this.findAllBy(key);
-    return { grouped };
+  index(
+    @Query('q') key,
+    @Query('ids') ids, 
+    @Request() req
+  ) {
+    const activeUseCase = this.useCase.cookies(req, 'UCID');
+    const useCases = this.useCase.findAllBy({key, ids})
+    useCases.forEach(el => {
+      const ids = el.mock_responses.split(',').map(id => parseInt(id));
+      el.mockResponses = this.mockResp.findAllBy({ids});
+      el.active = el.id === +activeUseCase;
+    });
+
+    return { useCases, activeUseCase };
   }
 
   // Render the Edit Page
   @Get(':id/edit')
   @Render('use-cases-edit')
-  edit(@Param() params) {
+  edit(@Param() params, @Response() res) {
     const useCase: UseCase = this.useCase.find(params.id);
     const ids = useCase.mock_responses.split(',').map(id => parseInt(id));
     const mockResponses = this.mockResp.findAllBy({ids});
     return { useCase, mockResponses };
   }
+
 
   // Render the New Page or Duplicate Page based on data provided.
   @Get('new')
@@ -47,8 +51,7 @@ export class UseCasesController {
       id: undefined,
       name: '',
       description: '',
-      mock_responses: '',
-      category: ''
+      mock_responses: ''
     };
     var mockResponses = [];
   
@@ -61,29 +64,10 @@ export class UseCasesController {
       useCase.name = row.name;
       useCase.description = row.description;
       useCase.mock_responses = row.mock_responses;
-      useCase.category = row.category;
       return { useCase, mockResponses }
     } else {
       return { useCase, mockResponses }
-
     }
-  }
-
-  // Return all use cases or search by query
-  @Get()
-  findAllBy(@Query('q') key) {
-
-    const apiGrouped = this.useCase.findAllBy({ key });
-    var mockResponses = groupBy(apiGrouped);
-    
-    for (var category in mockResponses) {
-      mockResponses[category] = {
-        count: mockResponses[category].length,
-        data: mockResponses[category]
-      }
-    }
-
-    return mockResponses;
   }
 
   @Get(':id')
@@ -91,14 +75,26 @@ export class UseCasesController {
     return this.useCase.find(params.id);
   }
 
+  @Put(':id/activate')
+  activate(@Param() params, @Response() res, @Request() req) {
+    const useCase: UseCase = this.useCase.find(+params.id);
+    const matches = req.hostname.match(/[-\w]+\.(?:[-\w]+\.xn--[-\w]+|[-\w]{3,}|[-\w]+\.[-\w]{2})$/i);
+    const topLevelDomain = (matches && matches[0]) || req.hostname;
+    const cookieDomain = topLevelDomain.match(/\./) ? '.' + topLevelDomain : topLevelDomain;
+    if (useCase) {
+      res.cookie('UCID', useCase.id, {
+        path: '/',
+        domain: cookieDomain,
+        maxAge: 604800 
+      });
+    }  
+    res.end();
+  }
+
+
   @Post()
   create(@Body() data: UseCase) {
     return this.useCase.create(data);
-  }
-
-  @Put(':id/activate')
-  activate(@Param() params) {
-    return this.useCase.activate(params.id);
   }
 
   @Put(':id')

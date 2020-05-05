@@ -1,21 +1,3 @@
-<script>
-function getFormData() {
-  const inputEls = document.querySelectorAll('.mock-response [id]');
-  const data = Array.from(inputEls).reduce( (acc, el) => {
-      acc[el.id] = el.value;
-      return acc;
-    }, {})
-  data.active = document.querySelector('.mock-response [id=active]').checked ? 1 : 0;
-  return data;
-}
-
-function beautifyJSON() {
-  const textArea = document.getElementById("res_body");
-  textArea.value = JSON.stringify(JSON.parse(textArea.value), null, 2);
-  textArea.style.height = textArea.scrollHeight + "px";
-}
-
-</script>
 <style>
 .mock-response.form .column  { padding: 4px 0; }
 .mock-response.form .column label { display: inline-block; width: 100px; }
@@ -43,22 +25,13 @@ function beautifyJSON() {
   {{#if mockResponse.id}}
   <div class="id column">
     <label for="id">Id</label>
-    <input id="id" readonly value="{{mockResponse.id}}" />
+    <input class="for-edit" id="id" readonly value="{{mockResponse.id}}" />
   </div>
   {{/if}}
 
   <div class="name column">
     <label for="name">Name</label>
-    <input id="name" required value="{{mockResponse.name}}" />
-  </div>
-
-  <div class="active column">
-    <label for="active">Active</label>
-    {{#if mockResponse.active}}
-      <input id="active" type="checkbox" value="1" checked="checked" />
-    {{else}}
-      <input id="active" type="checkbox" value="1"/>
-    {{/if}}
+    <input class="for-edit"  id="name" required value="{{mockResponse.name}}" />
   </div>
 
   <fieldset class="request-group">
@@ -66,17 +39,17 @@ function beautifyJSON() {
 
     <div class="req_method column">
       <label for="req_method">Method</label>
-      <input id="req_method" pattern="^(GET|POST|DELETE|PUT|OPTIONS)?$" value="{{mockResponse.req_method}}" />
+      <input class="for-edit"  id="req_method" pattern="^(GET|POST|DELETE|PUT|OPTIONS)?$" value="{{mockResponse.req_method}}" />
     </div>
 
     <div class="req_url column">
       <label for="req_url">Url</label>
-      <input id="req_url" required value="{{mockResponse.req_url}}" />
+      <input class="for-edit"  id="req_url" required value="{{mockResponse.req_url}}" />
     </div>
 
     <div class="req_url column">
       <label for="req_payload">Payload</label>
-      <input id="req_payload" pattern="^(\S+,\s?)*\S+$" value="{{mockResponse.req_payload}}" />
+      <input class="for-edit"  id="req_payload" pattern="^(\S+,\s?)*\S+$" value="{{mockResponse.req_payload}}" />
     </div>
   </fieldset>
 
@@ -85,37 +58,40 @@ function beautifyJSON() {
 
     <div class="res_status column">
       <label for="res_status">Status Code</label>
-      <input id="res_status" pattern="^\d{3}$" value="{{mockResponse.res_status}}" />
+      <input class="for-edit"  id="res_status" pattern="^\d{3}$" value="{{mockResponse.res_status}}" />
     </div>
 
     <div class="res_delay_sec column">
       <label for="res_delay_sec">Delay Time</label>
-      <input id="res_delay_sec" required pattern="^\d{1}$" value="{{mockResponse.res_delay_sec}}" />
+      <input class="for-edit"  id="res_delay_sec" required pattern="^\d{1}$" value="{{mockResponse.res_delay_sec}}" />
     </div>
 
     <div class="res_content_type column">
       <label for="res_content_type">Content Type</label>
-      <input id="res_content_type" pattern="^\S+\/\S+$" value="{{mockResponse.res_content_type}}" />
+      <input class="for-edit"  id="res_content_type" pattern="^\S+\/\S+$" value="{{mockResponse.res_content_type}}" />
       <a class="beautify-button" onclick="beautifyJSON()">Beautify JSON</a>
     </div>
 
     <div class="res_body column">
       <label for="res_body">Body</label>
-      <textarea id="res_body" required>{{mockResponse.res_body}}</textarea>
+      <textarea class="for-edit"  id="res_body" required>{{mockResponse.res_body}}</textarea>
     </div>
   </fieldset>
 
   {{#if mockResponse.id}}
-    <button onclick="fireEvent(event, 'update-mock-response', getFormData())">
+    <button class="for-edit"  onclick="fireEvent(event, 'update-mock-response', getFormData())">
       <i class="fas fa-edit"></i>
       Update Mock Response 
     </button>
-    <button onclick="fireEvent(event, 'delete-mock-response', {{mockResponse.id}})">
+    <a class="button for-edit" href="#/mock-responses/new?from={{mockResponse.id}}">
+      Duplicate Mock Response
+    </a>&nbsp;
+    <button class="for-edit"  onclick="fireEvent(event, 'delete-mock-response', {{mockResponse.id}})">
       <i class="fas fa-trash-alt"></i>
       Delete Mock Resoponse
     </button>
   {{else}}
-    <button onclick="fireEvent(event, 'create-mock-response', getFormData())">
+    <button class="for-edit"  onclick="fireEvent(event, 'create-mock-response', getFormData())">
       <i class="fas fa-plus-circle"></i>
       Create Mock Response 
     </button>

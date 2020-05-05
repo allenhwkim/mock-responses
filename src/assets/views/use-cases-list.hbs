@@ -1,80 +1,73 @@
 <style>
-  td {
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .use-cases {
-    width: 100%;
-    table-layout: fixed;
-  }
-
-  .use-cases .header {
-    background: rgb(187, 185, 185)
-  }
-
-  .use-cases .collapse {
-    width: 16px;
-  }
-
-  .use-cases {
-    padding: 12px 0;
-  }
-
-  .use-cases .id-name {
-    width: 170px;
-  }
-
-  .use-cases .actions {
-    width: 60px;
-    align: right;
-  }
-
-  .use-cases .group .use-case:not(:first-child) .expand.icon,
-  .use-cases .group:not(.expanded) .use-case:not(:first-child) {
-    display: none;
-    border-top: 40px solid white;
-  }
-
-  tbody tr.use-case:nth-child(odd) {
-    background-color: rgb(230, 230, 230);
-  }
-
-  button.mainIcon {
-    padding: 5px;
-  }
+  .use-cases .id { width: 60px; }
+  .use-cases .actions { width: 140px; align: right; }
 </style>
 
+<div class="for-edit for-dialog">
+  <input class="use-cases-search" size="40" placeholder="Type to search use cases"  />
+  <button onclick="fireEvent(event, 'search-use-case', {key: this.parentElement.querySelector('.use-cases-search').value})">
+    <i class="fas fa-search"></i> Search
+  </button> &nbsp;
+  <a class="button for-edit" href="#/use-cases/new">
+    <i class="fas fa-plus"></i> New
+  </a>
+</div>
+
+<span class="for-edit"> active use case: {{activeUseCase}}</span>
 {{!-- Use cases get populated below --}}
 <table class="use-cases">
-  {{#each grouped}}
-  <tbody class="group sidebar">
-    <!-- {{@key}} {{this.count}} -->
-    <td class="collapse">
-      <button class="expand icon" onclick="this.closest('.group').classList.toggle('expanded')">
-        <i class="fas fa-angle-up"></i>
-      </button>
-    </td>
-    <td class="id-name"><b>{{@key}} ({{this.count}})</b></td>
-    <td></td>
-    {{#each this.data}}
-    <tr class="use-case">
-      <td></td>
-      <td class="id-name {{this.id}}">{{this.name}}</td>
-      <td class="actions">
-        <button class="icon" onclick="fireEvent(event, 'activate-use-case', {{this.id}})">
-          <i class="fas fa-play" title="run it"></i>
-        </button>
-        <button class="icon" onclick="fireEvent(event, 'new-use-case', {{this.id}})">
-          <i class="fas fa-copy" title="duplicate it"></i>
-        </button>
-        <button class="icon" onclick="fireEvent(event, 'edit-use-case', {{this.id}})">
-          <i class="fas fa-edit" title="edit it"></i>
-        </button>
-      </td>
+  <thead>
+    <tr>
+      <th class="id">Id</th>
+      <th class="name">Name/Description</th>
+      <th class="mock_responses">Use Cases/Mock Responses</th>
+      <th class="actions">Actions</th>
     </tr>
+  </thead>
+{{#each useCases}}
+  <tr class="use-case">
+    <td class="id">
+      <div>{{this.id}}</div>
+    </td>
+    <td class="name">
+      <b>{{this.name}}</b>
+      <p>{{this.description}}</p> 
+    </td>
+    <td class="mock_responses">
+    {{#each this.use_cases}}
+      <b>{{this}}</b>
     {{/each}}
-  </tbody>
-  {{/each}}
+    {{#each this.mockResponses}}
+      <li> 
+        {{this.id}}
+        | {{this.req_url}} 
+        | {{this.name}} 
+        | {{this.res_status}}
+        | {{this.res_content_type}}
+     </li>
+    {{/each}}
+    </td>
+    <td class="actions">
+      <a class="button for-edit" href="#/use-cases/{{this.id}}/edit">
+        Edit
+      </a>
+      <a class="button for-not-authorized" href="#/use-cases/{{this.id}}/edit">
+        Browse
+      </a>
+    {{#if this.active}}
+      Active
+    {{else}}
+      <button class="for-edit" onclick="fireEvent(event, 'activate-use-case', {{this.id}})">
+        Activate
+      </button>
+    {{/if}}
+      <button class="for-dialog" onclick="fireEvent(event, 'select-use-case', {{this.id}})">
+        Select
+      </button>
+      <a class="button icon for-list delete" onclick="fireEvent(event, 'unselect-use-case', {{this.id}})">
+        <i class="fas fa-trash-alt"></i>
+      </a>
+    </td>
+  </tr>
+{{/each}}
+  </table>
