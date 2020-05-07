@@ -19,9 +19,11 @@ export class UseCasesService {
   findAllBy(by) {
     const sql = 
       by.key !== undefined ? 
-        `SELECT * FROM use_cases WHERE name like '%${by.key}%' OR description like '%${by.key}%'`: 
+        `SELECT * FROM use_cases WHERE name LIKE '%${by.key}%' OR description like '%${by.key}%'`: 
       by.ids !== undefined ? 
-        `SELECT * FROM use_cases WHERE id in (${by.ids})`:
+        `SELECT * FROM use_cases WHERE id IN (${by.ids})`:
+      by.except !== undefined ? 
+        `SELECT * FROM use_cases WHERE id NOT IN (${by.except})`:
         `SELECT * FROM use_cases`;
     console.log('[mock-responses] UseCaseService.findAllBy', sql);
 

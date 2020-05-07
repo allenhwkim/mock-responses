@@ -19,10 +19,11 @@ export class UseCasesController {
   index(
     @Query('q') key,
     @Query('ids') ids, 
+    @Query('except') except, 
     @Request() req
   ) {
     const activeUseCase = this.useCase.cookies(req, 'UCID');
-    const useCases = this.useCase.findAllBy({key, ids})
+    const useCases = this.useCase.findAllBy({key, ids, except})
     useCases.forEach(el => {
       const ids = el.mock_responses.split(',').map(id => parseInt(id));
       el.mockResponses = this.mockResp.findAllBy({ids});

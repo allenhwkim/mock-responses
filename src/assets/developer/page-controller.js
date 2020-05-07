@@ -62,15 +62,16 @@ function authorize(key) {
   key = key || window.localStorage.getItem('ey');
   window.localStorage.setItem('auth-key', key);
   if (key === '2') {
-    document.querySelector('.main').classList.remove('not-authorized');
+    document.querySelector('.main').classList.add('authorized');
   } else {
-    document.querySelector('.main').classList.add('not-authorized');
+    document.querySelector('.main').classList.remove('authorized');
   } 
 }
 
 function handleCustomEvents(event) {
   const type = event.type;
   const data = event.detail;
+  console.log('handling custom-event', {type, data, event})
 
   // console.log('[mock-responses]  handling custom event', type, data, event);
   switch(type) {
@@ -138,20 +139,27 @@ var UseCase = {
   },
   activate: function(id) { // activate-use-case
     fetchUrl(`/use-cases/${id}/activate`, {method: 'PUT'})
-      .then(resp => window.location.href = `#/use-cases/index?active=${id}`)
+      .then(resp => window.location.href = `#/mock-responses/index?active=${id}`)
   },
   select: function(id) {
-    const useCasesEl = document.querySelector('.form #use_cases');
-    const useCases = useCasesEl.value.trim().split(',').concat(id).filter(el => el);
-    const noDupes = useCases.filter((v,i) => useCases.indexOf(v) === i);
-    useCasesEl.setAttribute('value', noDupes.join(','));
-    useCasesEl.dispatchEvent(new Event('change'));
+    const useCasesEl = document.querySelector('#use_cases');
+    if (useCasesEl) {
+      const useCases = useCasesEl.value.trim().split(',').concat(id).filter(el => el);
+      const noDupes = useCases.filter((v,i) => useCases.indexOf(v) === i);
+      useCasesEl.setAttribute('value', noDupes.join(','));
+      useCasesEl.dispatchEvent(new Event('change'));
+    } 
+ 
+    const useCaseEl = document.querySelector('#currently-active-use-case');
+    if (useCaseEl) {
+      useCaseEl.setAttribute('value', id);
+      useCaseEl.dispatchEvent(new Event('change'));
+    }
     Main.dialogEl.close();
   },
   unselect: function(id) {
     const useCasesEl = document.querySelector('.form #use_cases');
     const useCases = useCasesEl.value.trim().split(',').filter(el => el !== ''+id);
-    console.log({id, useCases})
     useCasesEl.setAttribute('value', useCases.join(','));
     useCasesEl.dispatchEvent(new Event('change'));
   }
@@ -239,8 +247,8 @@ function openSearchMockResponsesDialog() {
   Main.dialogEl.open({title: ' ', body});
 }
 
-function openSearchUseCasesDialog() {
-  const body = `<hce-routes class="dialog" src="/use-cases/index"></hce-routes>`;
+function openSearchUseCasesDialog(except) {
+  const body = `<hce-routes class="dialog" src="/use-cases/index?except=${except}"></hce-routes>`;
   Main.dialogEl.open({title: ' ', body});
 }
 
@@ -250,6 +258,7 @@ function getFormData() {
       acc[el.id] = el.value;
       return acc;
     }, {})
+  console.log('[mock-responses] form data', data)
   return data;
 }
 

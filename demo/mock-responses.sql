@@ -33,7 +33,7 @@ INSERT INTO mock_responses VALUES(1000000000000013,'create',0,'fdasf','POST',200
 INSERT INTO mock_responses VALUES(1000000000000014,'function row',0,'/api/func',NULL,200,0,'function','return req.query.foo == 1 ? 20 : 21;',1571758912499,'allen.kim',1571759272930,'allen.kim','');
 INSERT INTO mock_responses VALUES(1000000000000015,'with ?foo=1',1,'/api/func',NULL,200,0,'text/plain','this is from /api/func?foo=1',1571759051272,'allen.kim',1571759960626,'allen.kim','');
 INSERT INTO mock_responses VALUES(1000000000000016,'with ?foo=2',0,'/api/func',NULL,200,0,'text/plain','this is from /api/func?foo=2',1571759059184,'allen.kim',1571759946567,'allen.kim','');
-INSERT INTO mock_responses VALUES(1000000000000017,'500 error',1,'/api/500','POST',500,0,'application/json',replace('{\n  "error": 500\n}','\n',char(10)),1574278844811,'allen.kim',1588647960700,'allen.kim','');
+INSERT INTO mock_responses VALUES(1000000000000017,'500 error',1,'/api/500','POST',500,0,'application/json',replace('{\n  "error": 500\n}','\n',char(10)),1574278844811,'allen.kim',1588822072096,'allen.kim','');
 INSERT INTO mock_responses VALUES(1000000000000018,'/rogers_rest/documents/3293380-01020014588',1,'/rogers_rest/documents/3293380-01020014588',NULL,200,0,'application/json','{"success":1}',1588307833390,'allen.kim',1588307868696,'allen.kim','');
 INSERT INTO mock_responses VALUES(1000000000000019,'/cms/UTE-iPhone-11-black-225x338-01.png',1,'/cms/UTE-iPhone-11-black-225x338-01.png',NULL,200,0,'image/png','data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7',1588308635797,'allen.kim',1588308635797,'allen.kim','');
 CREATE TABLE use_cases (
@@ -42,11 +42,11 @@ CREATE TABLE use_cases (
         description TEXT NOT NULL,
         mock_responses TEXT,
 	category TEXT NOT NULL
-        );
-INSERT INTO use_cases VALUES(1,'fraud bad long desc long desc long desc long desc long desc long desc long desc','fdsaf long desc long desc long desc long desc long desc long desc long desc long desc','1000000000000003,1000000000000008,1000000000000010','FRAUD');
-INSERT INTO use_cases VALUES(2,'tssshuper','222 hups','4','OTHER');
-INSERT INTO use_cases VALUES(3,'hup downgrade','users can do	wngrade their account','10','HUP');
-INSERT INTO use_cases VALUES(5,'hup all the way','hardware upgrades for all','17','HUP');
-INSERT INTO use_cases VALUES(12,'woo','owo','17','Uncategorized');
-INSERT INTO use_cases VALUES(13,'polls','canada huper','17','Uncategorized');
+        , use_cases TEXT);
+INSERT INTO use_cases VALUES(1,'fraud bad long desc long desc long desc long desc long desc long desc long desc','fdsaf long desc long desc long desc long desc long desc long desc long desc long desc','1000000000000003,1000000000000008,1000000000000010','FRAUD',NULL);
+INSERT INTO use_cases VALUES(2,'tssshuper','222 hups','4','OTHER',NULL);
+INSERT INTO use_cases VALUES(3,'hup downgrade','users can do	wngrade their account','10','HUP',NULL);
+INSERT INTO use_cases VALUES(5,'hup all the way','hardware upgrades for all','17','HUP',NULL);
+INSERT INTO use_cases VALUES(12,'woo','owo','17','Uncategorized',NULL);
+INSERT INTO use_cases VALUES(13,'polls','canada huper','17','Uncategorized',NULL);
 COMMIT;

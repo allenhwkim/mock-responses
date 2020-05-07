@@ -22,23 +22,13 @@
   <a class="button for-edit" href="#/mock-responses/new">
     <i class="fas fa-plus"></i> New
   </a>
-  <select class="use-cases for-edit" style="width: 200px;"
-    onchange="window.location.hash='#/mock-responses/index?active='+this.value">
-  {{#each useCases}}
-    {{#if this.active}}
-    <option value="{{this.id}}" selected>{{this.id}} - {{this.name}}</option>
-    {{else}}
-    <option value="{{this.id}}">{{this.id}} - {{this.name}}</option>
-    {{/if}}
-  {{/each}}
-  </select>
   <span class="for-edit">
-    active use case: 
-    {{#if activeUseCase}} 
-      {{activeUseCase}} 
-    {{else}} 
-      none
-    {{/if}}
+    &nbsp;Currently Active Use Case: 
+    <input id="currently-active-use-case" value="{{activeUseCase}}" readonly size="4"
+      onchange="fireEvent(event, 'activate-use-case', this.value)"/>
+    <i class="fas fa-search for-list" onclick="openSearchUseCasesDialog()"></i>
+  </span>
+  </h4>
   </span>
 </div>
 

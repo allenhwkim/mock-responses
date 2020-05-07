@@ -55,11 +55,7 @@
         Browse
       </a>
     {{#if this.active}}
-      Active
-    {{else}}
-      <button class="for-edit" onclick="fireEvent(event, 'activate-use-case', {{this.id}})">
-        Activate
-      </button>
+      <div>Active</div>
     {{/if}}
       <button class="for-dialog" onclick="fireEvent(event, 'select-use-case', {{this.id}})">
         Select

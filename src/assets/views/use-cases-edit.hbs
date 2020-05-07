@@ -41,21 +41,21 @@
 
   <h4 class="list">
     Use Cases
-    <i class="fas fa-search for-list" onclick="openSearchUseCasesDialog()"></i>
     <input type="xhidden" id="use_cases" 
       value="{{useCase.use_cases}}"
       onchange="document.querySelector('#use-cases-list').setAttribute('src','/use-cases/index?ids='+this.value);"/>
+    <i class="fas fa-search for-list" onclick="openSearchUseCasesDialog({{useCase.id}})"></i>
   </h4>
   <hce-routes id="use-cases-list" class="list" src="/use-cases/index?ids={{useCase.use_cases}}">
   </hce-routes>
 
   <h4>
     Mock Responses
-    <i class="fas fa-search for-list" onclick="openSearchMockResponsesDialog()"></i>
-    <input type="xhidden" size="100" id="mock_responses"
+    <input type="xhidden" size="40" id="mock_responses"
       value="{{useCase.mock_responses}}"
       onchange="document.querySelector('#mock-responses-list').setAttribute('src','/mock-responses/index?ids='+this.value);"
     />
+    <i class="fas fa-search for-list" onclick="openSearchMockResponsesDialog()"></i>
   </h4>
   <hce-routes id="mock-responses-list" class="list" src="/mock-responses/index?ids={{useCase.mock_responses}}">
   </hce-routes>

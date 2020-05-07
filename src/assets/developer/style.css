@@ -57,6 +57,9 @@ button {
   color: #FFF;
   display: inline-block;
 }
+button {
+  line-height: 34px;
+}
 
 .icon {
   color: #2188E5;
@@ -68,19 +71,22 @@ button {
 hce-dialog .dialog { width: 100%; }
 hce-dialog .dialog pre { width: 100%; overflow: auto; }
 
-.for-list {display: none;}
-.for-dialog {display: none;}
-.for-edit {display: none;}
-.for-not-authorized {display: none;}
-.main:not(.not-authorized) .list .for-edit { display: none;}
-.main:not(.not-authorized) .list .for-dialog { display: none;}
+/* .main:not(.authorized) .list .for-edit { display: none;} */
+/* .main:not(.authorized) .list .for-dialog { display: none;} */
 
+.for-list {display: none;}
 .list .for-list { display: initial; }
 .list .fa-search.for-list { cursor: pointer; }
 
+.for-dialog {display: none;}
 .dialog .for-dialog { display: initial; }
+.dialog .close { background: transparent; cursor: pointer;}
 
-.main:not(.not-authorized) .for-edit { display: initial; } /* hide any editable one for non-authorized users */
-.not-authorized input.for-edit { display: initial; border: #FFF; pointer-events: none;}
-.not-authorized textarea.for-edit { display: initial; border: #FFF; pointer-events: none;}
-.not-authorized .for-not-authorized { display: initial;}
+.for-edit {display: initial;}
+.main:not(.authorized) .for-edit { display: none; } /* hide any editable one for non-authorized users */
+.main:not(.authorized) input.for-edit { display: initial; border: #FFF; pointer-events: none;}
+.main:not(.authorized) textarea.for-edit { display: initial; border: #FFF; pointer-events: none;}
+
+.for-not-authorized {display: none;}
+.main:not(.authorized) .for-not-authorized { display: initial;}
+
