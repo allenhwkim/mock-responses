@@ -39,6 +39,14 @@ body {
 a {
   text-decoration: none;
 }
+ul {
+  list-style-position: inside;
+  margin: 12px 0 0 0;
+  padding: 0;
+}
+ul li{
+  white-space: nowrap;
+}
 
 table { width: 100%; }
 td, th { padding: 10px; word-break: break-word; }
@@ -68,20 +76,31 @@ button {
   background: none;
 }
 
-hce-dialog .dialog { width: 100%; }
-hce-dialog .dialog pre { width: 100%; overflow: auto; }
+hce-dialog#dialog > .dialog { 
+  width: 100%;
+  max-width: calc(100vw - 120px);
+  max-height: calc(100vh - 120px);
+}
+hce-dialog#dialog > .dialog > .body {
+  overflow: auto;
+  max-height: calc(100vh - 200px);
+}
 
-/* .main:not(.authorized) .list .for-edit { display: none;} */
-/* .main:not(.authorized) .list .for-dialog { display: none;} */
-
-.for-list {display: none;}
+/* for list only item, hide .for-edit / .for-dialog items */
+.for-list {display: none;} /* this is only for list and availible under .list */
 .list .for-list { display: initial; }
+.list .for-edit { display: none;}
+.list .for-dialog { display: none;}
 .list .fa-search.for-list { cursor: pointer; }
 
+/* for dialog only item, hide .for-edit / .for-list items */
 .for-dialog {display: none;}
 .dialog .for-dialog { display: initial; }
+.dialog .for-edit {display: none; }
+.dialog .for-list {display: none; }
 .dialog .close { background: transparent; cursor: pointer;}
 
+/* for edit only item, hide when not authoriazed */
 .for-edit {display: initial;}
 .main:not(.authorized) .for-edit { display: none; } /* hide any editable one for non-authorized users */
 .main:not(.authorized) input.for-edit { display: initial; border: #FFF; pointer-events: none;}

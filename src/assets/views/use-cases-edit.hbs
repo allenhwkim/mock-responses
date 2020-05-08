@@ -45,6 +45,7 @@
       value="{{useCase.use_cases}}"
       onchange="document.querySelector('#use-cases-list').setAttribute('src','/use-cases/index?ids='+this.value);"/>
     <i class="fas fa-search for-list" onclick="openSearchUseCasesDialog({{useCase.id}})"></i>
+    <i class="fas fa-ban for-list" onclick="fireEvent(event, 'clear-use-case')"></i>
   </h4>
   <hce-routes id="use-cases-list" class="list" src="/use-cases/index?ids={{useCase.use_cases}}">
   </hce-routes>
@@ -56,6 +57,7 @@
       onchange="document.querySelector('#mock-responses-list').setAttribute('src','/mock-responses/index?ids='+this.value);"
     />
     <i class="fas fa-search for-list" onclick="openSearchMockResponsesDialog()"></i>
+    <i class="fas fa-ban for-list" onclick="fireEvent(event, 'clear-mock-response')"></i>
   </h4>
   <hce-routes id="mock-responses-list" class="list" src="/mock-responses/index?ids={{useCase.mock_responses}}">
   </hce-routes>

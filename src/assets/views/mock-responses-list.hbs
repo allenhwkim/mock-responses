@@ -12,25 +12,50 @@
 .mock-responses .group .mock-response:first-child {
   background: #eee; border: 1px outset #eee;
 }
+.active-use-cases .active-use-case {
+  background: #DDD;
+  color: #999;
+  padding: 4px 8px; 
+}
+.use-case-section {
+  padding: 12px 0;
+}
 </style>
 
 <div class="for-edit for-dialog">
-  <input class="mock-response-search" size="40" placeholder="Type to search mock responses" />
-  <button onclick="fireEvent(event, 'search-mock-response', {key: this.parentElement.querySelector('.mock-response-search').value})">
-    <i class="fas fa-search"></i> Search
-  </button> &nbsp;
-  <a class="button for-edit" href="#/mock-responses/new">
-    <i class="fas fa-plus"></i> New
-  </a>
-  <span class="for-edit">
-    &nbsp;Currently Active Use Case: 
-    <input id="currently-active-use-case" value="{{activeUseCase}}" readonly size="4"
-      onchange="fireEvent(event, 'activate-use-case', this.value)"/>
-    <i class="fas fa-search for-list" onclick="openSearchUseCasesDialog()"></i>
-  </span>
-  </h4>
-  </span>
+  <div class="use-case-section">
+    <span class="for-edit">
+      &nbsp;Currently Active Use Case: 
+      {{#unless activeUseCase}}
+        None
+      {{/unless}}
+      <i class="fas fa-search for-list" onclick="openSearchUseCasesDialog()"></i>
+      <input id="currently-active-use-case" value="{{activeUseCase}}" readonly size="4"
+        onchange="fireEvent(event, 'activate-use-case', this.value)"/>
+    </span>
+
+    {{#if activeUseCase}}
+      <div class="active-use-cases">
+      {{#each useCases}}
+        <a class="active-use-case" href="#/use-cases/{{this.id}}/edit">{{this.id}} - {{this.name}}</a>
+      {{/each}}
+      </div>
+    {{/if}}
+  </div>
+
+  <div class="search-section">
+    <input class="mock-response-search" size="40" value="{{key}}"
+      placeholder="Type to search mock responses" />
+    <button onclick="fireEvent(event, 'search-mock-response', {key: this.parentElement.querySelector('.mock-response-search').value})">
+      <i class="fas fa-search"></i> Search
+    </button> &nbsp;
+    <a class="button for-edit" href="#/mock-responses/new">
+      <i class="fas fa-plus"></i> New
+    </a>
+  </div>
+
 </div>
+
 
 <table class="mock-responses">
   <thead>

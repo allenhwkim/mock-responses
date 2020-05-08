@@ -43,8 +43,7 @@ export class MockResponsesService {
     if (by.ids !== undefined) {
       sql = `
         SELECT * FROM mock_responses
-        WHERE id IN (${by.ids}) 
-        ORDER BY updated_at DESC, id`;
+        WHERE id IN (${by.ids})`;
     } else if (by.active !== undefined) {
       const useCase = this.db.prepare(`SELECT * FROM use_cases WHERE id = ${by.active}`).get();
       const ids = useCase.mock_responses.split(',').map(el => +el);

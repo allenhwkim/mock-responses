@@ -49,12 +49,14 @@ export class UseCasesService {
     const name = data.name.trim().replace(/'/g, '\'\'');
     const description = data.description.trim().replace(/'/g, '\'\'');
     const mockResponses = data.mock_responses.trim().replace(/'/g, '\'\'');;
+    const useCases = data.use_cases.trim().replace(/'/g, '\'\'');;
 
     const sql = `
       UPDATE use_cases SET
         name = '${name}',
         description = '${description}',
-        mock_responses = '${mockResponses}'
+        mock_responses = '${mockResponses}',
+        use_cases ='${useCases}'
       WHERE id = ${data.id};
       `;
     console.log('[mock-responses] UseCaseService', sql);

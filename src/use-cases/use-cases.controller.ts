@@ -25,8 +25,10 @@ export class UseCasesController {
     const activeUseCase = this.useCase.cookies(req, 'UCID');
     const useCases = this.useCase.findAllBy({key, ids, except})
     useCases.forEach(el => {
-      const ids = el.mock_responses.split(',').map(id => parseInt(id));
-      el.mockResponses = this.mockResp.findAllBy({ids});
+      const mockRespIds = el.mock_responses.split(',').filter(el=>el).map(id => parseInt(id));
+      el.mockResponses = this.mockResp.findAllBy({ids: mockRespIds});
+      const useCaseIds = (el.use_cases||'').split(',').filter(el=>el).map(id => parseInt(id));
+      el.useCases = this.useCase.findAllBy({ids: useCaseIds});
       el.active = el.id === +activeUseCase;
     });
 

@@ -13,7 +13,6 @@
   </a>
 </div>
 
-<span class="for-edit"> active use case: {{activeUseCase}}</span>
 {{!-- Use cases get populated below --}}
 <table class="use-cases">
   <thead>
@@ -34,18 +33,22 @@
       <p>{{this.description}}</p> 
     </td>
     <td class="mock_responses">
-    {{#each this.use_cases}}
-      <b>{{this}}</b>
-    {{/each}}
-    {{#each this.mockResponses}}
-      <li> 
-        {{this.id}}
-        | {{this.req_url}} 
-        | {{this.name}} 
-        | {{this.res_status}}
-        | {{this.res_content_type}}
-     </li>
-    {{/each}}
+      <ul><b>Use Cases</b>
+      {{#each this.useCases}}
+        <li><b>{{this.id}} - {{this.name}}</b></li>
+      {{/each}}
+      </ul>
+      <ul><b>Mock Responses</b>
+      {{#each this.mockResponses}}
+        <li> 
+          {{this.id}}
+          | {{this.req_url}} 
+          | {{this.name}} 
+          | {{this.res_status}}
+          | {{this.res_content_type}}
+        </li>
+      {{/each}}
+      </ul>
     </td>
     <td class="actions">
       <a class="button for-edit" href="#/use-cases/{{this.id}}/edit">
@@ -55,7 +58,7 @@
         Browse
       </a>
     {{#if this.active}}
-      <div>Active</div>
+      <br/><br/>Active
     {{/if}}
       <button class="for-dialog" onclick="fireEvent(event, 'select-use-case', {{this.id}})">
         Select

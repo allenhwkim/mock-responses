@@ -32,9 +32,9 @@ export class MockResponsesController {
   ) {
     const activeUseCase = this.useCase.cookies(req, 'UCID');
     const mockResponses = this.mockResp.findAllBy({key, ids, active});
-    const useCases = this.useCase.findAllBy({key: ''});
-    useCases.forEach(el => el.active = el.id === +active );
-    return { mockResponses, useCases, activeUseCase };
+    const useCaseIds = active ? this.useCase.find(active).use_cases : '';
+    const useCases  = useCaseIds ? this.useCase.findAllBy({ids: useCaseIds}) : [];
+    return { mockResponses, useCases, activeUseCase, key, active};
   }
 
   @Get(':id/edit')
