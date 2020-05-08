@@ -43,8 +43,8 @@
     {{/if}}
   </div>
 
-  <div class="search-section">
-    <input class="mock-response-search" size="40" value="{{key}}"
+  <div class="search-section for-dialog">
+    <input class="mock-response-search for-dialog" size="40" value="{{key}}"
       placeholder="Type to search mock responses" />
     <button onclick="fireEvent(event, 'search-mock-response', {key: this.parentElement.querySelector('.mock-response-search').value})">
       <i class="fas fa-search"></i> Search

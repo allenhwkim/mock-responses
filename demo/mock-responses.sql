@@ -44,7 +44,7 @@ CREATE TABLE use_cases (
 	category TEXT NOT NULL
         , use_cases TEXT);
 INSERT INTO use_cases VALUES(1,'fraud bad long desc long desc long desc long desc long desc long desc long desc','fdsaf long desc long desc long desc long desc long desc long desc long desc long desc','1000000000000001,1000000000000002,1000000000000003','FRAUD','2,3');
-INSERT INTO use_cases VALUES(2,'tssshuper','222 hups','1000000000000004,1000000000000005','OTHER','3,5');
+INSERT INTO use_cases VALUES(2,'tssshuper','222 hups','1000000000000003,1000000000000006','OTHER','3,5');
 INSERT INTO use_cases VALUES(3,'hup downgrade','users can do	wngrade their account','10','HUP',NULL);
 INSERT INTO use_cases VALUES(5,'hup all the way','hardware upgrades for all','17','HUP',NULL);
 INSERT INTO use_cases VALUES(12,'woo','owo','17','Uncategorized',NULL);
