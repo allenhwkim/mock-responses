@@ -1,0 +1,38 @@
+<div class="use-case-section">
+  <span *ngIf="authorized">
+    &nbsp;Currently Active Use Case: 
+    <span *ngIf="!activeUseCase">None</span>
+    <i class="fas fa-search"
+      (click)="openSearchUseCasesDialog()"></i>
+    <input id="currently-active-use-case"
+      [(ngModel)]="activeUseCase" readonly size="4" />
+  </span>
+
+  <div *ngIf="activeUseCase" class="active-use-cases">
+    <a *ngFor="let el of useCases" 
+      class="active-use-case" [routerLink]="['/use-cases', el.id, 'edit']">
+      {{el.id}} - {{el.name}}
+    </a>
+  </div>
+</div>
+
+<app-mock-responses-list
+  [mockResponses]="mockResponses"
+  [dialogMode]="false"
+  [collectionMode]="false"
+  (playClicked)="playClicked($event)"
+  (searchTermChanged)="serachTermChanged($event)">
+  <!-- 
+    (selectClicked)="playClicked($event)" // for collection mode
+    (unselectClicked)="playClicked($event)" // for collection mode
+   -->
+  <div class="search-section">
+    <input class="mock-response-search" size="40" 
+      (change)="searchTermChanged.emit($event)"
+      placeholder="Type to search mock responses" />
+    <a class="button" *ngIf="auth.authorized && !dialogMode"
+      [routerLink]="['/mock-responses/new']">
+      <fa-icon [icon]="faPlus"></fa-icon> New
+    </a>
+  </div>
+</app-mock-responses-list>
