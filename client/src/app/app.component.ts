@@ -10,7 +10,7 @@ export class AppComponent {
   
   constructor(private authorizedService: AuthorizedServiceService) {}
 
-  authorizedChanged($event) {
-    this.authorizedService.key = $event.target.key;
+  authorizedChanged(event) {
+    this.authorizedService.key = event.key;
   }
 }

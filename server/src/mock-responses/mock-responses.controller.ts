@@ -22,9 +22,47 @@ export class MockResponsesController {
     private mockResp: MockResponsesService
   ) {}
 
-  @Get('index')
-  @Render('mock-responses-list')
-  index(
+  // @Get('index')
+  // @Render('mock-responses-list')
+  // index(
+  //   @Query('q') key,
+  //   @Query('ids') ids,
+  //   @Query('active') active,
+  //   @Request() req
+  // ) {
+  //   const activeUseCase = this.useCase.cookies(req, 'UCID');
+  //   const mockResponses = this.mockResp.findAllBy({key, ids, active});
+  //   const useCaseIds = active ? this.useCase.find(active).use_cases : '';
+  //   const useCases  = useCaseIds ? this.useCase.findAllBy({ids: useCaseIds}) : [];
+  //   return { mockResponses, useCases, activeUseCase, key};
+  // }
+
+  // @Get(':id/edit')
+  // @Render('mock-responses-edit')
+  // edit(@Param() params) {
+  //   const mockResponse: MockResponse = this.mockResp.find(params.id);
+  //   return { mockResponse };
+  // }
+
+  // @Get('new')
+  // @Render('mock-responses-edit')
+  // new(@Query('from') from) {
+  //   const row = from ? this.mockResp.find(from) : {};
+  //   return { 
+  //     mockResponse: {
+  //       name: row.name || '',
+  //       req_url: row.req_url || '',
+  //       req_method: row.req_method || 'POST',
+  //       req_payload: row.req_payload || '', res_status: row.res_status || 200,
+  //       res_delay_sec: row.res_delay_sec || 0,
+  //       res_content_type: row.res_content_type || 'application/json',
+  //       res_body: row.res_body || ''
+  //     } 
+  //   };
+  // }
+
+  @Get()
+  findAllBy(
     @Query('q') key,
     @Query('ids') ids,
     @Query('active') active,
@@ -35,30 +73,6 @@ export class MockResponsesController {
     const useCaseIds = active ? this.useCase.find(active).use_cases : '';
     const useCases  = useCaseIds ? this.useCase.findAllBy({ids: useCaseIds}) : [];
     return { mockResponses, useCases, activeUseCase, key};
-  }
-
-  @Get(':id/edit')
-  @Render('mock-responses-edit')
-  edit(@Param() params) {
-    const mockResponse: MockResponse = this.mockResp.find(params.id);
-    return { mockResponse };
-  }
-
-  @Get('new')
-  @Render('mock-responses-edit')
-  new(@Query('from') from) {
-    const row = from ? this.mockResp.find(from) : {};
-    return { 
-      mockResponse: {
-        name: row.name || '',
-        req_url: row.req_url || '',
-        req_method: row.req_method || 'POST',
-        req_payload: row.req_payload || '', res_status: row.res_status || 200,
-        res_delay_sec: row.res_delay_sec || 0,
-        res_content_type: row.res_content_type || 'application/json',
-        res_body: row.res_body || ''
-      } 
-    };
   }
 
   @Get(':id')

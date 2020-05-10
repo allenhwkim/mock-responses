@@ -1,0 +1,13 @@
+.mock-response.form .column  { padding: 4px 0; }
+.mock-response.form .column label { display: inline-block; width: 100px; }
+.mock-response.form .column #name { width: 400px; }
+.mock-response.form .column #req_method { width: 6em; }
+.mock-response.form .column #req_url { width: 400px; }
+.mock-response.form .column #req_payload { width: 400px; }
+.mock-response.form .column #res_status { width: 6em; }
+.mock-response.form .column #res_delay_sec { width: 6em; }
+.mock-response.form .column #res_body { width: calc(100% - 100px - 12px); resize: vertical; }
+.request-group, .response-group {
+  margin: 12px 0;
+  border: 1px solid #ccc;
+}

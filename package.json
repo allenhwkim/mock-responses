@@ -1,0 +1,15 @@
+{
+  "name": "mock-responses",
+  "author": "Allen Kim <allenhwkim@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/allenhwkim/mock-responses#readme",
+  "scripts": {
+    "stop": "kill-port --port 3331,3332",
+    "start": "npm stop && npm run start:server && npm run start:client",
+    "start:server": "kill-port --port 3331 && cd server && npm start & cd ..",
+    "start:client": "kill-port --port 3332 && cd client && npm start & cd .."
+  },
+  "devDependencies": {
+    "kill-port": "^1.6.0"
+  }
+}

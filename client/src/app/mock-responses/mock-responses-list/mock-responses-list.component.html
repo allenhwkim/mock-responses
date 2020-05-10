@@ -30,11 +30,11 @@
         <fa-icon [icon]="faPlay"></fa-icon>
       </button>&nbsp;
       <a class="button icon" *ngIf="auth.authorized" 
-        [routerLink]="['mock-responses', el.id, 'edit']">
+        [routerLink]="['/mock-responses', el.id, 'edit']">
         <fa-icon [icon]="faEdit"></fa-icon>
       </a>
       <a class="button icon" *ngIf="!auth.authorized"
-        [routerLink]="['mock-responses', el.id, 'edit']">
+        [routerLink]="['/mock-responses', el.id, 'edit']">
         <fa-icon [icon]="faFile"></fa-icon>
       </a>
       <a class="button icon delete" *ngIf="collectionMode"

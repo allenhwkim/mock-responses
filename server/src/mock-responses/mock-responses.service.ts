@@ -38,13 +38,12 @@ export class MockResponsesService {
 
   findAllBy(by:any ={}) {
     let sql;
-    console.log('xxxxxxxxxxxxx', by)
 
-    if (by.ids !== undefined) {
+    if (by.ids) {
       sql = `
         SELECT * FROM mock_responses
         WHERE id IN (${by.ids})`;
-    } else if (by.active !== undefined) {
+    } else if (by.active) {
       const useCase = this.db.prepare(`SELECT * FROM use_cases WHERE id = ${by.active}`).get();
       const ids = useCase.mock_responses.split(',').map(el => +el);
       sql = `

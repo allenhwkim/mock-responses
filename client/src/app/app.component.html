@@ -6,7 +6,7 @@
         <a [routerLink]="['/use-cases']">Use Cases</a>
         <input class="passcode public" 
           title="Enter passcode here to enable edit mode"
-          (change)="authorizedChanged($event)"/>
+          (keypress)="authorizedChanged($event)"/>
       </div>
       <div class="right">
         <a href="https://github.com/allenhwkim/mock-responses"><i class="fab fa-github"></i></a>

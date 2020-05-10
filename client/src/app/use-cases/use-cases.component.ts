@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-use-cases-component',
-  templateUrl: './use-cases-component.component.html',
-  styleUrls: ['./use-cases-component.component.scss']
+  selector: 'app-use-cases',
+  templateUrl: './use-cases.component.html',
+  styleUrls: ['./use-cases.component.scss']
 })
 export class UseCasesComponent implements OnInit {
 

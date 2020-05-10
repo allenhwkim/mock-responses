@@ -28,7 +28,7 @@ td, th { padding: 10px; word-break: break-word; }
 tr:nth-child(odd) { background-color: rgb(230, 230, 230); }
 th { background: #ccc; font-weight: bold; }
 
-input, textarea { padding: 4px; border: 1px solid #ccc; background-color: whitesmoke; }
+input, textarea { font-size: 16px; padding: 4px; border: 1px solid #ccc; background-color: whitesmoke; }
 input:invalid, textarea:invalid { color: red; border: 1px solid red; }
 input[readonly] { border: none; background: #FFF; outline: none; } 
 
@@ -39,7 +39,12 @@ button {
   border-radius: 4px;
   color: #FFF;
   display: inline-block;
+  font-size: 16px;  
 }
-button {
-  line-height: 34px;
+.icon {
+  background: none;
+  border: none;
+  border-radius: none;
+  color: #2188e5;
+  padding: 0; 
 }

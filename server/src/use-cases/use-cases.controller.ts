@@ -13,69 +13,74 @@ export class UseCasesController {
     private mockResp: MockResponsesService
   ) {}
 
-  // Render the list of all use cases in sidebar
-  @Get('index')
-  @Render('use-cases-list')
-  index(
-    @Query('q') key,
-    @Query('ids') ids, 
-    @Query('except') except, 
-    @Request() req
-  ) {
-    const activeUseCase = this.useCase.cookies(req, 'UCID');
-    const useCases = this.useCase.findAllBy({key, ids, except})
-    useCases.forEach(el => {
-      const mockRespIds = el.mock_responses.split(',').filter(el=>el).map(id => parseInt(id));
-      el.mockResponses = this.mockResp.findAllBy({ids: mockRespIds});
-      const useCaseIds = (el.use_cases||'').split(',').filter(el=>el).map(id => parseInt(id));
-      el.useCases = this.useCase.findAllBy({ids: useCaseIds});
-      el.active = el.id === +activeUseCase;
-    });
+  // // Render the list of all use cases in sidebar
+  // @Get('index')
+  // @Render('use-cases-list')
+  // index(
+  //   @Query('q') key,
+  //   @Query('ids') ids, 
+  //   @Query('except') except, 
+  //   @Request() req
+  // ) {
+  //   const activeUseCase = this.useCase.cookies(req, 'UCID');
+  //   const useCases = this.useCase.findAllBy({key, ids, except})
+  //   useCases.forEach(el => {
+  //     const mockRespIds = el.mock_responses.split(',').filter(el=>el).map(id => parseInt(id));
+  //     el.mockResponses = this.mockResp.findAllBy({ids: mockRespIds});
+  //     const useCaseIds = (el.use_cases||'').split(',').filter(el=>el).map(id => parseInt(id));
+  //     el.useCases = this.useCase.findAllBy({ids: useCaseIds});
+  //     el.active = el.id === +activeUseCase;
+  //   });
 
-    return { useCases, activeUseCase };
-  }
+  //   return { useCases, activeUseCase };
+  // }
 
-  // Render the Edit Page
-  @Get(':id/edit')
-  @Render('use-cases-edit')
-  edit(@Param() params, @Response() res) {
-    const useCase: UseCase = this.useCase.find(params.id);
-    const ids = useCase.mock_responses.split(',').map(id => parseInt(id));
-    const mockResponses = this.mockResp.findAllBy({ids});
-    return { useCase, mockResponses };
-  }
+  // // Render the Edit Page
+  // @Get(':id/edit')
+  // @Render('use-cases-edit')
+  // edit(@Param() params, @Response() res) {
+  //   const useCase: UseCase = this.useCase.find(params.id);
+  //   const ids = useCase.mock_responses.split(',').map(id => parseInt(id));
+  //   const mockResponses = this.mockResp.findAllBy({ids});
+  //   return { useCase, mockResponses };
+  // }
 
 
-  // Render the New Page or Duplicate Page based on data provided.
-  @Get('new')
-  @Render('use-cases-edit')
-  new(@Query('from') from) {
-    var useCase = {
-      id: undefined,
-      name: '',
-      description: '',
-      mock_responses: ''
-    };
-    var mockResponses = [];
+  // // Render the New Page or Duplicate Page based on data provided.
+  // @Get('new')
+  // @Render('use-cases-edit')
+  // new(@Query('from') from) {
+  //   var useCase = {
+  //     id: undefined,
+  //     name: '',
+  //     description: '',
+  //     mock_responses: ''
+  //   };
+  //   var mockResponses = [];
   
-    // for duplicating an existing use case
-    if (from) {
-      const row = this.useCase.find(from);
-      const ids = row.mock_responses.split(',').map(id => parseInt(id));
-      mockResponses = this.mockResp.findAllBy({ids});
+  //   // for duplicating an existing use case
+  //   if (from) {
+  //     const row = this.useCase.find(from);
+  //     const ids = row.mock_responses.split(',').map(id => parseInt(id));
+  //     mockResponses = this.mockResp.findAllBy({ids});
 
-      useCase.name = row.name;
-      useCase.description = row.description;
-      useCase.mock_responses = row.mock_responses;
-      return { useCase, mockResponses }
-    } else {
-      return { useCase, mockResponses }
-    }
-  }
+  //     useCase.name = row.name;
+  //     useCase.description = row.description;
+  //     useCase.mock_responses = row.mock_responses;
+  //     return { useCase, mockResponses }
+  //   } else {
+  //     return { useCase, mockResponses }
+  //   }
+  // }
 
   @Get(':id')
-  findOne(@Param() params): string {
-    return this.useCase.find(params.id);
+  findOne(@Param() params) {
+    const useCase: UseCase = this.useCase.find(params.id);
+    const mockResponseIds = useCase.mock_responses.split(',').map(id => parseInt(id));
+    const mockResponses = this.mockResp.findAllBy({ids: mockResponseIds});
+    const useCaseIds = useCase.use_cases.split(',').map(id => parseInt(id));
+    const useCases = this.useCase.findAllBy({ids: useCaseIds});
+    return {useCase, mockResponses, useCases};
   }
 
   @Put(':id/activate')
