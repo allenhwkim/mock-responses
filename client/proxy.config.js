@@ -4,8 +4,7 @@ module.exports = [
       '/mock-responses',
       '/use-cases',
       '/api',
-      '/foo',
-      '/bar',
+      '/cms'
     ],
     target: 'http://localhost:3331',
     secure: false,

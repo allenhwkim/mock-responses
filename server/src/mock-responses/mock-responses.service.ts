@@ -91,32 +91,28 @@ export class MockResponsesService {
       this.db.exec(sql) && BetterSqlite3.backupToSql();
     } catch (err) {
       console.log("[mock-responses] MockResponseService failed to insert query\n", err);
-      
     }
     
   }
 
   update(data) {
-    const reqMethod = data.req_method ? `'${data.req_method}'` : 'NULL';
-    const reqName = data.name ? `'${data.name}'` : 'NULL';
-    const resDelaySec = data.res_delay_sec ? data.res_delay_sec : 'NULL';
-    const resBody = data.res_body.replace(/'/g, '\'\'');
+    const columns = [];
+    data.req_url && columns.push(`req_url = '${data.req_url}'`);
+    data.req_name && columns.push(`req_name = '${data.req_name}'`);
+    data.req_method && columns.push(`req_method = '${data.req_method}'`);
+    data.req_payload && columns.push(`req_payload = '${data.req_palyload}'`);
+    data.res_status && columns.push(`res_status = ${data.res_status}`);
+    data.res_delay_sec && columns.push(`res_delay_sec = ${data.res_delay_sec}`);
+    data.res_content_type && columns.push(`res_content_type = '${data.res_content_type}'`);
+    data.res_body && columns.push(`res_body = '${data.res_body.replace(/'/g, '\'\'')}'`);
 
     const sql = `
       UPDATE mock_responses SET
-        name = ${reqName},
-        req_url = '${data.req_url}',
-        req_method = ${reqMethod},
-        req_payload = '${data.req_payload}',
-        res_status = ${data.res_status},
-        res_delay_sec = ${resDelaySec},
-        res_content_type = '${data.res_content_type}',
-        res_body =  '${resBody}',
+        ${columns.join(',\n')},
         updated_at = ${new Date().getTime()},
         updated_by = '${username.sync()}'
       WHERE id = ${data.id};
       `;
-    console.log('[mock-responses] MockResponseService', sql);
 
     if (this.db.exec(sql)) {
       BetterSqlite3.backupToSql();

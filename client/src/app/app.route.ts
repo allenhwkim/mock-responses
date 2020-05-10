@@ -6,6 +6,7 @@ import { MockResponseEditComponent } from './mock-responses/mock-response-edit/m
 
 const routes: Routes = [
   { path: 'mock-responses/:id/edit', component: MockResponseEditComponent },
+  { path: 'mock-responses/new', component: MockResponseEditComponent },
   { path: 'mock-responses', component: MockResponsesComponent },
   { path: 'use-cases', component: UseCasesComponent },
   { path: '', component: MockResponsesComponent },

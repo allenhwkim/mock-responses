@@ -21,10 +21,10 @@ export class MockResponsesService {
   }
 
   createMockResponse(mockResponse) {
-    return this.http.put(`/mock-responses`, mockResponse);
+    return this.http.post(`/mock-responses`, mockResponse);
   }
 
   deleteMockResponse(id) {
-    return this.http.delete(`/mock-responses` + id);
+    return this.http.delete(`/mock-responses/` + id);
   }
 }
