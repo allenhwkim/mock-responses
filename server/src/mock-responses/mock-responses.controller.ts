@@ -34,7 +34,7 @@ export class MockResponsesController {
     const mockResponses = this.mockResp.findAllBy({key, ids, active});
     const useCaseIds = active ? this.useCase.find(active).use_cases : '';
     const useCases  = useCaseIds ? this.useCase.findAllBy({ids: useCaseIds}) : [];
-    return { mockResponses, useCases, activeUseCase, key, active};
+    return { mockResponses, useCases, activeUseCase, key};
   }
 
   @Get(':id/edit')

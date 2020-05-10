@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthorizedServiceService } from './authorized.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'client';
+  
+  constructor(private authorizedService: AuthorizedServiceService) {}
+
+  authorizedChanged($event) {
+    this.authorizedService.key = $event.target.key;
+  }
 }
