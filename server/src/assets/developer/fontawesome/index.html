@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Mock Responses</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="normalize.css" />
+    <link rel="stylesheet" href="fontawesome/css/all.css" />
+    <script src="html-custom-elements.umd.js"></script>
+    <script src="page-controller.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="contents">
+        <div class="top-header">
+          <div class="left">
+            <a href="#/mock-responses/index?q=">Mock Responses</a> |
+            <a href="#/use-cases/index?q=">Use Cases</a>
+            <input class="passcode public" title="Enter passcode here to enable edit mode"
+              onkeyup="fireEvent(event, 'enable-edit-mode', this.value)"/>
+          </div>
+          <div class="right">
+            <a href="https://github.com/allenhwkim/mock-responses"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+        <div class="main-route">
+          <hce-routes class="hce-routes" src="/mock-responses/index">
+            <div route-match="/use-cases/index(.*)" import="/use-cases/index{{1}}"> </div>
+            <div route-match="/use-cases/new(.*)" import="/use-cases/new{{1}}"> </div>
+            <div route-match="/use-cases/(\d+)/edit" import="/use-cases/{{1}}/edit"></div>
+
+            <div route-match="/mock-responses/new(.*)" import="/mock-responses/new{{1}}"></div>
+            <div route-match="/mock-responses/(\d+)/edit" import="/mock-responses/{{1}}/edit"></div>
+            <div route-match="/mock-responses/index(.*)" import="/mock-responses/index{{1}}"></div>
+          </hce-routes>
+        </div>
+      </div>
+    </div>
+    <hce-dialog id="dialog"></hce-dialog>
+    <hce-snackbar></hce-snackbar>
+  </body>
+</html>

@@ -1,0 +1,72 @@
+<style>
+  .use-cases .id { width: 60px; }
+  .use-cases .actions { width: 140px; align: right; }
+</style>
+
+<div class="for-edit for-dialog">
+  <input class="use-cases-search" size="40" placeholder="Type to search use cases"  />
+  <button onclick="fireEvent(event, 'search-use-case', {key: this.parentElement.querySelector('.use-cases-search').value})">
+    <i class="fas fa-search"></i> Search
+  </button> &nbsp;
+  <a class="button for-edit" href="#/use-cases/new">
+    <i class="fas fa-plus"></i> New
+  </a>
+</div>
+
+{{!-- Use cases get populated below --}}
+<table class="use-cases">
+  <thead>
+    <tr>
+      <th class="id">Id</th>
+      <th class="name">Name/Description</th>
+      <th class="mock_responses">Use Cases/Mock Responses</th>
+      <th class="actions">Actions</th>
+    </tr>
+  </thead>
+{{#each useCases}}
+  <tr class="use-case">
+    <td class="id">
+      <div>{{this.id}}</div>
+    </td>
+    <td class="name">
+      <b>{{this.name}}</b>
+      <p>{{this.description}}</p> 
+    </td>
+    <td class="mock_responses">
+      <ul><b>Use Cases</b>
+      {{#each this.useCases}}
+        <li><b>{{this.id}} - {{this.name}}</b></li>
+      {{/each}}
+      </ul>
+      <ul><b>Mock Responses</b>
+      {{#each this.mockResponses}}
+        <li> 
+          {{this.id}}
+          | {{this.req_url}} 
+          | {{this.name}} 
+          | {{this.res_status}}
+          | {{this.res_content_type}}
+        </li>
+      {{/each}}
+      </ul>
+    </td>
+    <td class="actions">
+      <a class="button for-edit" href="#/use-cases/{{this.id}}/edit">
+        Edit
+      </a>
+      <a class="button for-not-authorized" href="#/use-cases/{{this.id}}/edit">
+        Browse
+      </a>
+    {{#if this.active}}
+      <br/><br/>Active
+    {{/if}}
+      <button class="for-dialog" onclick="fireEvent(event, 'select-use-case', {{this.id}})">
+        Select
+      </button>
+      <a class="button icon for-list delete" onclick="fireEvent(event, 'unselect-use-case', {{this.id}})">
+        <i class="fas fa-trash-alt"></i>
+      </a>
+    </td>
+  </tr>
+{{/each}}
+  </table>

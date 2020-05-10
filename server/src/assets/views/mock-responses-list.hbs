@@ -1,0 +1,106 @@
+<style>
+.mock-responses .id { width: 100px; }
+.mock-responses .id-name { width: 200px; }
+.mock-responses .request { width: 25%; }
+.mock-responses .response { width: 25%; }
+.mock-responses .actions { width: 60px; }
+.mock-responses .group .mock-response:not(:first-child) .expand.icon,
+.mock-responses .group.count-1 .mock-response .expand.icon,
+.mock-responses .group:not(.expanded) .mock-response:not(:first-child) {
+  display: none;
+}
+.mock-responses .group .mock-response:first-child {
+  background: #eee; border: 1px outset #eee;
+}
+.active-use-cases .active-use-case {
+  background: #DDD;
+  color: #999;
+  padding: 4px 8px; 
+}
+.use-case-section {
+  padding: 12px 0;
+}
+</style>
+
+<div class="for-edit for-dialog">
+  <div class="use-case-section">
+    <span class="for-edit">
+      &nbsp;Currently Active Use Case: 
+      {{#unless activeUseCase}}
+        None
+      {{/unless}}
+      <i class="fas fa-search for-list" onclick="openSearchUseCasesDialog()"></i>
+      <input id="currently-active-use-case" value="{{activeUseCase}}" readonly size="4"
+        onchange="fireEvent(event, 'activate-use-case', this.value)"/>
+    </span>
+
+    {{#if activeUseCase}}
+      <div class="active-use-cases">
+      {{#each useCases}}
+        <a class="active-use-case" href="#/use-cases/{{this.id}}/edit">{{this.id}} - {{this.name}}</a>
+      {{/each}}
+      </div>
+    {{/if}}
+  </div>
+
+  <div class="search-section for-dialog">
+    <input class="mock-response-search for-dialog" size="40" value="{{key}}"
+      placeholder="Type to search mock responses" />
+    <button onclick="fireEvent(event, 'search-mock-response', {key: this.parentElement.querySelector('.mock-response-search').value})">
+      <i class="fas fa-search"></i> Search
+    </button> &nbsp;
+    <a class="button for-edit" href="#/mock-responses/new">
+      <i class="fas fa-plus"></i> New
+    </a>
+  </div>
+
+</div>
+
+
+<table class="mock-responses">
+  <thead>
+    <tr class="header">
+      <th class="id">ID</th>
+      <th class="id-name">Name</th>
+      <th class="request">Request</th>
+      <th class="response">Response</th>
+      <th class="actions"></th>
+    </tr>
+  </thead>
+{{#each mockResponses}}
+  <tr class="mock-response">
+    <td class="id">
+      {{this.id}}
+    </td>
+    <td class="id-name">{{this.name}}</td>
+    <td class="request">
+      <div>Method: {{this.req_method}}</div>
+      <div>Url: {{this.req_url}}</div>
+      <div>Payload: {{this.req_payload}}</div>
+    </td>
+    <td class="response">
+      <div>Status: {{this.res_status}}</div>
+      <div>Delay: {{this.res_delay_sec}}</div>
+      <div>Type: {{this.res_content_type}}</div>
+    </td>
+    <td class="actions">
+      <button class="icon" onclick="fireEvent(event, 'play-mock-response', {{this.id}})">
+        <i class="fas fa-play" title="run it"></i>
+      </button>&nbsp;
+      <a class="button icon for-edit" href="#/mock-responses/{{this.id}}/edit">
+        <i class="fas fa-edit" title="edit it"></i>
+      </a>
+      <a class="button icon for-not-authorized" href="#/mock-responses/{{this.id}}/edit">
+        <i class="fas fa-file"></i>
+      </a>
+      <a class="button icon for-list delete"
+        onclick="fireEvent(event, 'unselect-mock-response', {{this.id}})">
+        <i class="fas fa-trash-alt"></i>
+      </a>
+      <button class="for-dialog" onclick="fireEvent(event, 'select-mock-response', {{this.id}})">
+        Select
+      </button>&nbsp;
+    </td>
+  </tr>
+{{/each}}
+</table>
