@@ -23,7 +23,7 @@
   (searchTermChanged)="searchTermChanged($event)">
   <div class="search-section">
     <input class="mock-response-search" size="40" 
-      (change)="searchTermChanged($event)"
+      (keyup)="searchTermChanged($event)"
       placeholder="Type to search mock responses" />
     <a class="button" *ngIf="auth.authorized"
       [routerLink]="['/mock-responses/new']">
