@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
-import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 
 import { MockResponsesService } from './mock-responses.service';
 import { AuthorizedServiceService } from '../authorized.service';
-import { MockResponseSelectDialogComponent } from '../dialogs/mock-response-select-dialog.component';
-import { UseCaseSelectDialogComponent } from '../dialogs/use-case-select-dialog.component copy';
+import { UseCaseDialogComponent } from '../dialogs/use-case-dialog.component';
+import { UseCasesService } from '../use-cases/use-cases.service';
 
 @Component({
   selector: 'app-mock-responses',
@@ -22,19 +20,18 @@ export class MockResponsesComponent implements OnInit {
 
   constructor(
     public mockResponseService: MockResponsesService,
-    private snackBar: MatSnackBar,
+    private useCaseService: UseCasesService,
     public auth: AuthorizedServiceService,
-    private http: HttpClient,
     private dialog: MatDialog
   ) {}
 
   ngOnInit() {
-    this.searchTermChanged('');
+    this.updateMockResponses({key:''});
   }
 
-  searchTermChanged(event) {
-    const key = (event && event.target.value) || '';
-    this.mockResponseService.getMockResponses({key})
+  updateMockResponses(data) {
+    data  = data.target ? {key: data.target.value} : data;
+    this.mockResponseService.getMockResponses(data)
       .subscribe( (resp:any) => {
         this.mockResponses = resp.mockResponses;
         this.activeUseCase = resp.activeUseCase;
@@ -42,16 +39,23 @@ export class MockResponsesComponent implements OnInit {
       })
   }
 
-  openSearchUseCasesDialog() {
+  openUseCasesDialog() {
     const dialogRef = this.dialog.open(
-      UseCaseSelectDialogComponent, 
-      {width: '90%', height: '90%'}
-    );
-    dialogRef.afterClosed().subscribe(result => {});
+      UseCaseDialogComponent, { 
+        width: '90%', height: '90%',
+        data: { collectionMode: false, activate: true, activeUseCase: +this.activeUseCase } });
+    // acrivate a use case
+    dialogRef.componentInstance.selectClicked.subscribe(event => {
+      this.useCaseService.activateUseCase(event.id).subscribe(resp => {
+        this.updateMockResponses({useCase: event.id});
+        this.dialog.closeAll();
+      });
+    })
   }
 
-  activateUseCaseClicked(event) {
-    console.log('activateUseCase', event);
+  deleteClicked(event) {
+    this.mockResponseService.deleteMockResponse(event.id)
+      .subscribe( (resp: any) => this.updateMockResponses({key:''}) );
   }
 
 }

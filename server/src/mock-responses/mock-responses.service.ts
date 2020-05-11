@@ -2,6 +2,8 @@ import * as username from 'username';
 import { Injectable } from '@nestjs/common';
 import { MockResponse } from '../common/interfaces/mock-response.interface';
 import { BetterSqlite3 } from '../common/better-sqlite3';
+import { UseCaseToUseCasesService } from 'src/use-cases/use-case-to-use-cases.service';
+import { UseCaseToMockResponsesService } from 'src/use-cases/use-case-to-mock-resonses.service';
 
 function getJSON(data) {
   try {
@@ -31,6 +33,11 @@ function getWhereFromBy(by) {
 export class MockResponsesService {
   db = BetterSqlite3.db;
 
+  constructor(
+    private uc2uc: UseCaseToUseCasesService,
+    private uc2mr: UseCaseToMockResponsesService
+  ) {}
+
   find(id: number) {
     const row = this.db.prepare(`SELECT * FROM mock_responses WHERE id = ${id}`);
     return row.get();
@@ -43,46 +50,47 @@ export class MockResponsesService {
       sql = `
         SELECT * FROM mock_responses
         WHERE id IN (${by.ids})`;
-    } else if (by.active) {
-      const useCase = this.db.prepare(`SELECT * FROM use_cases WHERE id = ${by.active}`).get();
-      const ids = useCase.mock_responses.split(',').map(el => +el);
-      sql = `
-        SELECT * FROM mock_responses
-        WHERE id IN (${ids}) 
-        ORDER BY updated_at DESC, id`;
     } else {
       const where = getWhereFromBy(by) || '1 = 1';
       sql = `
         SELECT * FROM mock_responses 
         WHERE ${ where }
-        ORDER BY req_url, updated_at DESC`;
+        ORDER BY updated_at DESC`;
     }
     
     console.log('[mock-responses] MockResponseService.findAllBy', sql);
     return this.db.prepare(sql).all();
   }
 
+  findAllByUseCase(useCaseId) {
+    const mockRespIds = this.uc2mr.findAll(useCaseId).map(el => el.mock_response_id).join(',')
+
+    return this.findAllBy({ids: (mockRespIds || '0') });
+  }
+
   create(data: MockResponse) {
     const createdAt = new Date().getTime();
     const reqMethod = data.req_method ? `'${data.req_method}'` : 'NULL';
     const reqName = data.name ? `'${data.name}'` : 'NULL';
-    const resDelaySec = data.res_delay_sec ? data.res_delay_sec : 'NULL';
+    const reqPayload = data.req_payload || '';
+    const resDelaySec = data.res_delay_sec ? data.res_delay_sec : 0;
+    const resStatus = data.res_status || 200;
     const resBody = getJSON(data.res_body);
+    const resContentType = data.res_content_type || 'application/json';
     const UUID = require('uuid-int');
-
     const sql = `
-      INSERT INTO mock_responses(id, name,
-        req_url, req_method, req_payload,
-        res_status, res_delay_sec,
-        res_content_type, res_body,
-        created_at, created_by, updated_at, updated_by
-        ) VALUES
-        (
-         ${UUID(0).uuid()}, ${reqName},
-        '${data.req_url}', ${reqMethod}, '${data.req_payload}',
-         ${data.res_status}, ${resDelaySec},
-        '${data.res_content_type}', '${resBody}',
-         ${createdAt}, '${username.sync()}', ${createdAt}, '${username.sync()}'
+      INSERT INTO mock_responses(
+          id, name,
+          req_url, req_method, req_payload,
+          res_status, res_delay_sec,
+          res_content_type, res_body,
+          created_at, created_by, updated_at, updated_by
+        ) VALUES (
+          ${UUID(0).uuid()}, ${reqName},
+          '${data.req_url}', ${reqMethod}, '${reqPayload}',
+          ${resStatus}, ${resDelaySec},
+          '${resContentType}', '${resBody}',
+          ${createdAt}, '${username.sync()}', ${createdAt}, '${username.sync()}'
         )
       `;
 
@@ -124,11 +132,13 @@ export class MockResponsesService {
   delete(id) {
     const sql = `DELETE FROM mock_responses where id=${id}`;
     console.log('[mock-responses] MockResponseService ', sql);
-    if (this.db.exec(sql)) {
-      BetterSqlite3.backupToSql();
-    } else {
-      throw '[mock-responses] error delete mock_responses'
-    }
+    this.db.exec(sql);
+
+    const sql2 = `DELETE FROM use_case_to_mock_responses where mock_response_id=${id}`;
+    console.log('[mock-responses] MockResponseService ', sql2);
+    this.db.exec(sql2);
+
+    BetterSqlite3.backupToSql();
   }
 
 }

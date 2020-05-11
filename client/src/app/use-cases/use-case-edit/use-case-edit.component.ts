@@ -7,8 +7,8 @@ import { MockResponse } from 'src/app/models/mock-response.interface';
 import { UseCase } from 'src/app/models/use-case.interface';
 import { MockResponsesService } from 'src/app/mock-responses/mock-responses.service';
 import { UseCasesService } from '../use-cases.service';
-import { UseCaseSelectDialogComponent } from 'src/app/dialogs/use-case-select-dialog.component copy';
-import { MockResponseSelectDialogComponent } from 'src/app/dialogs/mock-response-select-dialog.component';
+import { UseCaseDialogComponent } from 'src/app/dialogs/use-case-dialog.component';
+import { MockResponseDialogComponent } from 'src/app/dialogs/mock-response-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
@@ -19,11 +19,13 @@ import { MatDialog } from '@angular/material/dialog';
 export class UseCaseEditComponent implements OnInit {
   collectionMode: boolean;
   orgUseCase: UseCase = {};
-  useCases: any;
-  mockResponses: any;
+ 
   useCase: UseCase = {};
   faSearch = faSearch; faBan = faBan; faEdit = faEdit;
   faPlusCircle = faPlusCircle; faTrashAlt = faTrashAlt;
+
+  useCases: any;
+  mockResponses: any;
 
   constructor(
     public auth: AuthorizedServiceService,
@@ -42,6 +44,8 @@ export class UseCaseEditComponent implements OnInit {
         .subscribe((resp:any) => {
           this.orgUseCase = resp;
           this.useCase = {...this.orgUseCase};
+          this.useCases = [...resp.useCases];
+          this.mockResponses = [...resp.mockResponses];
         });
     } else if (from) {
       this.useCaseService.getUseCase(from)
@@ -49,6 +53,8 @@ export class UseCaseEditComponent implements OnInit {
           this.orgUseCase = {};
           this.useCase = resp;
           this.useCase.id = undefined;
+          this.useCases = [...resp.useCases];
+          this.mockResponses = [...resp.mockResponses];
         });
     }
   }
@@ -75,7 +81,7 @@ export class UseCaseEditComponent implements OnInit {
       .subscribe(resp => this.router.navigate(['/use-cases']) );
   }
 
-  deleteUseCase() {
+  deleteUseCase(event?) {
     this.useCaseService.deleteUseCase(this.useCase.id)
       .subscribe(resp => this.router.navigate(['/use-cases']) );
   }
@@ -92,30 +98,35 @@ export class UseCaseEditComponent implements OnInit {
     console.log('selectUseCase()...'); 
   }
 
-  unselectUseCase(event) {
-    console.log('unselectUseCase()...'); 
-  }
-
   selectMockResponse(event) {
     console.log('selectMockResponse()...'); 
   }
 
-  unselectMockResponse(event) {
-    console.log('unselectMockResponse()...'); 
+  deleteMockResponse(event) {
+    console.log('deleteMockResponse()...'); 
   }
-
-  openSearchUseCasesDialog() {
+  
+  openUseCasesDialog() {
     const dialogRef = this.dialog.open(
-      UseCaseSelectDialogComponent, 
-      {width: '90%', height: '90%'}
+      UseCaseDialogComponent,
+      {width: '90%', height: '90%', data: {collectionMode: true}}
     );
-    dialogRef.afterClosed().subscribe(result => {});
+    // collect use cases
+    dialogRef.componentInstance.selectClicked.subscribe(event => {
+      const useCaseIds = this.useCases.map(el => el.id).concat(event.id).join(',');
+      this.useCaseService.getUseCases({ids: useCaseIds})
+        .subscribe( (resp: any) => {
+          this.useCases = resp.useCases;
+          // this.activeUseCase = resp.activeUseCase;
+          this.dialog.closeAll();
+        });
+      });
   }
 
   openSearchMockResponsesDialog() {
     const dialogRef = this.dialog.open(
-      MockResponseSelectDialogComponent, 
-      {width: '90%', height: '90%'}
+      MockResponseDialogComponent, 
+      {width: '90%', height: '90%', data: {collectionMode: true}}
     );
     dialogRef.afterClosed().subscribe(result => {});
   }

@@ -55,7 +55,7 @@
     <div class="res_delay_sec column">
       <label for="res_delay_sec">Delay Time</label>
       <input [ngClass]="{'for-edit': auth.authorized}"
-        id="res_delay_sec" required pattern="\d{1}"
+        id="res_delay_sec" pattern="\d{1}"
         [(ngModel)]="mockResponse.res_delay_sec" />
     </div>
 

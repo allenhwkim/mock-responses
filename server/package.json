@@ -24,7 +24,7 @@
     "build": "rimraf dist && tsc -p tsconfig.build.json && npm run build:copy-assets",
     "build:copy-assets": "cp -R src/assets demo dist",
     "format": "prettier --write \"src/**/*.ts\"",
-    "start": "nodemon --watch src --ext js,ts --exec \"ts-node -r tsconfig-paths/register src/main.ts --port 3331\"",
+    "start": "kill-port 3331 && nodemon --watch src --ext js,ts --exec \"ts-node -r tsconfig-paths/register src/main.ts\" --port 3331",
     "start:dev": "tsc-watch -p tsconfig.build.json --onSuccess \"node dist/main.js\"",
     "start:debug": "tsc-watch -p tsconfig.build.json --onSuccess \"node --inspect-brk dist/main.js\"",
     "start:prod": "node dist/main.js",

@@ -22,13 +22,6 @@ export class UseCasesController {
   ) {
     const activeUseCase = this.useCase.cookies(req, 'UCID');
     const useCases = this.useCase.findAllBy({key, ids, except})
-    useCases.forEach(el => {
-      const mockRespIds = el.mock_responses.split(',').filter(el=>el).map(id => parseInt(id));
-      el.mockResponses = this.mockResp.findAllBy({ids: mockRespIds});
-      const useCaseIds = (el.use_cases||'').split(',').filter(el=>el).map(id => parseInt(id));
-      el.useCases = this.useCase.findAllBy({ids: useCaseIds});
-      el.active = el.id === +activeUseCase;
-    });
 
     return { useCases, activeUseCase };
   }
@@ -36,11 +29,7 @@ export class UseCasesController {
   @Get(':id')
   findOne(@Param() params) {
     const useCase: UseCase = this.useCase.find(params.id);
-    const mockResponseIds = useCase.mock_responses.split(',').map(id => parseInt(id));
-    const mockResponses = this.mockResp.findAllBy({ids: mockResponseIds});
-    const useCaseIds = useCase.use_cases.split(',').map(id => parseInt(id));
-    const useCases = this.useCase.findAllBy({ids: useCaseIds});
-    return {useCase, mockResponses, useCases};
+    return useCase;
   }
 
   @Put(':id/activate')

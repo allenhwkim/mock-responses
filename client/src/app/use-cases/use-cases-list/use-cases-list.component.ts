@@ -12,8 +12,10 @@ export class UseCasesListComponent implements OnInit {
   @Input() useCases: any;
   @Input() collectionMode: boolean;
   @Input() dialogMode: boolean;
+  @Input() activeUseCase: any;
+  @Input() activate: boolean;
 
-  @Output() unselectClicked = new EventEmitter();
+  @Output() deleteClicked = new EventEmitter();
   @Output() selectClicked = new EventEmitter();
 
   faPlay = faPlay; faEdit = faEdit; faFile = faFile; faTrashAlt = faTrashAlt;
@@ -24,6 +26,7 @@ export class UseCasesListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    console.log('...........', this.useCases);
   }
   
 }

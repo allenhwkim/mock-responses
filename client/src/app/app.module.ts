@@ -13,8 +13,8 @@ import { MockResponsesComponent } from './mock-responses/mock-responses.componen
 import { UseCasesComponent } from './use-cases/use-cases.component';
 import { MockResponseEditComponent } from './mock-responses/mock-response-edit/mock-response-edit.component';
 import { MockResponsesListComponent } from './mock-responses/mock-responses-list/mock-responses-list.component';
-import { MockResponseSelectDialogComponent } from './dialogs/mock-response-select-dialog.component';
-import { UseCaseSelectDialogComponent } from './dialogs/use-case-select-dialog.component copy';
+import { MockResponseDialogComponent } from './dialogs/mock-response-dialog.component';
+import { UseCaseDialogComponent } from './dialogs/use-case-dialog.component';
 import { UseCaseEditComponent } from './use-cases/use-case-edit/use-case-edit.component';
 import { UseCasesListComponent } from './use-cases/use-cases-list/use-cases-list.component';
 
@@ -24,11 +24,11 @@ import { UseCasesListComponent } from './use-cases/use-cases-list/use-cases-list
     MockResponsesComponent,
     MockResponseEditComponent,
     MockResponsesListComponent,
-    MockResponseSelectDialogComponent,
+    MockResponseDialogComponent,
     UseCasesComponent,
     UseCaseEditComponent,
     UseCasesListComponent,
-    UseCaseSelectDialogComponent
+    UseCaseDialogComponent
   ],
   imports: [
     BrowserModule,

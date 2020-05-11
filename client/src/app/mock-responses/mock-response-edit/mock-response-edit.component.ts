@@ -49,7 +49,7 @@ export class MockResponseEditComponent implements OnInit {
   beautifyJSON() {
     const jsObj = JSON.parse(this.mockResponse.res_body);
     this.mockResponse.res_body = JSON.stringify(jsObj, null, '  ');
-    this.autoGrow();
+    setTimeout( _ => this.autoGrow());
   }
 
   getUpdatedMockResponse() {

@@ -4,45 +4,65 @@ import { Injectable } from '@nestjs/common';
 import { UseCase, MockResponse } from '../common/interfaces';
 import { BetterSqlite3 } from '../common/better-sqlite3';
 import { MockResponsesService } from '../mock-responses/mock-responses.service';
+import { UseCaseToUseCasesService } from './use-case-to-use-cases.service';
+import { UseCaseToMockResponsesService } from './use-case-to-mock-resonses.service';
 
 @Injectable()
 export class UseCasesService {
   db = BetterSqlite3.db;
 
-  constructor(private mockResp: MockResponsesService) {}
+  constructor(
+    private mockResp: MockResponsesService,
+    private uc2ucs: UseCaseToUseCasesService,
+    private uc2mrs: UseCaseToMockResponsesService
+  ) {}
 
   find(id: number) {
     const row = this.db.prepare(`SELECT * FROM use_cases WHERE id = ${id}`);
-    return row.get();
+    const useCase = row.get();
+    useCase.useCases = this.uc2ucs.findAll(id);
+    useCase.mockResponses = this.uc2mrs.findAll(id);
+    return useCase;
   }
 
   findAllBy(by) {
     const sql = 
-      by.key !== undefined ? 
+      by.key ? 
         `SELECT * FROM use_cases WHERE name LIKE '%${by.key}%' OR description like '%${by.key}%'`: 
-      by.ids !== undefined ? 
+      by.ids ? 
         `SELECT * FROM use_cases WHERE id IN (${by.ids})`:
-      by.except !== undefined ? 
+      by.except ? 
         `SELECT * FROM use_cases WHERE id NOT IN (${by.except})`:
         `SELECT * FROM use_cases`;
     console.log('[mock-responses] UseCaseService.findAllBy', sql);
 
-    return this.db.prepare(sql).all();
+    const useCases = this.db.prepare(sql).all();
+    useCases.forEach(useCase => {
+      useCase.useCases = this.uc2ucs.findAll(useCase.id);
+      useCase.mockResponses = this.uc2mrs.findAll(useCase.id);
+    });
+
+    return useCases;
   }
 
   create(data: UseCase) {
     const name = data.name.trim().replace(/'/g, '\'\'');
     const description = data.description.trim().replace(/'/g, '\'\'');
-    const mockResponses = data.mock_responses.trim().replace(/'/g, '\'\'');;
     const UUID = require('uuid-int');
+    const useCaseId = UUID(0).uuid();
 
     const sql = `
       INSERT INTO use_cases 
         (id, name, description, mock_responses)
-        VALUES (${UUID(0).uuid()}, '${name}', '${description}', '${mockResponses}');
+        VALUES (${useCaseId}, '${name}', '${description}');
       `;
     console.log('[mock-responses] UseCaseService use_cases create', sql);
-    return this.db.exec(sql) && BetterSqlite3.backupToSql();
+    this.db.exec(sql);
+
+    this.uc2ucs.updateAllChildren(useCaseId, data.useCaseIds);
+    this.uc2mrs.updateAllChildren(useCaseId, data.mockResponseIds);
+
+    return BetterSqlite3.backupToSql();
   }
 
   update(data: UseCase) {
@@ -51,10 +71,6 @@ export class UseCasesService {
       columns.push(`name = '${data.name.trim().replace(/'/g, '\'\'')}'`);
     data.description &&
       columns.push(`description = '${data.description.trim().replace(/'/g, '\'\'')}'`);
-    data.mock_responses &&
-      columns.push(`mock_responses = '${data.mock_responses.trim()}`);
-    data.use_cases &&
-      columns.push(`mock_responses = '${data.use_cases.trim()}`);
 
     const sql = `
       UPDATE use_cases SET
@@ -62,16 +78,28 @@ export class UseCasesService {
       WHERE id = ${data.id};
       `;
     console.log('[mock-responses] UseCaseService', sql);
-    const result = this.db.exec(sql);
-    return this.db.exec(sql) && BetterSqlite3.backupToSql();
+    this.db.exec(sql);
+
+    this.uc2ucs.updateAllChildren(data.id, data.useCaseIds);
+    this.uc2mrs.updateAllChildren(data.id, data.mockResponseIds);
+
+    return BetterSqlite3.backupToSql();
   }
 
   delete(id) {
     const sql = `DELETE FROM use_cases where id=${id}`;
-
     console.log('[mock-responses] UseCaseService', sql);
-    const result = this.db.exec(sql);
-    return this.db.exec(sql) && BetterSqlite3.backupToSql();
+    this.db.exec(sql);
+
+    const sql2 = `DELETE FROM use_case_to_use_cases where use_case_id=${id}`;
+    console.log('[mock-responses] UseCaseService', sql2);
+    this.db.exec(sql2);
+
+    const sql3 = `DELETE FROM use_case_to_use_cases where child_use_case_id=${id}`;
+    console.log('[mock-responses] UseCaseService', sql3);
+    this.db.exec(sql3);
+
+    return BetterSqlite3.backupToSql();
   }
 
 

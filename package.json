@@ -6,8 +6,8 @@
   "scripts": {
     "stop": "kill-port --port 3331,3332",
     "start": "npm stop && npm run start:server && npm run start:client",
-    "start:server": "kill-port --port 3331 && cd server && npm start & cd ..",
-    "start:client": "kill-port --port 3332 && cd client && npm start & cd .."
+    "start:server": "cd server && npm start & cd ..",
+    "start:client": "cd client && npm start & cd .."
   },
   "devDependencies": {
     "kill-port": "^1.6.0"

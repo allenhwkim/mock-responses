@@ -6,7 +6,7 @@
 .mock-response.form .column #req_payload { width: 400px; }
 .mock-response.form .column #res_status { width: 6em; }
 .mock-response.form .column #res_delay_sec { width: 6em; }
-.mock-response.form .column #res_body { width: calc(100% - 100px - 12px); resize: vertical; }
+.mock-response.form .column #res_body { width: 100%; height: 40px; resize: vertical; }
 .request-group, .response-group {
   margin: 12px 0;
   border: 1px solid #ccc;

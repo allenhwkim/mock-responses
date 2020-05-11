@@ -14,7 +14,7 @@ export class MockResponsesListComponent implements OnInit {
   @Input() dialogMode: boolean;
 
   @Output() playClicked = new EventEmitter();
-  @Output() unselectClicked = new EventEmitter();
+  @Output() deleteClicked = new EventEmitter();
   @Output() selectClicked = new EventEmitter();
 
   faPlay = faPlay; faEdit = faEdit; faFile = faFile; faTrashAlt = faTrashAlt;

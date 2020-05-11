@@ -12,7 +12,7 @@ export class UseCasesService {
 
   getUseCases(options) {
     const url = `/use-cases?` + 
-      `q=${options.key||''}&active=${options.active||''}&ids=${options.ids||''}`;
+      `q=${options.key||''}&ids=${options.ids||''}`;
     return this.http.get(url);
   }
 

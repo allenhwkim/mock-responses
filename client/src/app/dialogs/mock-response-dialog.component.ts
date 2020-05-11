@@ -3,15 +3,15 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MockResponsesService } from '../mock-responses/mock-responses.service';
 
 @Component({
-  selector: 'app-mock-response-select-dialog',
+  selector: 'app-mock-response-dialog',
   template: `
     <app-mock-responses-list
       [mockResponses]="mockResponses"
       [dialogMode]="true"
-      [collectionMode]="true"
+      [collectionMode]="data?.collectionMode"
       (playClicked)="mockResponseService.play($event)"
       (selectClicked)="selectClicked.emit($event)"
-      (unselectClicked)="unselectClicked.emit($event)"
+      (deleteClicked)="deleteClicked.emit($event)"
       (searchTermChanged)="searchTermChanged($event)">
       <input class="mock-response-search" size="40" 
         (change)="searchTermChanged($event)"
@@ -19,14 +19,14 @@ import { MockResponsesService } from '../mock-responses/mock-responses.service';
     </app-mock-responses-list>
   `
 })
-export class MockResponseSelectDialogComponent implements OnInit {
+export class MockResponseDialogComponent implements OnInit {
   @Output() selectClicked = new EventEmitter();
-  @Output() unselectClicked = new EventEmitter();
+  @Output() deleteClicked = new EventEmitter();
 
   mockResponses: any;
 
   constructor(
-    public dialogRef: MatDialogRef<MockResponseSelectDialogComponent>,
+    public dialogRef: MatDialogRef<MockResponseDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public mockResponseService: MockResponsesService
   ) {}

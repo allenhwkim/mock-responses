@@ -26,13 +26,14 @@ export class MockResponsesController {
   findAllBy(
     @Query('q') key,
     @Query('ids') ids,
-    @Query('active') active,
+    @Query('useCase') useCase,
     @Request() req
   ) {
-    const activeUseCase = this.useCase.cookies(req, 'UCID');
-    const mockResponses = this.mockResp.findAllBy({key, ids, active});
-    const useCaseIds = active ? this.useCase.find(active).use_cases : '';
-    const useCases  = useCaseIds ? this.useCase.findAllBy({ids: useCaseIds}) : [];
+    const activeUseCase = useCase || this.useCase.cookies(req, 'UCID');
+    const useCases = activeUseCase && this.useCase.find(activeUseCase).useCases;
+    const mockResponses = activeUseCase ? 
+       this.mockResp.findAllByUseCase(activeUseCase) : this.mockResp.findAllBy({key, ids});
+
     return { mockResponses, useCases, activeUseCase, key};
   }
 

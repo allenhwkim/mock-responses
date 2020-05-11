@@ -37,8 +37,8 @@
         [routerLink]="['/mock-responses', el.id, 'edit']">
         <fa-icon [icon]="faFile"></fa-icon>
       </a>
-      <a class="button icon delete" *ngIf="collectionMode && !dialogMode"
-        (click)="unselectClicked.emit(el)">
+      <a class="button icon delete" *ngIf="!dialogMode"
+        (click)="deleteClicked.emit(el)">
         <fa-icon [icon]="faTrashAlt"></fa-icon>
       </a>
       <button *ngIf="dialogMode"

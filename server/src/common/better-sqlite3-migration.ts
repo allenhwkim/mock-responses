@@ -10,7 +10,8 @@ export class BetterSqlite3Migration {
     this.addCreatedAtUpdatedAt();
     this.addReqPayload();
     this.createUseCases();
-    this.addUseCasesToUseCases();
+    this.createUseCaseToUseCases();
+    this.createUseCaseToMockResponses();
   }
 
   addResDelaySec() {
@@ -49,7 +50,7 @@ export class BetterSqlite3Migration {
     } catch(e) {
       console.log('[mock-responses] running migration for creating use_cases');
       const sql =`
-        CREATE TABLE use_cases (
+        CREATE TABLE IF NOT EXISTS use_cases (
           id  INTEGER PRIMARY KEY,
           name  TEXT NOT NULL,
           description TEXT NOT NULL,
@@ -62,14 +63,38 @@ export class BetterSqlite3Migration {
     }
   }
 
-  addUseCasesToUseCases() {
+  createUseCaseToUseCases() {
     try {
-      this.db.exec('select use_cases from use_cases limit 1');
+      this.db.exec('select * from use_case_to_use_cases limit 1');
     } catch(e) {
-      console.log('[mock-responses] running migration to add use_cases to use_cases');
-      this.db.exec('ALTER TABLE use_cases ADD COLUMN use_cases TEXT');
+      console.log('[mock-responses] running migration for creating use_case_to_use_cases');
+      const sql =`
+        CREATE TABLE IF NOT EXISTS use_case_to_use_cases (
+          id  INTEGER PRIMARY KEY,
+          use_case_id INTEGER NOT NULL,
+          child_use_case_id INTEGER NOT NULL,
+          sequence INTEGER NOT NULL
+        )
+      `;
+      this.db.exec(sql);
     }
   }
 
+  createUseCaseToMockResponses() {
+    try {
+      this.db.exec('select * from use_case_to_mock_responses limit 1');
+    } catch(e) {
+      console.log('[mock-responses] running migration for creating use_case_to_mock_responses');
+      const sql =`
+        CREATE TABLE IF NOT EXISTS use_case_to_mock_responses (
+          id  INTEGER PRIMARY KEY,
+          use_case_id INTEGER NOT NULL,
+          mock_response_id INTEGER NOT NULL,
+          sequence INTEGER NOT NULL
+        )
+      `;
+      this.db.exec(sql);
+    }
+  }
 }
 
