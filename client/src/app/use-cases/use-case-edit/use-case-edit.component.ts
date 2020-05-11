@@ -17,13 +17,17 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./use-case-edit.component.scss']
 })
 export class UseCaseEditComponent implements OnInit {
+  collectionMode: boolean;
   orgUseCase: UseCase = {};
+  useCases: any;
+  mockResponses: any;
   useCase: UseCase = {};
-  faSearch = faSearch; faBan = faBan; faEdit = faEdit; faPlusCircle = faPlusCircle; faTrashAlt = faTrashAlt;
+  faSearch = faSearch; faBan = faBan; faEdit = faEdit;
+  faPlusCircle = faPlusCircle; faTrashAlt = faTrashAlt;
 
   constructor(
     public auth: AuthorizedServiceService,
-    private mockResponseService: MockResponsesService,
+    public mockResponseService: MockResponsesService,
     private useCaseService: UseCasesService,
     private route: ActivatedRoute,
     private router: Router,
@@ -71,9 +75,33 @@ export class UseCaseEditComponent implements OnInit {
       .subscribe(resp => this.router.navigate(['/use-cases']) );
   }
 
-  deleteMockResponse() {
+  deleteUseCase() {
     this.useCaseService.deleteUseCase(this.useCase.id)
       .subscribe(resp => this.router.navigate(['/use-cases']) );
+  }
+
+  clearUseCases() {
+    console.log('clearUseCase()...');
+  }
+
+  clearMockResponses() {
+    console.log('clearMockResponses()...');
+  }
+
+  selectUseCase(event) {
+    console.log('selectUseCase()...'); 
+  }
+
+  unselectUseCase(event) {
+    console.log('unselectUseCase()...'); 
+  }
+
+  selectMockResponse(event) {
+    console.log('selectMockResponse()...'); 
+  }
+
+  unselectMockResponse(event) {
+    console.log('unselectMockResponse()...'); 
   }
 
   openSearchUseCasesDialog() {
