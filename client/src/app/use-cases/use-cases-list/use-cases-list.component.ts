@@ -1,19 +1,18 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AuthorizedServiceService } from '../../authorized.service';
-import { MockResponsesService } from '../mock-responses.service';
+import { UseCasesService } from '../use-cases.service';
 import { faPlay, faEdit, faFile, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'app-mock-responses-list',
-  templateUrl: './mock-responses-list.component.html',
-  styleUrls: ['./mock-responses-list.component.scss']
+  selector: 'app-use-cases-list',
+  templateUrl: './use-cases-list.component.html',
+  styleUrls: ['./use-cases-list.component.scss']
 })
-export class MockResponsesListComponent implements OnInit {
-  @Input() mockResponses: any;
+export class UseCasesListComponent implements OnInit {
+  @Input() useCases: any;
   @Input() collectionMode: boolean;
   @Input() dialogMode: boolean;
 
-  @Output() playClicked = new EventEmitter();
   @Output() unselectClicked = new EventEmitter();
   @Output() selectClicked = new EventEmitter();
 
@@ -21,7 +20,7 @@ export class MockResponsesListComponent implements OnInit {
 
   constructor(
     public auth: AuthorizedServiceService,
-    public mockResponseService: MockResponsesService
+    public useCasesService: UseCasesService
   ) { }
 
   ngOnInit(): void {

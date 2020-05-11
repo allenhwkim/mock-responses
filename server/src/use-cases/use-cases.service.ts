@@ -46,17 +46,19 @@ export class UseCasesService {
   }
 
   update(data: UseCase) {
-    const name = data.name.trim().replace(/'/g, '\'\'');
-    const description = data.description.trim().replace(/'/g, '\'\'');
-    const mockResponses = data.mock_responses.trim().replace(/'/g, '\'\'');;
-    const useCases = data.use_cases.trim().replace(/'/g, '\'\'');;
+    const columns = [];
+    data.name && 
+      columns.push(`name = '${data.name.trim().replace(/'/g, '\'\'')}'`);
+    data.description &&
+      columns.push(`description = '${data.description.trim().replace(/'/g, '\'\'')}'`);
+    data.mock_responses &&
+      columns.push(`mock_responses = '${data.mock_responses.trim()}`);
+    data.use_cases &&
+      columns.push(`mock_responses = '${data.use_cases.trim()}`);
 
     const sql = `
       UPDATE use_cases SET
-        name = '${name}',
-        description = '${description}',
-        mock_responses = '${mockResponses}',
-        use_cases ='${useCases}'
+        ${columns.join(',\n')}
       WHERE id = ${data.id};
       `;
     console.log('[mock-responses] UseCaseService', sql);

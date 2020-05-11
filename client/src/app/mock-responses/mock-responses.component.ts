@@ -2,9 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { HttpClient } from '@angular/common/http';
+import { MatDialog } from '@angular/material/dialog';
 
 import { MockResponsesService } from './mock-responses.service';
 import { AuthorizedServiceService } from '../authorized.service';
+import { MockResponseSelectDialogComponent } from '../dialogs/mock-response-select-dialog.component';
+import { UseCaseSelectDialogComponent } from '../dialogs/use-case-select-dialog.component copy';
 
 @Component({
   selector: 'app-mock-responses',
@@ -18,10 +21,11 @@ export class MockResponsesComponent implements OnInit {
   faPlus = faPlus; faSearch = faSearch;
 
   constructor(
-    private mockResp: MockResponsesService,
+    public mockResponseService: MockResponsesService,
     private snackBar: MatSnackBar,
     public auth: AuthorizedServiceService,
-    private http: HttpClient
+    private http: HttpClient,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -30,7 +34,7 @@ export class MockResponsesComponent implements OnInit {
 
   searchTermChanged(event) {
     const key = (event && event.target.value) || '';
-    this.mockResp.getMockResponses({key})
+    this.mockResponseService.getMockResponses({key})
       .subscribe( (resp:any) => {
         this.mockResponses = resp.mockResponses;
         this.activeUseCase = resp.activeUseCase;
@@ -39,39 +43,15 @@ export class MockResponsesComponent implements OnInit {
   }
 
   openSearchUseCasesDialog() {
-    console.log('openSearchUseCaseDialog');
+    const dialogRef = this.dialog.open(
+      UseCaseSelectDialogComponent, 
+      {width: '90%', height: '90%'}
+    );
+    dialogRef.afterClosed().subscribe(result => {});
   }
 
   activateUseCaseClicked(event) {
     console.log('activateUseCase', event);
   }
 
-  playClicked(mockResp) {
-    const req = {
-      url: mockResp.req_url,
-      method: mockResp.req_method || 'POST',
-      body: mockResp.req_method !== 'GET' && mockResp.req_payload ? `{
-          ${mockResp.req_payload.trim().split(',').map(el => `"${el.trim()}":""`).join(",")}
-        }` : undefined
-    };
-
-    const httpCall = req.method === 'POST' || req.method === 'PUT'?
-      this.http[req.method.toLowerCase()](req.url, req.body) :
-      this.http[req.method.toLowerCase()](req.url);
-
-    httpCall.subscribe(
-      resp => {
-        console.log('[mock-response]', req.url, req.method, resp.body, resp);
-        this.snackBar.open(
-          `${req.url} ${req.method} call is made. Check console`, 'X', { duration: 3000 }
-        );
-      }, 
-      error => {
-        console.error('[mock-response]', req.url, req.method, error);
-        this.snackBar.open(
-          `Error in ${req.url} ${req.method} call. Check console`, 'X', { duration: 3000 }
-        );
-      }
-    );
-  }
 }

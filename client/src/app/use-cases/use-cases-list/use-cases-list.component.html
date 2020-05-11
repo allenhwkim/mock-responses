@@ -1,0 +1,53 @@
+<table class="use-cases">
+  <thead>
+    <tr>
+      <th class="id">Id</th>
+      <th class="name">Name/Description</th>
+      <th class="mock_responses">Use Cases/Mock Responses</th>
+      <th class="actions">Actions</th>
+    </tr>
+  </thead>
+  <tr *ngFor="let useCase of useCases" class="use-case">
+    <td class="id">
+      <div>{{useCase.id}}</div>
+    </td>
+    <td class="name">
+      <b>{{useCase.name}}</b>
+      <p>{{useCase.description}}</p> 
+    </td>
+    <td class="mock_responses">
+      <ul><b>Use Cases</b>
+        <li *ngFor="let uc of useCase.useCases"><b>{{uc.id}} - {{uc.name}}</b></li>
+      </ul>
+      <ul><b>Mock Responses</b>
+        <li *ngFor="let mr of useCase.mockResponses"> 
+          {{mr.id}}
+          | {{mr.req_url}} 
+          | {{mr.name}} 
+          | {{mr.res_status}}
+          | {{mr.res_content_type}}
+        </li>
+      </ul>
+    </td>
+    <td class="actions">
+      <a class="button" *ngIf="auth.authorized" 
+        [routerLink]="['/use-cases', useCase.id, 'edit']">
+        Edit
+      </a>
+      <a class="button" *ngIf="!auth.authorized"
+        [routerLink]="['/use-cases', useCase.id, 'edit']">
+        Browse
+      </a>
+      <div *ngIf="useCase.active">
+        Active
+      </div>
+      <button *ngIf="dialogMode" (click)="selectClicked.emit(useCase)">
+        Select
+      </button>
+      <a *ngIf="collectionMode" class="button icon delete"
+        (click)="unselectClicked.emit(useCase)">
+        <i class="fas fa-trash-alt"></i>
+      </a>
+    </td>
+  </tr>
+</table>

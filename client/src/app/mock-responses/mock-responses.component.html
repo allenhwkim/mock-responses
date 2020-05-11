@@ -19,12 +19,8 @@
   [mockResponses]="mockResponses"
   [dialogMode]="false"
   [collectionMode]="false"
-  (playClicked)="playClicked($event)"
+  (playClicked)="mockResponseService.play($event)"
   (searchTermChanged)="searchTermChanged($event)">
-  <!-- 
-    (selectClicked)="playClicked($event)" // for collection mode
-    (unselectClicked)="playClicked($event)" // for collection mode
-   -->
   <div class="search-section">
     <input class="mock-response-search" size="40" 
       (change)="searchTermChanged($event)"

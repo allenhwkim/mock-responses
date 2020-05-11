@@ -1,1 +1,11 @@
 <p>use-cases-component works!</p>
+
+<div class="for-edit for-dialog">
+  <input class="use-cases-search" size="40" placeholder="Type to search use cases"  />
+  <button onclick="fireEvent(event, 'search-use-case', {key: this.parentElement.querySelector('.use-cases-search').value})">
+    <i class="fas fa-search"></i> Search
+  </button> &nbsp;
+  <a class="button for-edit" href="#/use-cases/new">
+    <i class="fas fa-plus"></i> New
+  </a>
+</div>

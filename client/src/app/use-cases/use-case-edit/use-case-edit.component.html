@@ -1,0 +1,76 @@
+
+  <h3 *ngIf="useCase.id"> Update Use Case </h3>
+  <h3 *ngIf="!useCase.id"> Create Use Case </h3>
+  
+  <div class="use-case form">
+    <div class="id column" *ngIf="useCase.id">
+      <label for="id">Id</label>
+      <input id="id" readonly value="{{useCase.id}}" />
+    </div>
+  
+    <div class="name column">
+      <label for="name">Name *</label>
+      <input id="name" size="40" value="{{useCase.name}}" />
+    </div>
+  
+    <div class="description column">
+      <label for="description">Description *</label>
+      <input id="description" size="80" value="{{useCase.description}}" />
+    </div>
+  
+    <h4 class="list">
+      Use Cases
+      <input type="hidden" id="use_cases" [(ngModel)]="useCase.use_cases" />
+      <fa-icon [icon]="faSearch" *ngIf="collectionMode"
+        (click)="openSearchUseCasesDialog(useCase.id)"></fa-icon>
+      <fa-icon class="fas fa-ban" *ngIf="collectionMode"
+        (click)="clearUseCases()"></fa-icon>
+    </h4>
+
+    <app-use-cases-list 
+      [useCases]="useCases"
+      [dialogMode]="false"
+      [collectionMode]="false"
+      (selectClicked)="selectUseCase($event)"
+      (unselectClicked)="unselectUseCase($event)">
+    </app-use-cases-list>
+  
+    <h4>
+      Mock Responses
+      <input type="hidden" size="40" id="mock_responses"
+        [(ngModel)]="useCase.mock_responses" />
+      <fa-icon [icon]="faSearch" *ngIf="collectionMode"
+        (click)="openSearchMockResponsesDialog(useCase.id)"></fa-icon>
+      <fa-icon class="fas fa-ban" *ngIf="collectionMode"
+        (click)="clearMockResponses()"></fa-icon>
+    </h4>
+
+    <app-mock-responses-list
+      [mockResponses]="mockResponses"
+      [dialogMode]="false"
+      [collectionMode]="true"
+      (playClicked)="mockResponseService.play($event)"
+      (selectClicked)="selectMockResponse($event)"
+      (unselectClicked)="unselectMockResponse($event)">
+    </app-mock-responses-list>
+  
+    <br/>
+    <div class="buttons for-edit">
+      <button *ngIf="useCase.id" (click)="updateUseCase()">
+        <fa-icon [icon]="faEdit"></fa-icon> Update
+      </button>
+      <a class="button" *ngIf="useCase.id"
+        [routerLink]="['/use-cases/new']"
+        [queryParams]="{from: useCase.id}">
+        Duplicate
+      </a>
+      <button *ngIf="useCase.id" (click)="deleteUseCase()">
+        <fa-icon [icon]="faTrashAlt"></fa-icon> Delete 
+      </button>
+      <button *ngIf="!useCase.id" (click)="createUseCase()">
+        <fa-icon [icon]="faPlusCircle"></fa-icon> Create 
+      </button>
+    </div>
+  </div>
+  
+  
