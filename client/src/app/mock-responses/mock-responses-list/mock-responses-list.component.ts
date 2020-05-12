@@ -11,7 +11,7 @@ import { faPlay, faEdit, faFile, faTrashAlt } from '@fortawesome/free-solid-svg-
 export class MockResponsesListComponent implements OnInit {
   @Input() mockResponses: any;
   @Input() collectionMode: boolean;
-  @Input() dialogMode: boolean;
+  @Input() listMode: boolean;
 
   @Output() playClicked = new EventEmitter();
   @Output() deleteClicked = new EventEmitter();

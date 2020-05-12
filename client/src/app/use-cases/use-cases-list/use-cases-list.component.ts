@@ -10,10 +10,10 @@ import { faPlay, faEdit, faFile, faTrashAlt } from '@fortawesome/free-solid-svg-
 })
 export class UseCasesListComponent implements OnInit {
   @Input() useCases: any;
-  @Input() collectionMode: boolean;
-  @Input() dialogMode: boolean;
   @Input() activeUseCase: any;
-  @Input() activate: boolean;
+  @Input() collectionMode: boolean; // open a dialog, and select one
+  @Input() listMode: boolean; // list selected ones, and unselect one
+  @Input() activateMode: boolean; // enable activate a use case
 
   @Output() deleteClicked = new EventEmitter();
   @Output() selectClicked = new EventEmitter();
@@ -26,7 +26,6 @@ export class UseCasesListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log('...........', this.useCases);
   }
   
 }

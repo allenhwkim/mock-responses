@@ -30,18 +30,18 @@
       </ul>
     </td>
     <td class="actions">
-      <a class="button" *ngIf="auth.authorized && !dialogMode" 
+      <a class="button" *ngIf="auth.authorized && !collectionMode && !listMode" 
         [routerLink]="['/use-cases', useCase.id, 'edit']">
         Edit
       </a>
-      <a class="button" *ngIf="!auth.authorized && !dialogMode"
+      <a class="button" *ngIf="!auth.authorized && !collectionMode && !listMode"
         [routerLink]="['/use-cases', useCase.id, 'edit']">
         Browse
       </a>
-      <div *ngIf="activate && useCase.id === activeUseCase">
+      <div *ngIf="activateMode && useCase.id === activeUseCase">
         Active
       </div>
-      <div *ngIf="activate && useCase.id !== activeUseCase">
+      <div *ngIf="activateMode && useCase.id !== activeUseCase">
         <button (click)="selectClicked.emit(useCase)">
           Activate
         </button>
@@ -49,9 +49,9 @@
       <button *ngIf="collectionMode" (click)="selectClicked.emit(useCase)">
         Select
       </button>
-      <a *ngIf="collectionMode" class="button icon delete"
+      <a *ngIf="listMode" class="button icon delete"
         (click)="deleteClicked.emit(useCase)">
-        <i class="fas fa-trash-alt"></i>
+        <fa-icon [icon]="faTrashAlt"></fa-icon>
       </a>
     </td>
   </tr>

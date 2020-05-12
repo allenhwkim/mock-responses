@@ -7,7 +7,6 @@ import { MockResponsesService } from '../mock-responses/mock-responses.service';
   template: `
     <app-mock-responses-list
       [mockResponses]="mockResponses"
-      [dialogMode]="true"
       [collectionMode]="data?.collectionMode"
       (playClicked)="mockResponseService.play($event)"
       (selectClicked)="selectClicked.emit($event)"

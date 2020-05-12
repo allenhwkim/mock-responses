@@ -6,17 +6,15 @@ import { UseCasesService } from '../use-cases/use-cases.service';
   selector: 'app-use-case-dialog',
   template: `
     <input class="use-case-search" size="40" 
-      (keyup)="searchTermChanged($event)"
+      (keyup)="setUseCases({key: $event.target.value})"
       placeholder="Type to search use-cases" />
     <app-use-cases-list
       [useCases]="useCases"
-      [dialogMode]="true"
       [activeUseCase]="data?.activeUseCase"
       [activate]="data?.activate"
       [collectionMode]="data?.collectionMode"
       (selectClicked)="selectClicked.emit($event)"
-      (deleteClicked)="deleteClicked.emit($event)"
-      (searchTermChanged)="searchTermChanged($event)">
+      (deleteClicked)="deleteClicked.emit($event)">
     </app-use-cases-list>
   `
 })
@@ -29,21 +27,20 @@ export class UseCaseDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<UseCaseDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data,
     public useCaseService: UseCasesService
   ) {}
 
   ngOnInit() {
-    this.useCaseService.getUseCases({key: ''})
-      .subscribe( (resp: any) => {
-        this.useCases = resp.useCases
-      });
-        
+    this.setUseCases({key: ''});
   }
 
-  searchTermChanged(event) {
-    this.useCaseService.getUseCases({key: event.target.value})
-      .subscribe( (resp: any) => this.useCases = resp.useCases);
+  setUseCases(by) {
+    this.useCaseService.getUseCases(by)
+      .subscribe( (resp: any) => {
+        const excludeIds = this.data ? this.data.except.map(el => el.id) : [];
+        this.useCases = resp.useCases.filter(el => !excludeIds.includes(el.id));
+      });
   }
 
 }

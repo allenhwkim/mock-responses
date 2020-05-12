@@ -20,36 +20,27 @@
   
     <h4 class="list">
       Use Cases
-      <input type="hidden" id="use_cases" [(ngModel)]="useCases" />
       <fa-icon [icon]="faSearch" (click)="openUseCasesDialog()"></fa-icon>
-      <fa-icon [icon]="faBan" (click)="clearUseCases()"></fa-icon>
+      <fa-icon [icon]="faBan" (click)="useCases=[]"></fa-icon>
     </h4>
 
     <app-use-cases-list 
       [useCases]="useCases"
-      [dialogMode]="false"
-      [collectionMode]="true"
-      (selectClicked)="selectUseCase($event)"
-      (deleteClicked)="deleteUseCase($event)">
+      [listMode]="true"
+      (deleteClicked)="setUseCases('remove', $event.id)">
     </app-use-cases-list>
   
     <h4>
       Mock Responses
-      <input type="hidden" size="40" id="mock_responses"
-        [(ngModel)]="useCase.mockResponses" />
-      <fa-icon [icon]="faSearch" *ngIf="collectionMode"
-        (click)="openSearchMockResponsesDialog()"></fa-icon>
-      <fa-icon [icon]="faBan" *ngIf="collectionMode"
-        (click)="clearMockResponses()"></fa-icon>
+      <fa-icon [icon]="faSearch" (click)="openMockResponsesDialog()"></fa-icon>
+      <fa-icon [icon]="faBan" (click)="mockResponses=[]"></fa-icon>
     </h4>
 
     <app-mock-responses-list
       [mockResponses]="mockResponses"
-      [dialogMode]="false"
-      [collectionMode]="true"
+      [listMode]="true"
       (playClicked)="mockResponseService.play($event)"
-      (selectClicked)="selectMockResponse($event)"
-      (deleteClicked)="deleteMockResponse($event)">
+      (deleteClicked)="setMockResponses('remove', $event.id)">
     </app-mock-responses-list>
   
     <br/>

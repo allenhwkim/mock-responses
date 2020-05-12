@@ -86,49 +86,45 @@ export class UseCaseEditComponent implements OnInit {
       .subscribe(resp => this.router.navigate(['/use-cases']) );
   }
 
-  clearUseCases() {
-    console.log('clearUseCase()...');
-  }
-
-  clearMockResponses() {
-    console.log('clearMockResponses()...');
-  }
-
-  selectUseCase(event) {
-    console.log('selectUseCase()...'); 
-  }
-
-  selectMockResponse(event) {
-    console.log('selectMockResponse()...'); 
-  }
-
-  deleteMockResponse(event) {
-    console.log('deleteMockResponse()...'); 
-  }
-  
   openUseCasesDialog() {
     const dialogRef = this.dialog.open(
-      UseCaseDialogComponent,
-      {width: '90%', height: '90%', data: {collectionMode: true}}
-    );
-    // collect use cases
-    dialogRef.componentInstance.selectClicked.subscribe(event => {
-      const useCaseIds = this.useCases.map(el => el.id).concat(event.id).join(',');
-      this.useCaseService.getUseCases({ids: useCaseIds})
-        .subscribe( (resp: any) => {
-          this.useCases = resp.useCases;
-          // this.activeUseCase = resp.activeUseCase;
-          this.dialog.closeAll();
-        });
+      UseCaseDialogComponent, {
+        width: '90%',
+        height: '90%', 
+        data: { collectionMode: true, except: [...this.useCases, this.useCase] }
       });
+    dialogRef.componentInstance.selectClicked.subscribe(event => {
+      this.setUseCases('add', event.id); this.dialog.closeAll();
+    });
   }
 
-  openSearchMockResponsesDialog() {
+  setUseCases(action, useCaseId) {
+    const allUCIds = this.useCases.map(el => el.id);
+    const useCaseIds = 
+      action === 'add' ? allUCIds.concat(useCaseId).join(',') :
+      action === 'remove' ? allUCIds.filter(el => el !== useCaseId).join(',') : '';
+    this.useCaseService.getUseCases({ids: useCaseIds || '0'})
+      .subscribe( (resp: any) => this.useCases = resp.useCases);
+  }
+
+  openMockResponsesDialog() {
     const dialogRef = this.dialog.open(
-      MockResponseDialogComponent, 
-      {width: '90%', height: '90%', data: {collectionMode: true}}
-    );
-    dialogRef.afterClosed().subscribe(result => {});
+      MockResponseDialogComponent, {
+        width: '90%',
+        height: '90%', 
+        data: { collectionMode: true, except: this.mockResponses }
+      });
+    dialogRef.componentInstance.selectClicked.subscribe(event => {
+      this.setMockResponses('add', event.id); this.dialog.closeAll();
+    });
   }
 
+  setMockResponses(action, mockRespId) {
+    const allMockRespIds = this.mockResponses.map(el => el.id);
+    const mockRespIds = 
+      action === 'add' ? allMockRespIds.concat(mockRespId).join(',') :
+      action === 'remove' ? allMockRespIds.filter(el => el !== mockRespId).join(',') : '';
+    this.mockResponseService.getMockResponses({ids: mockRespIds || '0'})
+      .subscribe( (resp: any) => this.mockResponses = resp.mockResponses);
+  }
 }

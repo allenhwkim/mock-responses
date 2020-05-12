@@ -29,19 +29,19 @@
       <button class="icon" (click)="playClicked.emit(el)">
         <fa-icon [icon]="faPlay"></fa-icon>
       </button>&nbsp;
-      <a class="button icon" *ngIf="auth.authorized && !collectionMode" 
+      <a class="button icon" *ngIf="auth.authorized && !collectionMode && !listMode " 
         [routerLink]="['/mock-responses', el.id, 'edit']">
         <fa-icon [icon]="faEdit"></fa-icon>
       </a>
-      <a class="button icon" *ngIf="!auth.authorized && !collectionMode"
+      <a class="button icon" *ngIf="!auth.authorized && !collectionMode && !listMode"
         [routerLink]="['/mock-responses', el.id, 'edit']">
         <fa-icon [icon]="faFile"></fa-icon>
       </a>
-      <a class="button icon delete" *ngIf="!dialogMode"
+      <a class="button icon delete" *ngIf="listMode"
         (click)="deleteClicked.emit(el)">
         <fa-icon [icon]="faTrashAlt"></fa-icon>
       </a>
-      <button *ngIf="dialogMode"
+      <button *ngIf="collectionMode"
         (click)="selectClicked.emit(el)">
         Select
       </button>&nbsp;
