@@ -18,14 +18,15 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class UseCaseEditComponent implements OnInit {
   collectionMode: boolean;
-  orgUseCase: UseCase = {};
+
+  useCase: UseCase = {useCases: [], mockResponses: []};
+  orgUseCase: UseCase = {useCases: [], mockResponses: []};
  
-  useCase: UseCase = {};
   faSearch = faSearch; faBan = faBan; faEdit = faEdit;
   faPlusCircle = faPlusCircle; faTrashAlt = faTrashAlt;
 
-  useCases: any;
-  mockResponses: any;
+  useCases: any = [];
+  mockResponses: any = [];
 
   constructor(
     public auth: AuthorizedServiceService,
@@ -74,7 +75,6 @@ export class UseCaseEditComponent implements OnInit {
     const newMockRespIds = this.mockResponses.map(el => el.id);
     (''+orgMockRespIds !== ''+newMockRespIds) && (updated.mockResponseIds = newMockRespIds);
   
-    console.log('.........', {updated});
     return updated;
   }
 

@@ -20,8 +20,17 @@ export class UseCasesService {
   find(id: number) {
     const row = this.db.prepare(`SELECT * FROM use_cases WHERE id = ${id}`);
     const useCase = row.get();
-    useCase.useCases = this.uc2ucs.findAll(id);
-    useCase.mockResponses = this.uc2mrs.findAll(id);
+
+    const useCaseIds = this.uc2ucs.findAll(useCase.id)
+      .sort((a, b) => +(a.sequence > b.sequence))
+      .map(el => el.child_use_case_id).join(',');
+    useCase.useCases = this.findAllBy({ids: useCaseIds || '0'});
+
+    const mockRespIds = this.uc2mrs.findAll(useCase.id)
+      .sort((a, b) => +(a.sequence > b.sequence))
+      .map(el => el.mock_response_id).join(',');
+    useCase.mockResponses = this.mockResp.findAllBy({ids: mockRespIds || '0'});
+
     return useCase;
   }
 
@@ -49,7 +58,6 @@ export class UseCasesService {
         const mockRespIds = this.uc2mrs.findAll(useCase.id)
           .sort((a, b) => +(a.sequence > b.sequence))
           .map(el => el.mock_response_id).join(',');
-console.log('............>>>>>>>>>>', {mockRespIds }) 
         useCase.mockResponses = this.mockResp.findAllBy({ids: mockRespIds || '0'});
       });
 
@@ -65,7 +73,7 @@ console.log('............>>>>>>>>>>', {mockRespIds })
 
     const sql = `
       INSERT INTO use_cases 
-        (id, name, description, mock_responses)
+        (id, name, description)
         VALUES (${useCaseId}, '${name}', '${description}');
       `;
     console.log('[mock-responses] UseCaseService use_cases create', sql);

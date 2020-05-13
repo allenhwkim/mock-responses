@@ -6,41 +6,39 @@ export class BetterSqlite3Migration {
 
   runAllMigration() {
     this.db = BetterSqlite3.db;
-    this.addResDelaySec();
-    this.addCreatedAtUpdatedAt();
-    this.addReqPayload();
+    this.createMockResponses();
     this.createUseCases();
     this.createUseCaseToUseCases();
     this.createUseCaseToMockResponses();
+    this.rebuildMockResponses();
+    this.rebuildUseCases();
   }
 
-  addResDelaySec() {
+  createMockResponses() {
     try {
-      this.db.exec('select res_delay_sec from mock_responses limit 1');
+      this.db.exec('select * from mock_responses limit 1');
     } catch(e) {
-      console.log('[mock-responses] running migration for res_delay_sec');
-      this.db.exec('ALTER TABLE mock_responses ADD COLUMN res_delay_sec integer DEFAULT 0');
-    }
-  }
+      console.log('[mock-responses] running migration for creating mock_responses');
+      const sql = `
+        CREATE TABLE IF NOT EXISTS mock_responses (
+          id	INTEGER,
+          name	TEXT DEFAULT 'Unnamed',
+          req_url	TEXT,
+          req_method	TEXT DEFAULT 'GET',
+          res_status	INTEGET DEFAULT 200,
+          res_delay_sec	INTEGER,
+          res_content_type	TEXT DEFAULT 'application/json',
+          res_body	BLOB,
+          created_at	INTEGER,
+          created_by	string,
+          updated_at	INTEGER,
+          updated_by	string,
+          req_payload	TEXT,
+          PRIMARY KEY(id)
+        );
+      `;
 
-  addCreatedAtUpdatedAt() {
-    try {
-      this.db.exec('select created_at from mock_responses limit 1');
-    } catch(e) {
-      console.log('[mock-responses] running migration for created_at');
-      this.db.exec('ALTER TABLE mock_responses ADD COLUMN created_at INTEGER');
-      this.db.exec('ALTER TABLE mock_responses ADD COLUMN created_by string');
-      this.db.exec('ALTER TABLE mock_responses ADD COLUMN updated_at INTEGER');
-      this.db.exec('ALTER TABLE mock_responses ADD COLUMN updated_by string');
-    }
-  }
-
-  addReqPayload() {
-    try {
-      this.db.exec('select req_payload from mock_responses limit 1');
-    } catch(e) {
-      console.log('[mock-responses] running migration for req_payload');
-      this.db.exec('ALTER TABLE mock_responses ADD COLUMN req_payload TEXT');
+      this.db.exec(sql);
     }
   }
 
@@ -53,13 +51,11 @@ export class BetterSqlite3Migration {
         CREATE TABLE IF NOT EXISTS use_cases (
           id  INTEGER PRIMARY KEY,
           name  TEXT NOT NULL,
-          description TEXT NOT NULL,
-          mock_responses TEXT
+          description TEXT NOT NULL
         )
       `;
 
       this.db.exec(sql);
-      this.db.exec(`INSERT INTO use_cases (name, description, mock_responses) VALUES ('test', 'desc', '1,2,3')`);
     }
   }
 
@@ -96,5 +92,70 @@ export class BetterSqlite3Migration {
       this.db.exec(sql);
     }
   }
-}
 
+  // this is for table created with active column
+  rebuildMockResponses() {
+    try {
+      this.db.exec('select active from mock_responses limit 1');
+      console.log('[mock-responses] running migration for deleting active column from mock-responses');
+      const sql = `
+        BEGIN TRANSACTION;
+        ALTER TABLE mock_responses RENAME TO mock_responses_old;
+        CREATE TABLE mock_responses (
+          id	INTEGER,
+          name	TEXT DEFAULT 'Unnamed',
+          req_url	TEXT,
+          req_method	TEXT DEFAULT 'GET',
+          req_payload	TEXT,
+          res_status	INTEGET DEFAULT 200,
+          res_delay_sec	INTEGER,
+          res_content_type	TEXT DEFAULT 'application/json',
+          res_body	BLOB,
+          created_at	INTEGER,
+          created_by	string,
+          updated_at	INTEGER,
+          updated_by	string,
+          PRIMARY KEY(id)
+        );
+        INSERT INTO mock_responses 
+          SELECT 
+            id, name, req_url, req_method, req_payload,
+            res_status, res_delay_sec, res_content_type, res_body,
+            created_at, created_by, updated_at, updated_by
+          FROM mock_responses_old;
+        DROP TABLE mock_responses_old;
+        COMMIT;
+      `;
+      this.db.exec(sql);
+    } catch(e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+  rebuildUseCases() {
+    try {
+      this.db.exec('select category from use_cases limit 1');
+      console.log('[mock-responses] running migration for deleting columns for use_cases');
+      const sql = `
+        BEGIN TRANSACTION;
+        ALTER TABLE use_cases RENAME TO use_cases_old;
+        CREATE TABLE use_cases (
+          id  INTEGER PRIMARY KEY,
+          name  TEXT NOT NULL,
+          description TEXT NOT NULL
+        );
+        INSERT INTO use_cases
+          SELECT id, name, description
+          FROM use_cases_old;
+        DROP TABLE use_cases_old;
+        COMMIT;
+      `;
+      this.db.exec(sql);
+    } catch(e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+}
