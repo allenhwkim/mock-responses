@@ -56,6 +56,8 @@ CREATE TABLE use_case_to_use_cases (
         );
 INSERT INTO use_case_to_use_cases VALUES(1,2,3,1);
 INSERT INTO use_case_to_use_cases VALUES(2,3,5,1);
+INSERT INTO use_case_to_use_cases VALUES(3,5,12,1);
+INSERT INTO use_case_to_use_cases VALUES(4,12,13,1);
 CREATE TABLE use_case_to_mock_responses (
           id  INTEGER PRIMARY KEY,
           use_case_id INTEGER NOT NULL,
@@ -64,4 +66,8 @@ CREATE TABLE use_case_to_mock_responses (
         );
 INSERT INTO use_case_to_mock_responses VALUES(1,2,1000000000000017,1);
 INSERT INTO use_case_to_mock_responses VALUES(2,3,1000000000000011,1);
+INSERT INTO use_case_to_mock_responses VALUES(3,5,1000000000000011,1);
+INSERT INTO use_case_to_mock_responses VALUES(4,5,1000000000000019,2);
+INSERT INTO use_case_to_mock_responses VALUES(5,12,1000000000000015,1);
+INSERT INTO use_case_to_mock_responses VALUES(6,12,1000000000000016,2);
 COMMIT;
