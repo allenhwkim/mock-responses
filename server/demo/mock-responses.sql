@@ -70,4 +70,8 @@ INSERT INTO use_case_to_mock_responses VALUES(3,5,1000000000000011,1);
 INSERT INTO use_case_to_mock_responses VALUES(4,5,1000000000000019,2);
 INSERT INTO use_case_to_mock_responses VALUES(5,12,1000000000000015,1);
 INSERT INTO use_case_to_mock_responses VALUES(6,12,1000000000000016,2);
+INSERT INTO use_case_to_mock_responses VALUES(7,13,1000000000000002,1);
+INSERT INTO use_case_to_mock_responses VALUES(8,13,1000000000000010,2);
+INSERT INTO use_case_to_mock_responses VALUES(9,13,1000000000000014,3);
+INSERT INTO use_case_to_mock_responses VALUES(10,13,1000000000000015,4);
 COMMIT;
