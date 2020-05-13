@@ -20,12 +20,11 @@ export class UseCasesComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.searchTermChanged('');
+    this.setUseCases({key: ''});
   }
 
-  searchTermChanged(event) {
-    const key = (event && event.target.value) || '';
-    this.useCaseService.getUseCases({key})
+  setUseCases(by) {
+    this.useCaseService.getUseCases(by)
       .subscribe( (resp:any) => {
         this.useCases = resp.useCases;
         this.activeUseCase = resp.activeUseCase;

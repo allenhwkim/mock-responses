@@ -5,17 +5,17 @@
   <div class="use-case form">
     <div class="id column" *ngIf="useCase.id">
       <label for="id">Id</label>
-      <input id="id" readonly value="{{useCase.id}}" />
+      <input id="id" readonly [(ngModel)]="useCase.id" />
     </div>
   
     <div class="name column">
       <label for="name">Name *</label>
-      <input id="name" size="40" value="{{useCase.name}}" />
+      <input id="name" size="40" [(ngModel)]="useCase.name" />
     </div>
   
     <div class="description column">
       <label for="description">Description *</label>
-      <input id="description" size="80" value="{{useCase.description}}" />
+      <input id="description" size="80" [(ngModel)]="useCase.description" />
     </div>
   
     <h4 class="list">

@@ -10,10 +10,9 @@ import { MockResponsesService } from '../mock-responses/mock-responses.service';
       [collectionMode]="data?.collectionMode"
       (playClicked)="mockResponseService.play($event)"
       (selectClicked)="selectClicked.emit($event)"
-      (deleteClicked)="deleteClicked.emit($event)"
-      (searchTermChanged)="searchTermChanged($event)">
+      (deleteClicked)="deleteClicked.emit($event)">
       <input class="mock-response-search" size="40" 
-        (change)="searchTermChanged($event)"
+        (change)="setMockResponses({key: $event.target.value})"
         placeholder="Type to search mock responses" />
     </app-mock-responses-list>
   `
@@ -31,13 +30,17 @@ export class MockResponseDialogComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.mockResponseService.getMockResponses({key: ''})
-      .subscribe( (resp: any) => this.mockResponses = resp.mockResponses);
+    this.setMockResponses({key: ''});
   }
 
-  searchTermChanged(event) {
-    this.mockResponseService.getMockResponses({key: event.target.value})
-      .subscribe( (resp: any) => this.mockResponses = resp.mockResponses);
+
+  setMockResponses(by) {
+    this.mockResponseService.getMockResponses(by)
+      .subscribe( (resp: any) => {
+        const excludeIds = this.data ? this.data.except.map(el => el.id) : [];
+        console.log('xxxxxxxxxxxxxxxxxx', {excludeIds})
+        this.mockResponses = resp.mockResponses.filter(el => !excludeIds.includes(el.id));
+      });
   }
 
 }

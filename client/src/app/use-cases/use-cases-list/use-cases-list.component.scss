@@ -1,1 +1,22 @@
-.use-cases .id { width: 60px; }
+.use-cases  {
+  .id {
+    width: 5%; 
+    overflow: hidden;
+    max-width: 60px; 
+  }
+  .name-desc {
+    width: 30%; 
+    overflow: hidden;
+    max-width: 450px;
+  }
+  .children {
+    width: 30%; 
+    overflow: hidden;
+    max-width: 450px;
+  }
+  .actions {
+    width: 10%; 
+    overflow: hidden;
+    max-width: 240px;
+  }
+}

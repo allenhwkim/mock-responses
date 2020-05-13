@@ -3,23 +3,19 @@
 <table class="mock-responses">
   <thead>
     <tr class="header">
-      <th class="id">ID</th>
-      <th class="id-name">Name</th>
       <th class="request">Request</th>
+      <th class="id-name">Id/Name</th>
       <th class="response">Response</th>
       <th class="actions"></th>
     </tr>
   </thead>
   <tr *ngFor="let el of mockResponses" class="mock-response">
-    <td class="id">
-      {{el.id}}
-    </td>
-    <td class="id-name">{{el.name}}</td>
     <td class="request">
       <div>Method: {{el.req_method}}</div>
       <div>Url: {{el.req_url}}</div>
       <div>Payload: {{el.req_payload}}</div>
     </td>
+    <td class="id-name">({{el.id}}) <br/> {{el.name}}</td>
     <td class="response">
       <div>Status: {{el.res_status}}</div>
       <div>Delay: {{el.res_delay_sec}}</div>

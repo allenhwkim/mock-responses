@@ -2,8 +2,8 @@
   <thead>
     <tr>
       <th class="id">Id</th>
-      <th class="name">Name/Description</th>
-      <th class="mock_responses">Use Cases/Mock Responses</th>
+      <th class="name-desc">Name/Description</th>
+      <th class="children">Use Cases/Mock Responses</th>
       <th class="actions">Actions</th>
     </tr>
   </thead>
@@ -11,11 +11,11 @@
     <td class="id">
       <div>{{useCase.id}}</div>
     </td>
-    <td class="name">
+    <td class="name-desc">
       <b>{{useCase.name}}</b>
       <p>{{useCase.description}}</p> 
     </td>
-    <td class="mock_responses">
+    <td class="children">
       <ul><b>Use Cases</b>
         <li *ngFor="let uc of useCase.useCases"><b>{{uc.id}} - {{uc.name}}</b></li>
       </ul>

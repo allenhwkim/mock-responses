@@ -24,12 +24,12 @@ export class UseCasesService {
     return this.http.put(`/use-cases/${id}/activate`, {});
   }
 
-  updateUseCase(useCases) {
-    return this.http.put(`/use-cases/` + useCases.id, useCases);
+  updateUseCase(useCase) {
+    return this.http.put(`/use-cases/` + useCase.id, useCase);
   }
 
-  createUseCase(useCases) {
-    return this.http.post(`/use-cases`, useCases);
+  createUseCase(useCase) {
+    return this.http.post(`/use-cases`, useCase);
   }
 
   deleteUseCase(id) {

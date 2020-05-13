@@ -26,23 +26,35 @@ export class UseCasesService {
   }
 
   findAllBy(by) {
-    const sql = 
-      by.key ? 
-        `SELECT * FROM use_cases WHERE name LIKE '%${by.key}%' OR description like '%${by.key}%'`: 
-      by.ids ? 
-        `SELECT * FROM use_cases WHERE id IN (${by.ids})`:
-      by.except ? 
-        `SELECT * FROM use_cases WHERE id NOT IN (${by.except})`:
-        `SELECT * FROM use_cases`;
-    console.log('[mock-responses] UseCaseService.findAllBy', sql);
+    if (by.ids) {
+      const sql = `SELECT * FROM use_cases WHERE id IN (${by.ids})`;
+      console.log('[mock-responses] UseCaseService.findAllBy', sql);
+      return this.db.prepare(sql).all();
+    } else {
+      const sql = 
+        by.key ? 
+          `SELECT * FROM use_cases WHERE name LIKE '%${by.key}%' OR description like '%${by.key}%'`: 
+        by.except ? 
+          `SELECT * FROM use_cases WHERE id NOT IN (${by.except})`:
+          `SELECT * FROM use_cases`;
+      console.log('[mock-responses] UseCaseService.findAllBy', sql);
 
-    const useCases = this.db.prepare(sql).all();
-    useCases.forEach(useCase => {
-      useCase.useCases = this.uc2ucs.findAll(useCase.id);
-      useCase.mockResponses = this.uc2mrs.findAll(useCase.id);
-    });
+      const useCases = this.db.prepare(sql).all();
+      useCases.forEach(useCase => {
+        const useCaseIds = this.uc2ucs.findAll(useCase.id)
+          .sort((a, b) => +(a.sequence > b.sequence))
+          .map(el => el.child_use_case_id).join(',');
+        useCase.useCases = this.findAllBy({ids: useCaseIds || '0'});
 
-    return useCases;
+        const mockRespIds = this.uc2mrs.findAll(useCase.id)
+          .sort((a, b) => +(a.sequence > b.sequence))
+          .map(el => el.mock_response_id).join(',');
+console.log('............>>>>>>>>>>', {mockRespIds }) 
+        useCase.mockResponses = this.mockResp.findAllBy({ids: mockRespIds || '0'});
+      });
+
+      return useCases;
+    }
   }
 
   create(data: UseCase) {
@@ -59,29 +71,30 @@ export class UseCasesService {
     console.log('[mock-responses] UseCaseService use_cases create', sql);
     this.db.exec(sql);
 
-    this.uc2ucs.updateAllChildren(useCaseId, data.useCaseIds);
-    this.uc2mrs.updateAllChildren(useCaseId, data.mockResponseIds);
+    data.useCaseIds && this.uc2ucs.updateAllChildren(useCaseId, data.useCaseIds);
+    data.mockResponseIds && this.uc2mrs.updateAllChildren(useCaseId, data.mockResponseIds);
 
     return BetterSqlite3.backupToSql();
   }
 
   update(data: UseCase) {
-    const columns = [];
-    data.name && 
-      columns.push(`name = '${data.name.trim().replace(/'/g, '\'\'')}'`);
-    data.description &&
-      columns.push(`description = '${data.description.trim().replace(/'/g, '\'\'')}'`);
+    if (data.name || data.description) {
+      const columns = [];
+      data.name && 
+        columns.push(`name = '${data.name.trim().replace(/'/g, '\'\'')}'`);
+      data.description &&
+        columns.push(`description = '${data.description.trim().replace(/'/g, '\'\'')}'`);
+      const sql = `
+        UPDATE use_cases SET
+          ${columns.join(',\n')}
+        WHERE id = ${data.id};
+        `;
+      console.log('[mock-responses] UseCaseService', sql);
+      this.db.exec(sql);
+    }
 
-    const sql = `
-      UPDATE use_cases SET
-        ${columns.join(',\n')}
-      WHERE id = ${data.id};
-      `;
-    console.log('[mock-responses] UseCaseService', sql);
-    this.db.exec(sql);
-
-    this.uc2ucs.updateAllChildren(data.id, data.useCaseIds);
-    this.uc2mrs.updateAllChildren(data.id, data.mockResponseIds);
+    data.useCaseIds && this.uc2ucs.updateAllChildren(data.id, data.useCaseIds);
+    data.mockResponseIds && this.uc2mrs.updateAllChildren(data.id, data.mockResponseIds);
 
     return BetterSqlite3.backupToSql();
   }

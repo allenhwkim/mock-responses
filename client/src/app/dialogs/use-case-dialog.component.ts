@@ -11,7 +11,7 @@ import { UseCasesService } from '../use-cases/use-cases.service';
     <app-use-cases-list
       [useCases]="useCases"
       [activeUseCase]="data?.activeUseCase"
-      [activate]="data?.activate"
+      [activateMode]="data?.activateMode"
       [collectionMode]="data?.collectionMode"
       (selectClicked)="selectClicked.emit($event)"
       (deleteClicked)="deleteClicked.emit($event)">

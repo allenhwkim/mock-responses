@@ -4,7 +4,7 @@
     <span *ngIf="!activeUseCase">None</span>
     <fa-icon [icon]="faSearch" (click)="openUseCasesDialog()"></fa-icon>
     <input id="currently-active-use-case"
-      (ngModelChange)="updateMockResponses({active: activeUseCase})"
+      (ngModelChange)="setMockResponses({active: activeUseCase})"
       [(ngModel)]="activeUseCase" readonly size="4" />
   </span>
 
@@ -18,14 +18,12 @@
 
 <app-mock-responses-list
   [mockResponses]="mockResponses"
-  [dialogMode]="false"
   [collectionMode]="false"
   (playClicked)="mockResponseService.play($event)"
-  (deleteClicked)="deleteClicked($event)"
-  (searchTermChanged)="updateMockResponses($event)">
+  (deleteClicked)="deleteClicked($event)">
   <div class="search-section">
     <input class="mock-response-search" size="40" 
-      (keyup)="updateMockResponses($event)"
+      (keyup)="setMockResponses({key: $event})"
       placeholder="Type to search mock responses" />
     <a class="button" *ngIf="auth.authorized"
       [routerLink]="['/mock-responses/new']">

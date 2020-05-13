@@ -26,12 +26,11 @@ export class MockResponsesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.updateMockResponses({key:''});
+    this.setMockResponses({key:''});
   }
 
-  updateMockResponses(data) {
-    data  = data.target ? {key: data.target.value} : data;
-    this.mockResponseService.getMockResponses(data)
+  setMockResponses(by) {
+    this.mockResponseService.getMockResponses(by)
       .subscribe( (resp:any) => {
         this.mockResponses = resp.mockResponses;
         this.activeUseCase = resp.activeUseCase;
@@ -47,7 +46,7 @@ export class MockResponsesComponent implements OnInit {
     // acrivate a use case
     dialogRef.componentInstance.selectClicked.subscribe(event => {
       this.useCaseService.activateUseCase(event.id).subscribe(resp => {
-        this.updateMockResponses({useCase: event.id});
+        this.setMockResponses({useCase: event.id});
         this.dialog.closeAll();
       });
     })
@@ -55,7 +54,7 @@ export class MockResponsesComponent implements OnInit {
 
   deleteClicked(event) {
     this.mockResponseService.deleteMockResponse(event.id)
-      .subscribe( (resp: any) => this.updateMockResponses({key:''}) );
+      .subscribe( (resp: any) => this.setMockResponses({key:''}) );
   }
 
 }

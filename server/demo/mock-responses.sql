@@ -54,10 +54,14 @@ CREATE TABLE use_case_to_use_cases (
           child_use_case_id INTEGER NOT NULL,
           sequence INTEGER NOT NULL
         );
+INSERT INTO use_case_to_use_cases VALUES(1,2,3,1);
+INSERT INTO use_case_to_use_cases VALUES(2,3,5,1);
 CREATE TABLE use_case_to_mock_responses (
           id  INTEGER PRIMARY KEY,
           use_case_id INTEGER NOT NULL,
           mock_response_id INTEGER NOT NULL,
           sequence INTEGER NOT NULL
         );
+INSERT INTO use_case_to_mock_responses VALUES(1,2,1000000000000017,1);
+INSERT INTO use_case_to_mock_responses VALUES(2,3,1000000000000011,1);
 COMMIT;

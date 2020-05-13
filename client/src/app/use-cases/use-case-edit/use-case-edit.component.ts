@@ -60,12 +60,21 @@ export class UseCaseEditComponent implements OnInit {
   }
 
   getUpdatedUseCase() {
-    const updated = {id: this.useCase.id};
+    const updated: any = {id: this.useCase.id};
     for(var key in this.useCase) {
       if (this.orgUseCase[key] !== this.useCase[key]) {
         updated[key] = this.useCase[key];
       }
     }
+    const orgUseCaseIds = this.orgUseCase.useCases.map(el => el.id);
+    const newUseCaseIds = this.useCases.map(el => el.id);
+    (''+orgUseCaseIds !== ''+newUseCaseIds) && (updated.useCaseIds = newUseCaseIds);
+
+    const orgMockRespIds = this.orgUseCase.mockResponses.map(el => el.id);
+    const newMockRespIds = this.mockResponses.map(el => el.id);
+    (''+orgMockRespIds !== ''+newMockRespIds) && (updated.mockResponseIds = newMockRespIds);
+  
+    console.log('.........', {updated});
     return updated;
   }
 
@@ -98,15 +107,6 @@ export class UseCaseEditComponent implements OnInit {
     });
   }
 
-  setUseCases(action, useCaseId) {
-    const allUCIds = this.useCases.map(el => el.id);
-    const useCaseIds = 
-      action === 'add' ? allUCIds.concat(useCaseId).join(',') :
-      action === 'remove' ? allUCIds.filter(el => el !== useCaseId).join(',') : '';
-    this.useCaseService.getUseCases({ids: useCaseIds || '0'})
-      .subscribe( (resp: any) => this.useCases = resp.useCases);
-  }
-
   openMockResponsesDialog() {
     const dialogRef = this.dialog.open(
       MockResponseDialogComponent, {
@@ -117,6 +117,15 @@ export class UseCaseEditComponent implements OnInit {
     dialogRef.componentInstance.selectClicked.subscribe(event => {
       this.setMockResponses('add', event.id); this.dialog.closeAll();
     });
+  }
+
+  setUseCases(action, useCaseId) {
+    const allUCIds = this.useCases.map(el => el.id);
+    const useCaseIds = 
+      action === 'add' ? allUCIds.concat(useCaseId).join(',') :
+      action === 'remove' ? allUCIds.filter(el => el !== useCaseId).join(',') : '';
+    this.useCaseService.getUseCases({ids: useCaseIds || '0  '})
+      .subscribe( (resp: any) => this.useCases = resp.useCases);
   }
 
   setMockResponses(action, mockRespId) {
