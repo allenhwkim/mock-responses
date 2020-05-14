@@ -1,8 +1,16 @@
 .mock-responses .id { width: 100px; }
-.mock-responses .id-name { width: 200px; }
-.mock-responses .request { width: 25%; }
-.mock-responses .response { width: 25%; }
-.mock-responses .actions { width: 60px; }
+.mock-responses .id-name { width: 25%; }
+.mock-responses .request {
+  width: 50%; 
+  .contents {
+    display: flex; justify-content: space-between; 
+  }
+}
+.mock-responses .response { width: 25%; 
+  .contents {
+    display: flex; justify-content: space-between; 
+  }
+}
 .mock-responses .group .mock-response:not(:first-child) .expand.icon,
 .mock-responses .group.count-1 .mock-response .expand.icon,
 .mock-responses .group:not(.expanded) .mock-response:not(:first-child) {

@@ -1,0 +1,29 @@
+.main {
+  display: flex;
+  .use-cases, 
+  .mock-responses {
+    border: 1px solid #ccc;
+    padding: 12px;  
+    border-radius: 4px;
+    flex: 1;
+  }
+  
+  .use-cases {
+    .active-use-cases {
+      display: flex;
+      .active-use-case {
+        position: relative;
+        padding: 12px 20px; 
+        border: 1px solid #ccc;
+        border-radius: 12px;
+        box-shadow: 4px 4px 4px #ccc;
+        margin: 4px;
+        .delete {
+          position: absolute;
+          top: 4px;
+          right: 8px;
+        }
+      }
+    }
+  }
+}

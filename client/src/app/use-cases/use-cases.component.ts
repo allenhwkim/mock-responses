@@ -11,7 +11,6 @@ import { AuthorizedServiceService } from '../authorized.service';
 })
 export class UseCasesComponent implements OnInit {
   useCases: any;
-  activeUseCase: any;
   faPlus = faPlus;
 
   constructor(
@@ -27,7 +26,6 @@ export class UseCasesComponent implements OnInit {
     this.useCaseService.getUseCases(by)
       .subscribe( (resp:any) => {
         this.useCases = resp.useCases;
-        this.activeUseCase = resp.activeUseCase;
       })
   }
 }

@@ -128,8 +128,6 @@ export class BetterSqlite3Migration {
       `;
       this.db.exec(sql);
     } catch(e) {
-      console.error(e);
-      throw e;
     }
   }
 
@@ -153,8 +151,6 @@ export class BetterSqlite3Migration {
       `;
       this.db.exec(sql);
     } catch(e) {
-      console.error(e);
-      throw e;
     }
   }
 

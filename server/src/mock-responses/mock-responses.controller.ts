@@ -23,18 +23,9 @@ export class MockResponsesController {
   ) {}
 
   @Get()
-  findAllBy(
-    @Query('q') key,
-    @Query('ids') ids,
-    @Query('useCase') useCase,
-    @Request() req
-  ) {
-    const activeUseCase = useCase || this.useCase.cookies(req, 'UCID');
-    const useCases = activeUseCase && this.useCase.find(activeUseCase).useCases;
-    const mockResponses = activeUseCase ? 
-       this.mockResp.findAllByUseCase(activeUseCase) : this.mockResp.findAllBy({key, ids});
-
-    return { mockResponses, useCases, activeUseCase, key};
+  findAllBy(@Query('q') key, @Query('ids') ids) {
+    const mockResponses = this.mockResp.findAllBy({key, ids});
+    return { mockResponses, key};
   }
 
   @Get(':id')

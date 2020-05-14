@@ -11,8 +11,7 @@ export class MockResponsesService {
   ) {}
 
   getMockResponses(options) {
-    const url = `/mock-responses?` + 
-      `q=${options.key||''}&useCase=${options.useCase||''}&ids=${options.ids||''}`;
+    const url = `/mock-responses?q=${options.key||''}&ids=${options.ids||''}`;
     return this.http.get(url);
   }
 

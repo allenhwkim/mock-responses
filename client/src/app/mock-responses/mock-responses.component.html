@@ -1,33 +1,15 @@
-<div class="use-case-section">
-  <span *ngIf="auth.authorized">
-    &nbsp;Currently Active Use Case: 
-    <span *ngIf="!activeUseCase">None</span>
-    <fa-icon [icon]="faSearch" (click)="openUseCasesDialog()"></fa-icon>
-    <input id="currently-active-use-case"
-      (ngModelChange)="setMockResponses({active: activeUseCase})"
-      [(ngModel)]="activeUseCase" readonly size="4" />
-  </span>
-
-  <div *ngIf="activeUseCase" class="active-use-cases">
-    <a *ngFor="let el of useCases" 
-      class="active-use-case" [routerLink]="['/use-cases', el.id, 'edit']">
-      {{el.id}} - {{el.name}}
-    </a>
-  </div>
+<div class="search-section">
+  <input class="mock-response-search" size="40" 
+    (keyup)="setMockResponses({key: $event})"
+    placeholder="Type to search mock responses" />
+  <a class="button" *ngIf="auth.authorized"
+    [routerLink]="['/mock-responses/new']">
+    <fa-icon [icon]="faPlus"></fa-icon> New
+  </a>
 </div>
 
 <app-mock-responses-list
   [mockResponses]="mockResponses"
-  [collectionMode]="false"
   (playClicked)="mockResponseService.play($event)"
   (deleteClicked)="deleteClicked($event)">
-  <div class="search-section">
-    <input class="mock-response-search" size="40" 
-      (keyup)="setMockResponses({key: $event})"
-      placeholder="Type to search mock responses" />
-    <a class="button" *ngIf="auth.authorized"
-      [routerLink]="['/mock-responses/new']">
-      <fa-icon [icon]="faPlus"></fa-icon> New
-    </a>
-  </div>
 </app-mock-responses-list>

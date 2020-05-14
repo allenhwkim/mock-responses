@@ -10,7 +10,6 @@ import { faPlay, faEdit, faFile, faTrashAlt } from '@fortawesome/free-solid-svg-
 })
 export class UseCasesListComponent implements OnInit {
   @Input() useCases: any;
-  @Input() activeUseCase: any;
   @Input() collectionMode: boolean; // open a dialog, and select one
   @Input() listMode: boolean; // list selected ones, and unselect one
   @Input() activateMode: boolean; // enable activate a use case

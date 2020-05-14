@@ -1,22 +1,27 @@
 .use-cases  {
   .id {
-    width: 5%; 
+    width: 20%; 
     overflow: hidden;
-    max-width: 60px; 
+    .contents {
+      display: flex;
+      justify-content: space-between;
+    }
   }
   .name-desc {
     width: 30%; 
     overflow: hidden;
-    max-width: 450px;
   }
   .children {
-    width: 30%; 
+    width: 50%; 
     overflow: hidden;
-    max-width: 450px;
   }
-  .actions {
-    width: 10%; 
-    overflow: hidden;
-    max-width: 240px;
+
+  .child-use-case {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin: 0 4px;
+    display: inline-block;
+    padding: 4px;
+    background-color: #FFF;
   }
 }

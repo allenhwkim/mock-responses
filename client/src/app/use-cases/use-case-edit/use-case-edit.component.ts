@@ -57,6 +57,9 @@ export class UseCaseEditComponent implements OnInit {
           this.useCases = [...resp.useCases];
           this.mockResponses = [...resp.mockResponses];
         });
+    } else if (!id) {
+      this.useCaseService.getUseCases({ids: 1}) // the default use case
+        .subscribe((resp:any) => this.useCases = [...resp.useCases] );
     }
   }
 
@@ -80,7 +83,7 @@ export class UseCaseEditComponent implements OnInit {
 
   updateUseCase() {
     const updated = this.getUpdatedUseCase();
-    this.useCaseService.updateUseCase(updated)
+    this.useCaseService.updateUseCase(this.orgUseCase.id, updated)
       .subscribe(resp => this.router.navigate(['/use-cases']) );
   }
 

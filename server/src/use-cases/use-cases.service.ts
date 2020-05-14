@@ -85,9 +85,11 @@ export class UseCasesService {
     return BetterSqlite3.backupToSql();
   }
 
-  update(data: UseCase) {
+  update(id, data: UseCase) {
     if (data.name || data.description) {
       const columns = [];
+      data.id && 
+        columns.push(`id = '${data.id.trim()}'`);
       data.name && 
         columns.push(`name = '${data.name.trim().replace(/'/g, '\'\'')}'`);
       data.description &&
@@ -95,7 +97,7 @@ export class UseCasesService {
       const sql = `
         UPDATE use_cases SET
           ${columns.join(',\n')}
-        WHERE id = ${data.id};
+        WHERE id = ${id};
         `;
       console.log('[mock-responses] UseCaseService', sql);
       this.db.exec(sql);
@@ -124,12 +126,24 @@ export class UseCasesService {
   }
 
 
-  cookies(req, key) {
+  getCookie(req, key): string {
     const cookies = {};
     (req.headers.cookie || '').split('; ').forEach(el => {
       const [k,v] = el.split('=');
       cookies[k] = v;
     });
-    return key ? cookies[key] : cookies;
+    return cookies[key] ? decodeURIComponent(cookies[key]) : undefined;
+  }
+
+  setCookie(req, res, key, value) {
+    const matches = req.hostname.match(/[-\w]+\.(?:[-\w]+\.xn--[-\w]+|[-\w]{3,}|[-\w]+\.[-\w]{2})$/i);
+    const topLevelDomain = (matches && matches[0]) || req.hostname;
+    const cookieDomain = topLevelDomain.match(/\./) ? '.' + topLevelDomain : topLevelDomain;
+
+    res.cookie(key, value, {
+      path: '/',
+      domain: cookieDomain,
+      maxAge: 6048000 
+    });
   }
 }

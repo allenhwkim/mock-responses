@@ -14,7 +14,6 @@ import { UseCasesService } from '../use-cases/use-cases.service';
 })
 export class MockResponsesComponent implements OnInit {
   useCases: any;
-  activeUseCase: any;
   mockResponses: any;
   faPlus = faPlus; faSearch = faSearch;
 
@@ -33,23 +32,7 @@ export class MockResponsesComponent implements OnInit {
     this.mockResponseService.getMockResponses(by)
       .subscribe( (resp:any) => {
         this.mockResponses = resp.mockResponses;
-        this.activeUseCase = resp.activeUseCase;
-        this.useCases = resp.useCases;
       })
-  }
-
-  openUseCasesDialog() {
-    const dialogRef = this.dialog.open(
-      UseCaseDialogComponent, { 
-        width: '90%', height: '90%',
-        data: { collectionMode: false, activate: true, activeUseCase: +this.activeUseCase } });
-    // acrivate a use case
-    dialogRef.componentInstance.selectClicked.subscribe(event => {
-      this.useCaseService.activateUseCase(event.id).subscribe(resp => {
-        this.setMockResponses({useCase: event.id});
-        this.dialog.closeAll();
-      });
-    })
   }
 
   deleteClicked(event) {

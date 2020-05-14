@@ -6,43 +6,53 @@
       <th class="request">Request</th>
       <th class="id-name">Id/Name</th>
       <th class="response">Response</th>
-      <th class="actions"></th>
     </tr>
   </thead>
   <tr *ngFor="let el of mockResponses" class="mock-response">
     <td class="request">
-      <div *ngIf="el.req_method">Method: {{el.req_method}}</div>
-      <div>Url: {{el.req_url}}</div>
-      <div *ngIf="el.req_payload">Payload: {{el.req_payload}}</div>
+      <div class="contents">
+        <div>
+          <div *ngIf="el.req_method">Method: {{el.req_method}}</div>
+          <div>Url: {{el.req_url}}</div>
+          <div *ngIf="el.req_payload">Payload: {{el.req_payload}}</div>
+        </div>
+        <div class="actions">
+          <a class="button icon" *ngIf="auth.authorized && !collectionMode && !listMode " 
+            [routerLink]="['/mock-responses', el.id, 'edit']">
+            <fa-icon [icon]="faEdit"></fa-icon>
+          </a>
+          <a class="button icon" *ngIf="!auth.authorized && !collectionMode && !listMode"
+            [routerLink]="['/mock-responses', el.id, 'edit']">
+            <fa-icon [icon]="faFile"></fa-icon>
+          </a>
+          <a class="button icon delete" *ngIf="listMode"
+            (click)="deleteClicked.emit(el)">
+            <fa-icon [icon]="faTrashAlt"></fa-icon>
+          </a>
+          <button *ngIf="collectionMode"
+            (click)="selectClicked.emit(el)">
+            Select
+          </button>&nbsp;
+        </div>
+      </div>
     </td>
     <td class="id-name">({{el.id}}) <br/> {{el.name}}</td>
     <td class="response">
-      <div>
-        Status: {{el.res_status}}
-        <span *ngIf="el.res_delay_sec"> after delay: {{el.res_delay_sec}}</span>
+      <div class="contents">
+        <div>
+          <div>
+            Status: {{el.res_status}}
+            <span *ngIf="el.res_delay_sec"> after delay: {{el.res_delay_sec}}</span>
+          </div>
+          <div>Type: {{el.res_content_type}}</div>
+        </div>
+        <div class="actions">
+          <button class="icon" (click)="playClicked.emit(el)">
+            <fa-icon [icon]="faPlay"></fa-icon>
+          </button>
+        </div>
       </div>
-      <div>Type: {{el.res_content_type}}</div>
     </td>
-    <td class="actions">
-      <button class="icon" (click)="playClicked.emit(el)">
-        <fa-icon [icon]="faPlay"></fa-icon>
-      </button>&nbsp;
-      <a class="button icon" *ngIf="auth.authorized && !collectionMode && !listMode " 
-        [routerLink]="['/mock-responses', el.id, 'edit']">
-        <fa-icon [icon]="faEdit"></fa-icon>
-      </a>
-      <a class="button icon" *ngIf="!auth.authorized && !collectionMode && !listMode"
-        [routerLink]="['/mock-responses', el.id, 'edit']">
-        <fa-icon [icon]="faFile"></fa-icon>
-      </a>
-      <a class="button icon delete" *ngIf="listMode"
-        (click)="deleteClicked.emit(el)">
-        <fa-icon [icon]="faTrashAlt"></fa-icon>
-      </a>
-      <button *ngIf="collectionMode"
-        (click)="selectClicked.emit(el)">
-        Select
-      </button>&nbsp;
-    </td>
+
   </tr>
 </table>

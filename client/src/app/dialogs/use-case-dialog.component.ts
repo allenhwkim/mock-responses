@@ -10,7 +10,6 @@ import { UseCasesService } from '../use-cases/use-cases.service';
       placeholder="Type to search use-cases" />
     <app-use-cases-list
       [useCases]="useCases"
-      [activeUseCase]="data?.activeUseCase"
       [activateMode]="data?.activateMode"
       [collectionMode]="data?.collectionMode"
       (selectClicked)="selectClicked.emit($event)"
@@ -38,7 +37,7 @@ export class UseCaseDialogComponent implements OnInit {
   setUseCases(by) {
     this.useCaseService.getUseCases(by)
       .subscribe( (resp: any) => {
-        const excludeIds = this.data ? this.data.except.map(el => el.id) : [];
+        const excludeIds = this.data.except ? this.data.except.map(el => el.id) : [];
         this.useCases = resp.useCases.filter(el => !excludeIds.includes(el.id));
       });
   }

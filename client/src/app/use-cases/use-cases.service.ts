@@ -12,7 +12,7 @@ export class UseCasesService {
 
   getUseCases(options) {
     const url = `/use-cases?` + 
-      `q=${options.key||''}&ids=${options.ids||''}`;
+      `q=${options.key||''}&ids=${options.ids||''}&activeOnly=${options.activeOnly || ''}`;
     return this.http.get(url);
   }
 
@@ -24,8 +24,12 @@ export class UseCasesService {
     return this.http.put(`/use-cases/${id}/activate`, {});
   }
 
-  updateUseCase(useCase) {
-    return this.http.put(`/use-cases/` + useCase.id, useCase);
+  deactivateUseCase(id) {
+    return this.http.put(`/use-cases/${id}/deactivate`, {});
+  }
+
+  updateUseCase(id, useCase) {
+    return this.http.put(`/use-cases/` + id, useCase);
   }
 
   createUseCase(useCase) {

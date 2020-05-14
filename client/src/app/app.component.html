@@ -2,14 +2,17 @@
   <div class="contents">
     <div class="top-header">
       <div class="left">
+        <a [routerLink]="['/home']">Home</a> |
         <a [routerLink]="['/mock-responses']">Mock Responses</a> |
         <a [routerLink]="['/use-cases']">Use Cases</a>
         <input class="passcode public" 
           title="Enter passcode here to enable edit mode"
           (keypress)="authorizedChanged($event)"/>
       </div>
-      <div class="right">
-        <a href="https://github.com/allenhwkim/mock-responses"><i class="fab fa-github"></i></a>
+      <div>
+        <a href="https://github.com/allenhwkim/mock-responses">
+          <sup>github</sup>
+        </a>
       </div>
     </div>
     <div class="main-route">

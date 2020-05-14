@@ -17,6 +17,7 @@ import { MockResponseDialogComponent } from './dialogs/mock-response-dialog.comp
 import { UseCaseDialogComponent } from './dialogs/use-case-dialog.component';
 import { UseCaseEditComponent } from './use-cases/use-case-edit/use-case-edit.component';
 import { UseCasesListComponent } from './use-cases/use-cases-list/use-cases-list.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { UseCasesListComponent } from './use-cases/use-cases-list/use-cases-list
     UseCasesComponent,
     UseCaseEditComponent,
     UseCasesListComponent,
-    UseCaseDialogComponent
+    UseCaseDialogComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

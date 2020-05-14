@@ -6,7 +6,7 @@ CREATE TABLE use_case_to_use_cases (
           child_use_case_id INTEGER NOT NULL,
           sequence INTEGER NOT NULL
         );
-INSERT INTO use_case_to_use_cases VALUES(1,2,3,1);
+INSERT INTO use_case_to_use_cases VALUES(1,1,3,1);
 INSERT INTO use_case_to_use_cases VALUES(2,3,5,1);
 INSERT INTO use_case_to_use_cases VALUES(3,5,12,1);
 INSERT INTO use_case_to_use_cases VALUES(4,12,13,1);
@@ -16,7 +16,7 @@ CREATE TABLE use_case_to_mock_responses (
           mock_response_id INTEGER NOT NULL,
           sequence INTEGER NOT NULL
         );
-INSERT INTO use_case_to_mock_responses VALUES(1,2,1000000000000017,1);
+INSERT INTO use_case_to_mock_responses VALUES(1,1,1000000000000017,1);
 INSERT INTO use_case_to_mock_responses VALUES(2,3,1000000000000011,1);
 INSERT INTO use_case_to_mock_responses VALUES(3,5,1000000000000011,1);
 INSERT INTO use_case_to_mock_responses VALUES(4,5,1000000000000019,2);
@@ -66,7 +66,7 @@ CREATE TABLE use_cases (
           name  TEXT NOT NULL,
           description TEXT NOT NULL
         );
-INSERT INTO use_cases VALUES(2,'tssshuper','222 hups');
+INSERT INTO use_cases VALUES(1,'Default Use Case','222 hups');
 INSERT INTO use_cases VALUES(3,'hup downgrade','users can do	wngrade their account');
 INSERT INTO use_cases VALUES(5,'hup all the way','hardware upgrades for all');
 INSERT INTO use_cases VALUES(12,'woo','owo');

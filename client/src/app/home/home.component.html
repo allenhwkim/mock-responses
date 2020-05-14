@@ -1,0 +1,35 @@
+<div class="main">
+  <div class="use-cases">
+    <h3>
+      Currently Active Use Cases 
+      <fa-icon [icon]="faSearch" (click)="openUseCasesDialog()"></fa-icon>
+    </h3>
+
+    <div *ngIf="activeUseCases" class="active-use-cases">
+      <div class="active-use-case"
+        *ngFor="let el of activeUseCases" >
+        <div><b>({{el.id}}) {{el.name}}</b></div>
+        <div>
+          {{el.description}}
+          <a [routerLink]="['/use-cases', el.id, 'edit']"><sup>detail</sup></a>
+        </div>
+        <button class="no-style delete" (click)="deactivateUseCase(el)">x</button>
+      </div>
+    </div>
+  </div>
+  <div class="mock-responses">
+    <h3>
+      Currently Active Mock Responses
+    </h3>
+    <div class="search-section">
+      <input class="mock-response-search" size="40" 
+        (keyup)="setMockResponses({key: $event.target.value})"
+        placeholder="Type to search mock responses" />
+    </div>
+    <app-mock-responses-list
+      [mockResponses]="mockResponses"
+      [listMode]="true"
+      (playClicked)="mockResponseService.play($event)"  >
+    </app-mock-responses-list>
+  </div>
+</div>
