@@ -52,9 +52,9 @@ INSERT INTO mock_responses VALUES(1000000000000007,'Long name Long nameLong name
 INSERT INTO mock_responses VALUES(1000000000000008,NULL,'/api/options/call','OPTIONS','',200,NULL,'application/json','{}',1563894834295,'allen.kim',1563894834295,'allen.kim');
 INSERT INTO mock_responses VALUES(1000000000000009,'test233','/api/test','POST','',200,0,'application/json','test',1570211678295,'allen.kim',1570211955896,'allen.kim');
 INSERT INTO mock_responses VALUES(1000000000000010,'test222','/api/test','POST','',200,0,'application/json','test222',1570211949947,'allen.kim',1570212034458,'allen.kim');
-INSERT INTO mock_responses VALUES(1000000000000011,'test2','/api/test2','POST','',200,0,'application/json','test',1570211999314,'allen.kim',1588620142768,'allen.kim');
+INSERT INTO mock_responses VALUES(1000000000000011,'test2','/api/regexp/*.png','POST','',200,0,'application/json','test',1570211999314,'allen.kim',1589469883769,'allen.kim');
 INSERT INTO mock_responses VALUES(1000000000000012,'update','/api/test','POST','',200,0,'application/json','test',1570212065007,'allen.kim',1570212161466,'allen.kim');
-INSERT INTO mock_responses VALUES(1000000000000013,'create','/api/fdasf','POST','',200,0,'application/json','fdasf',1570212192308,'allen.kim',1570212277990,'allen.kim');
+INSERT INTO mock_responses VALUES(1000000000000013,'create','/api/fdasf','POST','',200,0,'application/json','{"foo": 1}',1570212192308,'allen.kim',1589505585568,'allen.kim');
 INSERT INTO mock_responses VALUES(1000000000000014,'function row','/api/func',NULL,'',200,0,'function','return req.query.foo == 1 ? 20 : 21;',1571758912499,'allen.kim',1571759272930,'allen.kim');
 INSERT INTO mock_responses VALUES(1000000000000015,'with ?foo=1','/api/func',NULL,'',200,0,'text/plain','this is from /api/func?foo=1',1571759051272,'allen.kim',1571759960626,'allen.kim');
 INSERT INTO mock_responses VALUES(1000000000000016,'with ?foo=2','/api/func',NULL,'',200,0,'text/plain','this is from /api/func?foo=2',1571759059184,'allen.kim',1571759946567,'allen.kim');

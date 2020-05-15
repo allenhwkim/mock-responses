@@ -32,6 +32,7 @@ function getWhereFromBy(by) {
 @Injectable()
 export class MockResponsesService {
   db = BetterSqlite3.db;
+  cache = {};
 
   constructor(
     private uc2uc: UseCaseToUseCasesService,
@@ -44,28 +45,23 @@ export class MockResponsesService {
   }
 
   findAllBy(by:any ={}) {
-    let sql;
-
     if (by.ids) {
-      sql = `
+      const sql = `
         SELECT * FROM mock_responses
         WHERE id IN (${by.ids})`;
+      console.log('[mock-responses] MockResponseService.findAllBy', sql);
+      return this.db.prepare(sql).all();
+    } else if (by.useCases) {
+      return this.findAllByUseCases(by.useCases);
     } else {
       const where = getWhereFromBy(by) || '1 = 1';
-      sql = `
+      const sql = `
         SELECT * FROM mock_responses 
         WHERE ${ where }
         ORDER BY updated_at DESC`;
+      console.log('[mock-responses] MockResponseService.findAllBy', sql);
+      return this.db.prepare(sql).all();
     }
-    
-    console.log('[mock-responses] MockResponseService.findAllBy', sql);
-    return this.db.prepare(sql).all();
-  }
-
-  findAllByUseCase(useCaseId) {
-    const mockRespIds = this.uc2mr.findAll(useCaseId).map(el => el.mock_response_id).join(',')
-
-    return this.findAllBy({ids: (mockRespIds || '0') });
   }
 
   create(data: MockResponse) {
@@ -139,6 +135,48 @@ export class MockResponsesService {
     this.db.exec(sql2);
 
     BetterSqlite3.backupToSql();
+  }
+
+  findAllByUseCases(useCaseIds) {
+    if (typeof useCaseIds === 'string') {
+      useCaseIds = useCaseIds.split(',').map(el => +el);
+    }
+    let urls = {};
+    useCaseIds.forEach(ucId => {
+      urls = {...urls, ...this.findAllByUseCase(ucId)};
+    });
+    return urls;
+  }
+
+  findAllByUseCase(useCaseId, processedOnes=[]) {
+    if (this.cache[useCaseId]) {
+      console.log('cache is already set for use case', useCaseId);
+    } else {
+      const useCaseIds = this.uc2uc.findAll(useCaseId);
+      console.log('.............. useCaseIds ...', {useCaseIds, processedOnes});
+
+      const mockRespIds = this.uc2mr.findAll(useCaseId)
+        .map(el => el.mock_response_id).join(',') || '0';
+      const mockResponses = this.findAllBy({ids: mockRespIds});
+      mockResponses.forEach(mockResp => {
+        const [url, method] = [mockResp.req_udl, mockResp.req_method];
+        this.cache[useCaseId] = this.cache[useCaseId] || {};
+        this.cache[useCaseId][url] = this.cache[useCaseId][url] || {};
+        this.cache[useCaseId][url][method] = mockResp.id;
+      })
+      processedOnes.push(useCaseId);
+      
+      useCaseIds.forEach(useCase => {
+        console.log('.............. useCaseId ...', {useCase});
+        if (processedOnes.indexOf(useCase.id) !== -1) {
+          console.log('[mock-responses] alreday process use_case id', useCase.id);
+          return false;
+        } else {
+          this.findAllByUseCase(useCase.id, processedOnes); // process child use case
+        }
+      })
+    }
+    return this.cache[useCaseId];
   }
 
 }

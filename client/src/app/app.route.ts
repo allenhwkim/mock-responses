@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: 'use-cases/new', component: UseCaseEditComponent },
   { path: 'use-cases', component: UseCasesComponent },
   { path: 'home', component: HomeComponent },
-  { path: '', component: MockResponsesComponent },
+  { path: '', component: HomeComponent },
 ];
 
 @NgModule({

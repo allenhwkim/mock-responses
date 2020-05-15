@@ -10,12 +10,14 @@
   
     <div class="name column">
       <label for="name">Name *</label>
-      <input id="name" size="40" [(ngModel)]="useCase.name" />
+      <input *ngIf="auth.authorized" id="name" size="40" [(ngModel)]="useCase.name" />
+      <span *ngIf="!auth.authorized">{{useCase.name}}</span>
     </div>
   
     <div class="description column">
       <label for="description">Description *</label>
-      <input id="description" size="80" [(ngModel)]="useCase.description" />
+      <input *ngIf="auth.authorized" id="description" size="80" [(ngModel)]="useCase.description" />
+      <span *ngIf="!auth.authorized">{{useCase.description}}</span>
     </div>
   
     <h4 class="list">
@@ -45,18 +47,18 @@
   
     <br/>
     <div class="buttons for-edit">
-      <button *ngIf="useCase.id" (click)="updateUseCase()">
+      <button *ngIf="auth.authorized && useCase.id" (click)="updateUseCase()">
         <fa-icon [icon]="faEdit"></fa-icon> Update
       </button>
-      <a class="button" *ngIf="useCase.id"
+      <a class="button" *ngIf="auth.authorized && useCase.id"
         [routerLink]="['/use-cases/new']"
         [queryParams]="{from: useCase.id}">
         Duplicate
       </a>
-      <button *ngIf="useCase.id" (click)="deleteUseCase()">
+      <button *ngIf="auth.authorized && useCase.id" (click)="deleteUseCase()">
         <fa-icon [icon]="faTrashAlt"></fa-icon> Delete 
       </button>
-      <button *ngIf="!useCase.id" (click)="createUseCase()">
+      <button *ngIf="auth.authorized && !useCase.id" (click)="createUseCase()">
         <fa-icon [icon]="faPlusCircle"></fa-icon> Create 
       </button>
     </div>

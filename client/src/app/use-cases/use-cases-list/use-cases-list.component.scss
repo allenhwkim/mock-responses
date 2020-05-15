@@ -17,11 +17,12 @@
   }
 
   .child-use-case {
+    display: inline-block;
+    background: #FFF;
+    padding: 12px 20px; 
     border: 1px solid #ccc;
     border-radius: 4px;
-    margin: 0 4px;
-    display: inline-block;
-    padding: 4px;
-    background-color: #FFF;
+    box-shadow: 4px 4px 4px #ccc;
+    margin: 4px;
   }
 }

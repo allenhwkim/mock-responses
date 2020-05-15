@@ -1,6 +1,6 @@
 <div class="search-section">
   <input class="mock-response-search" size="40" 
-    (keyup)="setMockResponses({key: $event})"
+    (keyup)="setMockResponses({key: $event.target.value})"
     placeholder="Type to search mock responses" />
   <a class="button" *ngIf="auth.authorized"
     [routerLink]="['/mock-responses/new']">

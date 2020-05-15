@@ -24,7 +24,8 @@ export class UseCasesController {
     if (activeOnly) {
       const ucIds = this.useCase.getCookie(req, 'UCIDS') || '0';
       const useCases = this.useCase.findAllBy({ids: ucIds});
-      return { useCases };
+      const mockResponses = this.mockResp.findAllByUseCases(ucIds);
+      return { useCases, mockResponses};
     } else {
       const useCases = this.useCase.findAllBy({key, ids, except})
       return { useCases };

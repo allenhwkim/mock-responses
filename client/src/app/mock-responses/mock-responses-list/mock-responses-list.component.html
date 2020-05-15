@@ -12,8 +12,8 @@
     <td class="request">
       <div class="contents">
         <div>
-          <div *ngIf="el.req_method">Method: {{el.req_method}}</div>
-          <div>Url: {{el.req_url}}</div>
+          <div *ngIf="el.req_method"><b>Method</b>: {{el.req_method}}</div>
+          <div><b>URL</b>: {{el.req_url}}</div>
           <div *ngIf="el.req_payload">Payload: {{el.req_payload}}</div>
         </div>
         <div class="actions">
@@ -25,7 +25,7 @@
             [routerLink]="['/mock-responses', el.id, 'edit']">
             <fa-icon [icon]="faFile"></fa-icon>
           </a>
-          <a class="button icon delete" *ngIf="listMode"
+          <a class="button icon delete" *ngIf="auth.authorized && listMode"
             (click)="deleteClicked.emit(el)">
             <fa-icon [icon]="faTrashAlt"></fa-icon>
           </a>
@@ -41,10 +41,10 @@
       <div class="contents">
         <div>
           <div>
-            Status: {{el.res_status}}
+            <b>Status</b>: {{el.res_status}}
             <span *ngIf="el.res_delay_sec"> after delay: {{el.res_delay_sec}}</span>
           </div>
-          <div>Type: {{el.res_content_type}}</div>
+          <div><b>Type</b>: {{el.res_content_type}}</div>
         </div>
         <div class="actions">
           <button class="icon" (click)="playClicked.emit(el)">

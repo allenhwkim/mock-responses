@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
+import { flatMap } from 'rxjs/operators';
 
 import { MockResponsesService } from '../mock-responses/mock-responses.service';
 import { AuthorizedServiceService } from '../authorized.service';
@@ -50,24 +51,23 @@ export class HomeComponent implements OnInit {
     dialogRef.componentInstance.selectClicked.subscribe(event => {
       this.useCaseService.activateUseCase(event.id).subscribe( (resp:any) => {
         this.activeUseCaseIds = resp;
-        this.useCaseService.getUseCases({ids: this.activeUseCaseIds})
-          .subscribe((resp: any) => {
-            this.activeUseCases = resp.useCases;
-            this.dialog.closeAll();
-          });
+        this.useCaseService.getUseCases({activeOnly: 1}).subscribe((resp: any) => {
+          this.activeUseCases = resp.useCases;
+          this.mockResponses = resp.mockResponses;
+          this.dialog.closeAll();
+        });
       });
     })
   }
 
-
   deactivateUseCase(useCase) {
     console.log('deleteClicked', useCase);
     this.useCaseService.deactivateUseCase(useCase.id).subscribe( (resp:any) => {
-      this.activeUseCaseIds = resp.length ? resp : '0';
-      this.useCaseService.getUseCases({ids: this.activeUseCaseIds})
-        .subscribe((resp: any) => {
-          this.activeUseCases = resp.useCases;
-        });
+      this.activeUseCaseIds = resp;
+      this.useCaseService.getUseCases({activeOnly: 1}).subscribe((resp: any) => {
+        this.activeUseCases = resp.useCases;
+        this.mockResponses = resp.mockResponses;
+      });
     });
   }
 

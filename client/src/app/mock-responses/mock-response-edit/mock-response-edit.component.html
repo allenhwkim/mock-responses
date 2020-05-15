@@ -2,18 +2,16 @@
 <h3 *ngIf="!mockResponse.id"> Create Mock Response </h3>
 
 <div class="mock-response form">
-  <input type="hidden" id="id" value="{{mockResponse.id}}">
-
   <div class="id column" *ngIf="mockResponse.id">
     <label for="id">Id</label>
-    <input [ngClass]="{'for-edit': auth.authorized}"
-      id="id" readonly [(ngModel)]="mockResponse.id" />
+    <input *ngIf="auth.authorized" id="id" readonly [(ngModel)]="mockResponse.id" />
+    <span *ngIf="!auth.authorized">{{mockResponse.id}}</span>
   </div>
 
   <div class="name column">
     <label for="name">Name</label>
-    <input [ngClass]="{'for-edit': auth.authorized}" 
-      id="name" required [(ngModel)]="mockResponse.name" />
+    <input *ngIf="auth.authorized" id="name" required [(ngModel)]="mockResponse.name" />
+    <span *ngIf="!auth.authorized">{{mockResponse.name}}</span>
   </div>
 
   <fieldset class="request-group">
@@ -21,24 +19,24 @@
 
     <div class="req_method column">
       <label for="req_method">Method</label>
-      <input [ngClass]="{'for-edit': auth.authorized}"
-        id="req_method" 
+      <input *ngIf="auth.authorized" id="req_method" 
         pattern="(GET|POST|DELETE|PUT|OPTIONS)"
         [(ngModel)]="mockResponse.req_method" />
+      <span *ngIf="!auth.authorized">{{mockResponse.req_method}}</span>
     </div>
 
     <div class="req_url column">
       <label for="req_url">Url</label>
-      <input [ngClass]="{'for-edit': auth.authorized}"
-        id="req_url" required
-        [(ngModel)]="mockResponse.req_url" />
+      <input *ngIf="auth.authorized" id="req_url" required [(ngModel)]="mockResponse.req_url" />
+      <span *ngIf="!auth.authorized">{{mockResponse.req_url}}</span>
     </div>
 
     <div class="req_url column">
       <label for="req_payload">Payload</label>
-      <input [ngClass]="{'for-edit': auth.authorized}"
+      <input *ngIf="auth.authorized"
         id="req_payload" pattern="(\S+,\s?)*\S+"
         [(ngModel)]="mockResponse.req_payload" />
+      <span *ngIf="!auth.authorized">{{mockResponse.req_payload}}</span>
     </div>
   </fieldset>
 
@@ -47,29 +45,30 @@
 
     <div class="res_status column">
       <label for="res_status">Status Code</label>
-      <input [ngClass]="{'for-edit': auth.authorized}"
-        id="res_status" pattern="\d{3}"
+      <input *ngIf="auth.authorized" id="res_status" pattern="\d{3}"
         [(ngModel)]="mockResponse.res_status" />
+      <span *ngIf="!auth.authorized">{{mockResponse.res_status}}</span>
     </div>
 
     <div class="res_delay_sec column">
       <label for="res_delay_sec">Delay Time</label>
-      <input [ngClass]="{'for-edit': auth.authorized}"
-        id="res_delay_sec" pattern="\d{1}"
+      <input *ngIf="auth.authorized" id="res_delay_sec" pattern="\d{1}"
         [(ngModel)]="mockResponse.res_delay_sec" />
+      <span *ngIf="!auth.authorized">{{mockResponse.res_status}}</span>
     </div>
 
     <div class="res_content_type column">
       <label for="res_content_type">Content Type</label>
-      <input [ngClass]="{'for-edit': auth.authorized}"
+      <input *ngIf="auth.authorized"
         id="res_content_type" pattern="\S+\/\S+"
         [(ngModel)]="mockResponse.res_content_type" />
+      <span *ngIf="!auth.authorized">{{mockResponse.res_content_type}}</span>
     </div>
 
     <div class="res_body column">
       <label for="res_body">Body</label>
       <a class="beautify-button" (click)="beautifyJSON()">Beautify JSON</a>
-      <textarea [ngClass]="{'for-edit': auth.authorized}"
+      <textarea *ngIf="auth.authorized"
         #resBody
         id="res_body" required 
         (keypress)="autoGrow()"
@@ -78,8 +77,7 @@
   </fieldset>
 
   <div *ngIf="auth.authorized">
-    <button *ngIf="mockResponse.id" 
-      (click)="updateMockResponse()">
+    <button *ngIf="mockResponse.id" (click)="updateMockResponse()">
       <fa-icon [icon]="faEdit"></fa-icon>
       Update Mock Response 
     </button>
