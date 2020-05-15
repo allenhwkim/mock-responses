@@ -32,7 +32,8 @@ function getWhereFromBy(by) {
 @Injectable()
 export class MockResponsesService {
   db = BetterSqlite3.db;
-  cache = {};
+  useCasesCached = {}; // use_case.id -> url -> method -> mock_response.id
+  mockResponsesCached = {}; // mock_response.id -> MockResponse
 
   constructor(
     private uc2uc: UseCaseToUseCasesService,
@@ -149,25 +150,30 @@ export class MockResponsesService {
   }
 
   findAllByUseCase(useCaseId, processedOnes=[]) {
-    if (this.cache[useCaseId]) {
+    if (this.useCasesCached[useCaseId]) {
       console.log('cache is already set for use case', useCaseId);
     } else {
       const useCaseIds = this.uc2uc.findAll(useCaseId);
-      console.log('.............. useCaseIds ...', {useCaseIds, processedOnes});
 
       const mockRespIds = this.uc2mr.findAll(useCaseId)
         .map(el => el.mock_response_id).join(',') || '0';
       const mockResponses = this.findAllBy({ids: mockRespIds});
-      mockResponses.forEach(mockResp => {
-        const [url, method] = [mockResp.req_udl, mockResp.req_method];
-        this.cache[useCaseId] = this.cache[useCaseId] || {};
-        this.cache[useCaseId][url] = this.cache[useCaseId][url] || {};
-        this.cache[useCaseId][url][method] = mockResp.id;
-      })
+      mockResponses.forEach((mockResp: MockResponse) => {
+        const [url, method] = [mockResp.req_url, mockResp.req_method];
+        this.mockResponsesCached[mockResp.id] = mockResp;
+        this.useCasesCached[useCaseId] = this.useCasesCached[useCaseId] || {};
+        this.useCasesCached[useCaseId][url] = this.useCasesCached[useCaseId][url] || {};
+        this.useCasesCached[useCaseId][url][method || '*'] = this.mockResponsesCached[mockResp.id];
+
+        if (url.includes('*')) { // regular expression match
+          this.useCasesCached[useCaseId]['REGEXP'] = this.useCasesCached[useCaseId]['REGEXP'] || {};
+          const urlRegExp = url.replace(/\*/g, '(.*?)');
+          this.useCasesCached[useCaseId]['REGEXP'][urlRegExp] = url;
+        }
+      });
       processedOnes.push(useCaseId);
-      
+
       useCaseIds.forEach(useCase => {
-        console.log('.............. useCaseId ...', {useCase});
         if (processedOnes.indexOf(useCase.id) !== -1) {
           console.log('[mock-responses] alreday process use_case id', useCase.id);
           return false;
@@ -176,7 +182,7 @@ export class MockResponsesService {
         }
       })
     }
-    return this.cache[useCaseId];
+    return this.useCasesCached[useCaseId];
   }
 
 }

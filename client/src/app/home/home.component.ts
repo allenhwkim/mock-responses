@@ -16,7 +16,8 @@ import { UseCasesService } from '../use-cases/use-cases.service';
 export class HomeComponent implements OnInit {
   activeUseCases = [];
   activeUseCaseIds = [];
-  mockResponses: any;
+  mockResponses: any= [];
+  objectEntries = Object.entries;
   faPlus = faPlus; faSearch = faSearch;
 
   constructor(
@@ -66,7 +67,7 @@ export class HomeComponent implements OnInit {
       this.activeUseCaseIds = resp;
       this.useCaseService.getUseCases({activeOnly: 1}).subscribe((resp: any) => {
         this.activeUseCases = resp.useCases;
-        this.mockResponses = resp.mockResponses;
+        this.mockResponses = Object.entries(resp.mockResponses);
       });
     });
   }
