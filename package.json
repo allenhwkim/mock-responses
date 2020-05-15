@@ -4,10 +4,12 @@
   "license": "MIT",
   "homepage": "https://github.com/allenhwkim/mock-responses#readme",
   "scripts": {
-    "stop": "kill-port --port 3331,3332",
-    "start": "npm stop && npm run start:server && npm run start:client",
+    "stop": "npm run stop:server; npm run stop:client",
+    "start": "npm stop; npm run start:server; npm run start:client",
     "start:server": "cd server && npm start & cd ..",
-    "start:client": "cd client && npm start & cd .."
+    "start:client": "cd client && npm start & cd ..",
+    "stop:server": "ps aux | grep -e 'nodemon\\|3331' | grep -v grep | awk '{print $2}' | xargs kill -9",
+    "stop:client": "ps aux | grep 'ng serve' | grep -v grep | awk '{print $2}' | xargs kill -9"
   },
   "devDependencies": {
     "kill-port": "^1.6.0"
