@@ -4,8 +4,8 @@
   "license": "MIT",
   "homepage": "https://github.com/allenhwkim/mock-responses#readme",
   "scripts": {
-    "stop": "npm run stop:server; npm run stop:client",
-    "start": "npm stop; npm run start:server; npm run start:client",
+    "stop": "npm run stop:server && npm run stop:client",
+    "start": "npm stop && npm run start:server && npm run start:client",
     "start:server": "cd server && npm start & cd ..",
     "start:client": "cd client && npm start & cd ..",
     "stop:server": "ps aux | grep -e 'nodemon\\|3331' | grep -v grep | awk '{print $2}' | xargs kill -9",

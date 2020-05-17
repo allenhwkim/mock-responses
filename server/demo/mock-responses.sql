@@ -10,6 +10,8 @@ INSERT INTO use_case_to_use_cases VALUES(1,1,3,1);
 INSERT INTO use_case_to_use_cases VALUES(2,3,5,1);
 INSERT INTO use_case_to_use_cases VALUES(3,5,12,1);
 INSERT INTO use_case_to_use_cases VALUES(4,12,13,1);
+INSERT INTO use_case_to_use_cases VALUES(5,3333825585217536,1,1);
+INSERT INTO use_case_to_use_cases VALUES(6,3333825585217536,3,2);
 CREATE TABLE use_case_to_mock_responses (
           id  INTEGER PRIMARY KEY,
           use_case_id INTEGER NOT NULL,
@@ -26,6 +28,12 @@ INSERT INTO use_case_to_mock_responses VALUES(7,13,1000000000000002,1);
 INSERT INTO use_case_to_mock_responses VALUES(8,13,1000000000000010,2);
 INSERT INTO use_case_to_mock_responses VALUES(9,13,1000000000000014,3);
 INSERT INTO use_case_to_mock_responses VALUES(10,13,1000000000000015,4);
+INSERT INTO use_case_to_mock_responses VALUES(11,3333825585217536,1000000000000013,1);
+INSERT INTO use_case_to_mock_responses VALUES(12,3333825585217536,1000000000000017,2);
+INSERT INTO use_case_to_mock_responses VALUES(13,3333826359066624,1000000000000013,1);
+INSERT INTO use_case_to_mock_responses VALUES(14,3333826359066624,1000000000000017,2);
+INSERT INTO use_case_to_mock_responses VALUES(15,3333828265377792,1000000000000013,1);
+INSERT INTO use_case_to_mock_responses VALUES(16,3333828265377792,1000000000000017,2);
 CREATE TABLE mock_responses (
           id	INTEGER,
           name	TEXT DEFAULT 'Unnamed',
@@ -64,11 +72,16 @@ INSERT INTO mock_responses VALUES(1000000000000019,'/cms/UTE-iPhone-11-black-225
 CREATE TABLE use_cases (
           id  INTEGER PRIMARY KEY,
           name  TEXT NOT NULL,
-          description TEXT NOT NULL
+          description TEXT NOT NULL,
+          created_at	INTEGER,
+          created_by	string,
+          updated_at	INTEGER,
+          updated_by	string
         );
-INSERT INTO use_cases VALUES(1,'Default Use Case','222 hups');
-INSERT INTO use_cases VALUES(3,'hup downgrade','users can do	wngrade their account');
-INSERT INTO use_cases VALUES(5,'hup all the way','hardware upgrades for all');
-INSERT INTO use_cases VALUES(12,'woo','owo');
-INSERT INTO use_cases VALUES(13,'polls','canada huper');
+INSERT INTO use_cases VALUES(1,'Default Use Case 2','222 hups',NULL,NULL,1589693128217,'allen.kim');
+INSERT INTO use_cases VALUES(3,'hup downgrade x','users can do	wngrade their account',NULL,NULL,1589693117054,'allen.kim');
+INSERT INTO use_cases VALUES(5,'hup all the way 2','hardware upgrades for all',NULL,NULL,1589693134707,'allen.kim');
+INSERT INTO use_cases VALUES(12,'woo','owo',NULL,NULL,NULL,NULL);
+INSERT INTO use_cases VALUES(13,'polls','canada huper',NULL,NULL,NULL,NULL);
+INSERT INTO use_cases VALUES(3333825585217536,'test 2','test2',NULL,NULL,1589693144723,'allen.kim');
 COMMIT;

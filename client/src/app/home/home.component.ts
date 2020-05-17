@@ -20,6 +20,9 @@ export class HomeComponent implements OnInit {
   objectEntries = Object.entries;
   faPlus = faPlus; faSearch = faSearch;
 
+  searchUseCases = [];
+  showUseCaseSearch = false;
+
   constructor(
     public mockResponseService: MockResponsesService,
     private useCaseService: UseCasesService,
@@ -42,32 +45,34 @@ export class HomeComponent implements OnInit {
     alert('TODO');
   }
 
-  openUseCasesDialog() {
-    const dialogRef = this.dialog.open(
-      UseCaseDialogComponent, {
-        width: '90%',
-        height: '90%', 
-        data: { collectionMode: true, except: this.activeUseCases}
-      });
-    dialogRef.componentInstance.selectClicked.subscribe(event => {
-      this.useCaseService.activateUseCase(event.id).subscribe( (resp:any) => {
-        this.activeUseCaseIds = resp;
-        this.useCaseService.getUseCases({activeOnly: 1}).subscribe((resp: any) => {
-          this.activeUseCases = resp.useCases;
-          this.mockResponses = resp.mockResponses;
-          this.dialog.closeAll();
-        });
-      });
+  openUseCaseDialog(useCase) {
+    const dialogRef = this.dialog.open(UseCaseDialogComponent, { data: { useCase } });
+  }
+
+  openUseCasesSearch(by = {key: ''}) {
+    this.useCaseService.getUseCases(by)
+      .subscribe( (resp: any) => {
+        this.searchUseCases = resp.useCases.filter(el => !this.activeUseCaseIds.includes(el.id));
+        this.showUseCaseSearch = true;
     })
   }
 
+ activateUseCase(useCase) {
+    this.useCaseService.activateUseCase(useCase.id).subscribe( (resp:any) => {
+      this.activeUseCaseIds = resp;
+      this.useCaseService.getUseCases({activeOnly: 1}).subscribe((resp: any) => {
+        this.activeUseCases = resp.useCases;
+        this.mockResponses = resp.mockResponses;
+      });
+    });
+  }
+
   deactivateUseCase(useCase) {
-    console.log('deleteClicked', useCase);
     this.useCaseService.deactivateUseCase(useCase.id).subscribe( (resp:any) => {
       this.activeUseCaseIds = resp;
       this.useCaseService.getUseCases({activeOnly: 1}).subscribe((resp: any) => {
         this.activeUseCases = resp.useCases;
-        this.mockResponses = Object.entries(resp.mockResponses);
+        this.mockResponses = resp.mockResponses;
       });
     });
   }

@@ -1,0 +1,43 @@
+<div class="use-case" *ngIf="useCase">
+  <h3> Use Case </h3>
+  <div class="id column">
+    <b for="id">Id</b> : {{useCase.id}}
+  </div>
+
+  <div class="name column">
+    <b for="name">Name</b> : 
+    <span>{{useCase.name}}</span>
+  </div>
+
+  <div class="description column">
+    <b for="description">Description</b> : 
+    <span>{{useCase.description}}</span>
+  </div>
+
+  <h4 class="list">Use Cases</h4>
+
+  <ul class="use-cases">
+    <li class="use-case" *ngFor="let el of useCase.useCases">
+      <span>({{el.id}})</span> 
+      <span>{{el.name}}</span>
+      <div> {{el.description}} </div>
+    </li>
+  </ul>
+
+  <h4> Mock Responses </h4>
+  <div *ngFor="let mockResp of useCase.mockResponses" title="{{mockResp.id}}">
+    <span><b>{{mockResp.req_url}}</b></span> &nbsp;
+    <span><b>{{mockResp.req_method}}</b></span> &nbsp;
+    <span>{{mockResp.name}}</span> &nbsp;
+    <span title="status code">{{mockResp.res_status}}</span> &nbsp;
+    <span title="content type">{{mockResp.res_content_type}}</span>
+    <!-- <button class="icon" (click)="playClicked(mockRexp)">
+      <fa-icon [icon]="faPlay"></fa-icon>
+    </button> -->
+  </div>
+
+  <div>Created at {{useCase.created_at}} by {{useCase.created_by}}</div>
+  <div>Updated at {{useCase.updated_at}} by {{useCase.updated_by}}</div>
+
+</div>
+

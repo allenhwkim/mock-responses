@@ -15,3 +15,43 @@
 
 .use-case.form .column  { padding: 4px 0; }
 .use-case.form .column label { display: inline-block; width: 100px; }
+
+.use-cases,
+.mock-responses {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  .use-case, 
+  .mock-response {
+    position: relative;
+    display: inline-block;
+    padding: 12px 20px; 
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 4px 4px 4px #ccc;
+    margin: 4px;
+    vertical-align: top;
+    .delete {
+      position: absolute;
+      top: 4px;
+      right: 8px;
+    }
+    &.add-use-case:not(.expanded),
+    &.add-mock-response:not(.expanded) {
+      border: none;
+      box-shadow: none;
+      cursor: pointer;
+    }
+  }
+  .add-use-case,
+  .add-mock-response {
+    max-width: 800px;
+    ::ng-deep .mock-responses,
+    ::ng-deep .use-cases {
+      max-height: 300px;
+      display: block;
+      margin: 12px 0;
+      overflow: auto;
+    }
+  }
+}

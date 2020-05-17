@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { MockResponsesService } from './mock-responses.service';
 import { AuthorizedServiceService } from '../authorized.service';
+import { MockResponseDialogComponent } from '../dialogs/mock-response-dialog.component';
 import { UseCaseDialogComponent } from '../dialogs/use-case-dialog.component';
 import { UseCasesService } from '../use-cases/use-cases.service';
 

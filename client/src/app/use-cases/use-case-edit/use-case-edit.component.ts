@@ -7,9 +7,9 @@ import { MockResponse } from 'src/app/models/mock-response.interface';
 import { UseCase } from 'src/app/models/use-case.interface';
 import { MockResponsesService } from 'src/app/mock-responses/mock-responses.service';
 import { UseCasesService } from '../use-cases.service';
+import { MatDialog } from '@angular/material/dialog';
 import { UseCaseDialogComponent } from 'src/app/dialogs/use-case-dialog.component';
 import { MockResponseDialogComponent } from 'src/app/dialogs/mock-response-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-use-case-edit',
@@ -25,8 +25,13 @@ export class UseCaseEditComponent implements OnInit {
   faSearch = faSearch; faBan = faBan; faEdit = faEdit;
   faPlusCircle = faPlusCircle; faTrashAlt = faTrashAlt;
 
-  useCases: any = [];
-  mockResponses: any = [];
+  useCases = [];
+  mockResponses = [];
+
+  searchUseCases = [];
+  showUseCaseSearch = false;
+  searchMockResponses = [];
+  showMockResponseSearch = false;
 
   constructor(
     public auth: AuthorizedServiceService,
@@ -51,7 +56,7 @@ export class UseCaseEditComponent implements OnInit {
     } else if (from) {
       this.useCaseService.getUseCase(from)
         .subscribe((resp:any) => {
-          this.orgUseCase = {};
+          this.orgUseCase = {useCases: [], mockResponses: []};
           this.useCase = resp;
           this.useCase.id = undefined;
           this.useCases = [...resp.useCases];
@@ -98,28 +103,23 @@ export class UseCaseEditComponent implements OnInit {
       .subscribe(resp => this.router.navigate(['/use-cases']) );
   }
 
-  openUseCasesDialog() {
-    const dialogRef = this.dialog.open(
-      UseCaseDialogComponent, {
-        width: '90%',
-        height: '90%', 
-        data: { collectionMode: true, except: [...this.useCases, this.useCase] }
-      });
-    dialogRef.componentInstance.selectClicked.subscribe(event => {
-      this.setUseCases('add', event.id); this.dialog.closeAll();
-    });
+  openUseCasesSearch(by = {key: ''}) {
+    const except = [...this.useCases, this.useCase];
+    this.useCaseService.getUseCases(by)
+      .subscribe( (resp: any) => {
+        const excludeIds = except.map(el => el.id);
+        this.searchUseCases = resp.useCases.filter(el => !excludeIds.includes(el.id));
+        this.showUseCaseSearch = true;
+    })
   }
 
-  openMockResponsesDialog() {
-    const dialogRef = this.dialog.open(
-      MockResponseDialogComponent, {
-        width: '90%',
-        height: '90%', 
-        data: { collectionMode: true, except: this.mockResponses }
-      });
-    dialogRef.componentInstance.selectClicked.subscribe(event => {
-      this.setMockResponses('add', event.id); this.dialog.closeAll();
-    });
+  openMockResponseSearch(by = {key: ''}) {
+    this.mockResponseService.getMockResponses(by)
+      .subscribe( (resp: any) => {
+        const excludeIds = this.mockResponses.map(el => el.id);
+        this.searchMockResponses = resp.mockResponses.filter(el => !excludeIds.includes(el.id));
+        this.showMockResponseSearch= true;
+    })
   }
 
   setUseCases(action, useCaseId) {
@@ -139,4 +139,13 @@ export class UseCaseEditComponent implements OnInit {
     this.mockResponseService.getMockResponses({ids: mockRespIds || '0'})
       .subscribe( (resp: any) => this.mockResponses = resp.mockResponses);
   }
+
+  openUseCaseDialog(useCase) {
+    const dialogRef = this.dialog.open(UseCaseDialogComponent, { data: { useCase } });
+  }
+
+  openMockResponseDialog(mockResponse) {
+    const dialogRef = this.dialog.open(MockResponseDialogComponent, { data: { mockResponse } });
+  }
+
 }

@@ -10,22 +10,40 @@
   
   .use-cases {
     .active-use-cases {
-      display: flex;
-      flex-wrap: wrap;
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
       .active-use-case {
         position: relative;
-        flex: 1 45%;
+        display: inline-block;
         padding: 12px 20px; 
         border: 1px solid #ccc;
         border-radius: 4px;
         box-shadow: 4px 4px 4px #ccc;
         margin: 4px;
+        vertical-align: top;
         .delete {
           position: absolute;
           top: 4px;
           right: 8px;
         }
+        &.add-use-case:not(.expanded) {
+          border: none;
+          box-shadow: none;
+          cursor: pointer;
+        }
+      }
+      .add-use-case {
+        max-width: 800px;
+        ::ng-deep .mock-responses,
+        ::ng-deep .use-cases {
+          max-height: 300px;
+          display: block;
+          margin: 12px 0;
+          overflow: auto;
+        }
       }
     }
   }
+
 }

@@ -2,6 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AuthorizedServiceService } from '../../authorized.service';
 import { UseCasesService } from '../use-cases.service';
 import { faPlay, faEdit, faFile, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { MatDialog } from '@angular/material/dialog';
+import { UseCaseDialogComponent } from 'src/app/dialogs/use-case-dialog.component';
 
 @Component({
   selector: 'app-use-cases-list',
@@ -21,10 +23,16 @@ export class UseCasesListComponent implements OnInit {
 
   constructor(
     public auth: AuthorizedServiceService,
-    public useCasesService: UseCasesService
+    public useCasesService: UseCasesService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
   }
+  
+  openUseCaseDialog(useCase) {
+    const dialogRef = this.dialog.open(UseCaseDialogComponent, { data: { useCase } });
+  }
+
   
 }

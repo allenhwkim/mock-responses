@@ -141,7 +141,11 @@ export class BetterSqlite3Migration {
         CREATE TABLE use_cases (
           id  INTEGER PRIMARY KEY,
           name  TEXT NOT NULL,
-          description TEXT NOT NULL
+          description TEXT NOT NULL,
+          created_at	INTEGER,
+          created_by	string,
+          updated_at	INTEGER,
+          updated_by	string,
         );
         INSERT INTO use_cases
           SELECT id, name, description

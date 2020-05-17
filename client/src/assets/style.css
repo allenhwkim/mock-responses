@@ -32,7 +32,8 @@ button {
   border-radius: 4px;
   color: #FFF;
   display: inline-block;
-  font-size: 16px;  
+  font-size: 16px; 
+  white-space: nowrap;
 }
 
 button.no-style {

@@ -1,21 +1,30 @@
 <div class="main">
   <div class="use-cases">
-    <h3>
-      Currently Active Use Cases 
-      <fa-icon [icon]="faSearch" (click)="openUseCasesDialog()"></fa-icon>
-    </h3>
+    <h3>Currently Active Use Cases</h3>
 
-    <div *ngIf="activeUseCases" class="active-use-cases">
-      <div class="active-use-case"
-        *ngFor="let el of activeUseCases" >
+    <ul *ngIf="activeUseCases" class="active-use-cases">
+      <li class="active-use-case"
+        *ngFor="let el of activeUseCases"
+        (click)="openUseCaseDialog(el)">
         <div><b>({{el.id}}) {{el.name}}</b></div>
-        <div>
-          {{el.description}}
-          <a [routerLink]="['/use-cases', el.id, 'edit']"><sup>detail</sup></a>
-        </div>
-        <button class="no-style delete" (click)="deactivateUseCase(el)">x</button>
-      </div>
-    </div>
+        <div>{{el.description}}</div>
+        <button class="no-style delete" (click)="deactivateUseCase(el); $event.stopPropagation()">x</button>
+      </li>
+      <li class="use-case add-use-case" [ngClass]="{expanded: showUseCaseSearch}">
+        <span (click)="openUseCasesSearch()">Add</span>
+        <span *ngIf="showUseCaseSearch">
+          <input class="use-case-search" size="40" 
+            (keyup)="openUseCasesSearch({key: $event.target.value})"
+            placeholder="Type to search use-cases" />
+          <span *ngIf="showUseCaseSearch" (click)="showUseCaseSearch=false">close</span>
+          <app-use-cases-list 
+            [useCases]="searchUseCases"
+            [collectionMode]="true"
+            (selectClicked)="activateUseCase($event); showUseCaseSearch=false;">
+          </app-use-cases-list>
+        </span>
+      </li>
+    </ul>
   </div>
 
   <div class="mock-responses">

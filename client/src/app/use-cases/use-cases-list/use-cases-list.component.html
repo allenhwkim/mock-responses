@@ -37,12 +37,11 @@
       <p>{{useCase.description}}</p> 
     </td>
     <td class="children">
-      <div class="child-use-case" *ngFor="let el of useCase.useCases">
+      <div class="child-use-case"
+         *ngFor="let el of useCase.useCases"
+        (click)="openUseCaseDialog(el)">
          <div><b>({{el.id}}) {{el.name}}</b></div>
-        <div>
-          {{el.description}}
-          <a [routerLink]="['/use-cases', el.id, 'edit']"><sup>detail</sup></a>
-        </div>
+        <div>{{el.description}}</div>
       </div>
       <ul><b>Mock Responses</b>
         <li *ngFor="let mr of useCase.mockResponses" title="{{mr.id}}"> 

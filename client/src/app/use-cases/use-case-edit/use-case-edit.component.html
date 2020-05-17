@@ -20,31 +20,62 @@
       <span *ngIf="!auth.authorized">{{useCase.description}}</span>
     </div>
   
-    <h4 class="list">
-      Use Cases
-      <fa-icon [icon]="faSearch" (click)="openUseCasesDialog()"></fa-icon>
-      <fa-icon [icon]="faBan" (click)="useCases=[]"></fa-icon>
-    </h4>
+    <h4 class="list">Use Cases</h4>
 
-    <app-use-cases-list 
-      [useCases]="useCases"
-      [listMode]="true"
-      (deleteClicked)="setUseCases('remove', $event.id)">
-    </app-use-cases-list>
-  
-    <h4>
-      Mock Responses
-      <fa-icon [icon]="faSearch" (click)="openMockResponsesDialog()"></fa-icon>
-      <fa-icon [icon]="faBan" (click)="mockResponses=[]"></fa-icon>
-    </h4>
+    <ul class="use-cases">
+      <li class="use-case" *ngFor="let useCase of useCases"
+        (click)="openUseCaseDialog(useCase)">
+        <span>({{useCase.id}})</span> 
+        <span>{{useCase.name}}</span>
+        <div>{{useCase.description}}</div>
+        <a *ngIf="auth.authorized" class="button icon delete"
+          (click)="setUseCases('remove', useCase.id); $event.stopPropagation();"> x </a>
+      </li>
+      <li class="use-case add-use-case" [ngClass]="{expanded: showUseCaseSearch}">
+        <span (click)="openUseCasesSearch()">Add</span>
+        <span *ngIf="showUseCaseSearch">
+          <input class="use-case-search" size="40" 
+            (keyup)="openUseCasesSearch({key: $event.target.value})"
+            placeholder="Type to search use-cases" />
+          <span *ngIf="showUseCaseSearch" (click)="showUseCaseSearch=false">close</span>
+          <app-use-cases-list 
+            [useCases]="searchUseCases"
+            [collectionMode]="true"
+            (selectClicked)="setUseCases('add', $event.id); showUseCaseSearch=false;">
+          </app-use-cases-list>
+        </span>
+      </li>
+    </ul>
 
-    <app-mock-responses-list
-      [mockResponses]="mockResponses"
-      [listMode]="true"
-      (playClicked)="mockResponseService.play($event)"
-      (deleteClicked)="setMockResponses('remove', $event.id)">
-    </app-mock-responses-list>
-  
+    <h4> Mock Responses </h4>
+
+    <ul class="mock-responses">
+      <li class="mock-response" *ngFor="let mockResp of mockResponses"
+        (click)="openMockResponseDialog(mockResp)" title="{{mockResp.id}}">
+        <b>{{mockResp.req_method}}</b><b *ngIf="!mockResp.method">&nbsp; &nbsp;</b> &nbsp;
+        <b>{{mockResp.req_url}}</b> &nbsp;
+        <span title="name">{{mockResp.name}}</span> &nbsp;
+        <span title="status code">{{mockResp.res_status}}</span> &nbsp;
+        <span title="content type">{{mockResp.res_content_type}}</span>
+        <a *ngIf="auth.authorized" class="button icon delete"
+          (click)="setMockResponses('remove', mockResp.id); $event.stopPropagation();"> x </a>
+      </li>
+      <li class="mock-response add-mock-response" [ngClass]="{expanded: showMockResponseSearch}">
+        <span (click)="openMockResponseSearch()">Add</span>
+        <span *ngIf="showMockResponseSearch">
+          <input class="mock-response-search" size="40" 
+            (keyup)="openMockResponseSearch({key: $event.target.value})"
+            placeholder="Type to search mock response" />
+          <span *ngIf="showMockResponseSearch" (click)="showMockResponseSearch=false">close</span>
+          <app-mock-responses-list 
+            [mockResponses]="searchMockResponses"
+            [collectionMode]="true"
+            (selectClicked)="setMockResponses('add', $event.id); showMockResponseSearch=false;">
+          </app-mock-responses-list >
+        </span>
+      </li>
+    </ul>
+
     <br/>
     <div class="buttons for-edit">
       <button *ngIf="auth.authorized && useCase.id" (click)="updateUseCase()">

@@ -41,11 +41,17 @@ export class UseCasesService {
       return this.db.prepare(sql).all();
     } else {
       const sql = 
-        by.key ? 
-          `SELECT * FROM use_cases WHERE name LIKE '%${by.key}%' OR description like '%${by.key}%'`: 
-        by.except ? 
-          `SELECT * FROM use_cases WHERE id NOT IN (${by.except})`:
-          `SELECT * FROM use_cases`;
+        by.key ? `
+          SELECT * FROM use_cases
+          WHERE name LIKE '%${by.key}%' OR description like '%${by.key}%'
+          ORDER BY updated_at DESC
+        `: 
+        by.except ? `
+          SELECT * FROM use_cases
+          WHERE id NOT IN (${by.except})
+          ORDER BY updated_at DESC
+        `:
+        `SELECT * FROM use_cases ORDER BY updated_at DESC`;
       console.log('[mock-responses] UseCaseService.findAllBy', sql);
 
       const useCases = this.db.prepare(sql).all();
@@ -70,11 +76,13 @@ export class UseCasesService {
     const description = data.description.trim().replace(/'/g, '\'\'');
     const UUID = require('uuid-int');
     const useCaseId = UUID(0).uuid();
-
+    const createdAt = new Date().getTime();
     const sql = `
       INSERT INTO use_cases 
-        (id, name, description)
-        VALUES (${useCaseId}, '${name}', '${description}');
+        VALUES (
+          ${useCaseId}, '${name}', '${description}',
+          ${createdAt}, '${username.sync()}', ${createdAt}, '${username.sync()}'
+        );
       `;
     console.log('[mock-responses] UseCaseService use_cases create', sql);
     this.db.exec(sql);
@@ -89,14 +97,16 @@ export class UseCasesService {
     if (data.name || data.description) {
       const columns = [];
       data.id && 
-        columns.push(`id = '${data.id.trim()}'`);
+        columns.push(`id = '${data.id.toString().trim()}'`);
       data.name && 
         columns.push(`name = '${data.name.trim().replace(/'/g, '\'\'')}'`);
       data.description &&
         columns.push(`description = '${data.description.trim().replace(/'/g, '\'\'')}'`);
       const sql = `
         UPDATE use_cases SET
-          ${columns.join(',\n')}
+          ${columns.join(',\n')},
+          updated_at = ${new Date().getTime()},
+          updated_by = '${username.sync()}'
         WHERE id = ${id};
         `;
       console.log('[mock-responses] UseCaseService', sql);
