@@ -12,12 +12,11 @@
       <li class="add-use-case add-available" [ngClass]="{expanded: useCaseSearchVisible}">
         <span (click)="showUseCasesSearch()">Add</span>
         <div class="search-use-case" *ngIf="useCaseSearchVisible">
-          <div class="blocker" (click)="useCaseSearchVisible=false">blocker</div>
+          <div class="blocker" (click)="useCaseSearchVisible=false"></div>
           <div class="contents">
             <input class="use-case-search" size="40" 
               (keyup)="showUseCasesSearch({key: $event.target.value})"
               placeholder="Type to search use-cases" />
-            <span *ngIf="useCaseSearchVisible" (click)="useCaseSearchVisible=false">close</span>
             <app-use-cases-list 
               [useCases]="searchUseCases"
               [collectionMode]="true"
@@ -43,12 +42,11 @@
       <li class="add-mock-response add-available" [ngClass]="{expanded: mockResponseSearchVisible}">
         <span (click)="showMockResponsesSearch()">Add</span>
         <div *ngIf="mockResponseSearchVisible">
-          <div class="blocker" (click)="mockResponseSearchVisible=false">blocker</div>
+          <div class="blocker" (click)="mockResponseSearchVisible=false"></div>
           <div class="contents">
             <input class="mock-response-search" size="40" 
               (keyup)="showMockResponsesSearch({key: $event.target.value})"
               placeholder="Type to search mock response" />
-            <span *ngIf="mockResponseSearchVisible" (click)="mockResponseSearchVisible=false">close</span>
             <app-mock-responses-list 
               [mockResponses]="searchMockResponses"
               [collectionMode]="true"

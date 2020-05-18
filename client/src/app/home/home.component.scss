@@ -11,15 +11,17 @@
       left: 0;
       width: 100vw;
       height: 100vh;
+      z-index: 1;
     }
     .contents {
       position: absolute;
       background: #FFF;
+      z-index: 1;
       width: 800px;
       padding: 12px;
       border-radius: 4px;
       border: 1px solid #ccc;
-      box-shadow: 4px 4px 4px #CCC;
+      box-shadow: 0 0 24px #333;
       ::ng-deep .mock-responses,
       ::ng-deep .use-cases {
         max-height: 300px;
