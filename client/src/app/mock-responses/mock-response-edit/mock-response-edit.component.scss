@@ -1,12 +1,20 @@
-.mock-response.form .column  { padding: 4px 0; }
-.mock-response.form .column label { display: inline-block; width: 100px; }
-.mock-response.form .column #name { width: 400px; }
-.mock-response.form .column #req_method { width: 6em; }
-.mock-response.form .column #req_url { width: 400px; }
-.mock-response.form .column #req_payload { width: 400px; }
-.mock-response.form .column #res_status { width: 6em; }
-.mock-response.form .column #res_delay_sec { width: 6em; }
-.mock-response.form .column #res_body { width: 100%; height: 40px; resize: vertical; }
+.mock-response.form .column  { 
+  padding: 4px 0; 
+  label { display: inline-block; width: 100px; }
+  #name { width: 400px; }
+  #req_method { width: 6em; }
+  #req_url { width: 400px; }
+  #req_payload { width: 400px; }
+  #res_status { width: 6em; }
+  #res_delay_sec { width: 6em; }
+  #res_body { 
+    width: calc(100% - 100px);
+    height: 40px; 
+    resize: vertical; 
+    padding: 12px;
+  }
+
+}
 .request-group, .response-group {
   margin: 12px 0;
   border: 1px solid #ccc;

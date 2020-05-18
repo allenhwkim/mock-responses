@@ -66,8 +66,10 @@
     </div>
 
     <div class="res_body column">
-      <label for="res_body">Body</label>
-      <a class="beautify-button" (click)="beautifyJSON()">Beautify JSON</a>
+      <label for="res_body">
+        Body <br/>
+        <a class="beautify-button" (click)="beautifyJSON()"><sub>Beautify JSON</sub></a>
+      </label>
       <textarea *ngIf="auth.authorized"
         #resBody
         id="res_body" required 

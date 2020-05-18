@@ -28,7 +28,7 @@
     padding: 12px 20px; 
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-shadow: 4px 4px 4px #ccc;
+    cursor: pointer;
     margin: 4px;
     vertical-align: top;
     .delete {
@@ -45,13 +45,35 @@
   }
   .add-use-case,
   .add-mock-response {
-    max-width: 800px;
-    ::ng-deep .mock-responses,
-    ::ng-deep .use-cases {
-      max-height: 300px;
-      display: block;
-      margin: 12px 0;
-      overflow: auto;
+    position: relative;
+    display: inline-block;
+    padding: 12px 20px; 
+    width: 800px;
+    border: none;
+    box-shadow: none;
+    .blocker {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+    }
+    .contents {
+      position: absolute;
+      background: #FFF;
+      z-index: 1;
+      padding: 12px;
+      width: 800px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-shadow: 4px 4px 4px #ccc;
+      ::ng-deep .mock-responses,
+      ::ng-deep .use-cases {
+        max-height: 300px;
+        display: block;
+        margin: 12px 0;
+        overflow: auto;
+      }
     }
   }
 }

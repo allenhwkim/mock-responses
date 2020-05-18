@@ -1,5 +1,5 @@
 import {
-  Body, Controller, Delete, Get, Param, Post, Put, Query, Request,
+  Body, Controller, Delete, Get, Param, Post, Put, Query, Request, Response
 } from '@nestjs/common';
 import { MockResponsesService } from './mock-responses.service';
 import { MockResponse } from '../common/interfaces';
@@ -48,4 +48,31 @@ export class MockResponsesController {
     return this.mockResp.delete(params.id);
   }
 
+  @Put(':id/activate')
+  activate(@Param() params, @Response() res, @Request() req) {
+    const activeMockResponses = (this.useCase.getCookie(req, 'MRIDS') || '')
+      .split(',').filter(el => el).map(el => +el);
+    const mockResponse: MockResponse = this.mockResp.find(+params.id);
+    if (mockResponse) {
+      const newActiveMockResponses = [...activeMockResponses, mockResponse.id];
+      this.useCase.setCookie(req, res, 'MRIDS', newActiveMockResponses.join(','));
+      res.send(newActiveMockResponses);
+    } else {
+      res.send(activeMockResponses);
+    }
+  }
+
+  @Put(':id/deactivate')
+  deactivate(@Param() params, @Response() res, @Request() req) {
+    const activeMockResponses = (this.useCase.getCookie(req, 'MRIDS') || '')
+      .split(',').filter(el => el).map(el => +el)
+    const mockResponse: MockResponse = this.mockResp.find(+params.id);
+    if (mockResponse) {
+      const newActiveMockResponses = activeMockResponses.filter(el => +el !== +params.id);
+      this.useCase.setCookie(req, res, 'MRIDS', newActiveMockResponses.join(','));
+      res.send(newActiveMockResponses);
+    } else {
+      res.send(activeMockResponses);
+    }
+  }
 }

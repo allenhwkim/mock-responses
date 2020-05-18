@@ -31,19 +31,22 @@
         <a *ngIf="auth.authorized" class="button icon delete"
           (click)="setUseCases('remove', useCase.id); $event.stopPropagation();"> x </a>
       </li>
-      <li class="use-case add-use-case" [ngClass]="{expanded: showUseCaseSearch}">
+      <li class="use-case add-use-case" [ngClass]="{expanded: useCaseSearchVisible}">
         <span (click)="openUseCasesSearch()">Add</span>
-        <span *ngIf="showUseCaseSearch">
-          <input class="use-case-search" size="40" 
-            (keyup)="openUseCasesSearch({key: $event.target.value})"
-            placeholder="Type to search use-cases" />
-          <span *ngIf="showUseCaseSearch" (click)="showUseCaseSearch=false">close</span>
-          <app-use-cases-list 
-            [useCases]="searchUseCases"
-            [collectionMode]="true"
-            (selectClicked)="setUseCases('add', $event.id); showUseCaseSearch=false;">
-          </app-use-cases-list>
-        </span>
+        <div *ngIf="useCaseSearchVisible">
+          <div class="blocker" (click)="useCaseSearchVisible=false">blocker</div>
+          <div class="contents">
+            <input class="use-case-search" size="40" 
+              (keyup)="openUseCasesSearch({key: $event.target.value})"
+              placeholder="Type to search use-cases" />
+            <span *ngIf="useCaseSearchVisible" (click)="useCaseSearchVisible=false">close</span>
+            <app-use-cases-list 
+              [useCases]="searchUseCases"
+              [collectionMode]="true"
+              (selectClicked)="setUseCases('add', $event.id); useCaseSearchVisible=false;">
+            </app-use-cases-list>
+          </div>
+        </div>
       </li>
     </ul>
 
@@ -60,19 +63,22 @@
         <a *ngIf="auth.authorized" class="button icon delete"
           (click)="setMockResponses('remove', mockResp.id); $event.stopPropagation();"> x </a>
       </li>
-      <li class="mock-response add-mock-response" [ngClass]="{expanded: showMockResponseSearch}">
-        <span (click)="openMockResponseSearch()">Add</span>
-        <span *ngIf="showMockResponseSearch">
-          <input class="mock-response-search" size="40" 
-            (keyup)="openMockResponseSearch({key: $event.target.value})"
-            placeholder="Type to search mock response" />
-          <span *ngIf="showMockResponseSearch" (click)="showMockResponseSearch=false">close</span>
-          <app-mock-responses-list 
-            [mockResponses]="searchMockResponses"
-            [collectionMode]="true"
-            (selectClicked)="setMockResponses('add', $event.id); showMockResponseSearch=false;">
-          </app-mock-responses-list >
-        </span>
+      <li class="mock-response add-mock-response" [ngClass]="{expanded: mockResponseSearchVisible}">
+        <span (click)="showMockResponsesSearch()">Add</span>
+        <div *ngIf="mockResponseSearchVisible">
+          <div class="blocker" (click)="mockResponseSearchVisible=false">blocker</div>
+          <div class="contents">
+            <input class="mock-response-search" size="40" 
+              (keyup)="showMockResponsesSearch({key: $event.target.value})"
+              placeholder="Type to search mock response" />
+            <span *ngIf="mockResponseSearchVisible" (click)="mockResponseSearchVisible=false">close</span>
+            <app-mock-responses-list 
+              [mockResponses]="searchMockResponses"
+              [collectionMode]="true"
+              (selectClicked)="setMockResponses('add', $event.id); mockResponseSearchVisible=false;">
+            </app-mock-responses-list >
+          </div>
+        </div>
       </li>
     </ul>
 

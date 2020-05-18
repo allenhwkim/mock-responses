@@ -29,9 +29,9 @@ export class UseCaseEditComponent implements OnInit {
   mockResponses = [];
 
   searchUseCases = [];
-  showUseCaseSearch = false;
+  useCaseSearchVisible = false;
   searchMockResponses = [];
-  showMockResponseSearch = false;
+  mockResponseSearchVisible = false;
 
   constructor(
     public auth: AuthorizedServiceService,
@@ -109,16 +109,16 @@ export class UseCaseEditComponent implements OnInit {
       .subscribe( (resp: any) => {
         const excludeIds = except.map(el => el.id);
         this.searchUseCases = resp.useCases.filter(el => !excludeIds.includes(el.id));
-        this.showUseCaseSearch = true;
+        this.useCaseSearchVisible = true;
     })
   }
 
-  openMockResponseSearch(by = {key: ''}) {
+  showMockResponsesSearch(by = {key: ''}) {
     this.mockResponseService.getMockResponses(by)
       .subscribe( (resp: any) => {
         const excludeIds = this.mockResponses.map(el => el.id);
         this.searchMockResponses = resp.mockResponses.filter(el => !excludeIds.includes(el.id));
-        this.showMockResponseSearch= true;
+        this.mockResponseSearchVisible= true;
     })
   }
 

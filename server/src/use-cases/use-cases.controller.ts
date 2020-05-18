@@ -23,9 +23,14 @@ export class UseCasesController {
   ) {
     if (activeOnly) {
       const ucIds = this.useCase.getCookie(req, 'UCIDS') || '0';
-      const useCases = this.useCase.findAllBy({ids: ucIds});
-      const mockResponses = this.mockResp.findAllByUseCases(ucIds);
-      return { useCases, mockResponses};
+      const mrIds = this.useCase.getCookie(req, 'MRIDS') || '0';
+      const activeUseCases = this.useCase.findAllBy({ids: ucIds});
+      const activeMockResponses = this.mockResp.findAllBy({ids: mrIds});
+      const availableMockResponses = this.mockResp.findAllByUseCases(ucIds);
+      activeMockResponses.forEach(mockResp => {
+        this.mockResp.setUseCase(availableMockResponses, mockResp); 
+      });
+      return { activeUseCases, activeMockResponses, availableMockResponses};
     } else {
       const useCases = this.useCase.findAllBy({key, ids, except})
       return { useCases };

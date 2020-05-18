@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { AuthorizedServiceService } from '../../authorized.service';
 import { UseCasesService } from '../use-cases.service';
-import { faPlay, faEdit, faFile, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faFile, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
 import { UseCaseDialogComponent } from 'src/app/dialogs/use-case-dialog.component';
 
@@ -19,7 +19,7 @@ export class UseCasesListComponent implements OnInit {
   @Output() deleteClicked = new EventEmitter();
   @Output() selectClicked = new EventEmitter();
 
-  faPlay = faPlay; faEdit = faEdit; faFile = faFile; faTrashAlt = faTrashAlt;
+  faEdit = faEdit; faFile = faFile; faTrashAlt = faTrashAlt;
 
   constructor(
     public auth: AuthorizedServiceService,

@@ -159,17 +159,8 @@ export class MockResponsesService {
         .map(el => el.mock_response_id).join(',') || '0';
       const mockResponses = this.findAllBy({ids: mockRespIds});
       mockResponses.forEach((mockResp: MockResponse) => {
-        const [url, method] = [mockResp.req_url, mockResp.req_method];
-        this.mockResponsesCached[mockResp.id] = mockResp;
         this.useCasesCached[useCaseId] = this.useCasesCached[useCaseId] || {};
-        this.useCasesCached[useCaseId][url] = this.useCasesCached[useCaseId][url] || {};
-        this.useCasesCached[useCaseId][url][method || '*'] = this.mockResponsesCached[mockResp.id];
-
-        if (url.includes('*')) { // regular expression match
-          this.useCasesCached[useCaseId]['REGEXP'] = this.useCasesCached[useCaseId]['REGEXP'] || {};
-          const urlRegExp = url.replace(/\*/g, '(.*?)');
-          this.useCasesCached[useCaseId]['REGEXP'][urlRegExp] = url;
-        }
+        this.setUseCase(this.useCasesCached[useCaseId], mockResp);
       });
       processedOnes.push(useCaseId);
 
@@ -183,6 +174,19 @@ export class MockResponsesService {
       })
     }
     return this.useCasesCached[useCaseId];
+  }
+
+  setUseCase(useCase, mockResp) {
+    this.mockResponsesCached[mockResp.id] = mockResp;
+    const [url, method] = [mockResp.req_url, mockResp.req_method]; 
+    useCase[url] = useCase[url] || {};
+    useCase[url][method || '*'] = this.mockResponsesCached[mockResp.id];
+
+    if (url.includes('*')) { // regular expression match
+      useCase['REGEXP'] = useCase['REGEXP'] || {};
+      const urlRegExp = url.replace(/\*/g, '(.*?)');
+      useCase['REGEXP'][urlRegExp] = url;
+    }
   }
 
 }
