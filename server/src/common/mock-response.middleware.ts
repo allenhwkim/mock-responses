@@ -5,39 +5,28 @@ import { Request, Response } from 'express';
 
 import { BetterSqlite3 } from './better-sqlite3';
 import { MockResponse } from './interfaces/mock-response.interface';
+import { UseCaseCache } from './use-case-cache';
+import { REQUEST } from '@nestjs/core';
 
-function hasAllPayload(body, payload) {
-  const payloads = payload.split(',');
-  for (var i=0; i < payloads.length; i++) {
-    var el = payloads[i].trim();
-    if (el && typeof body[el] === 'undefined') {
-      return false;
+function findMockResponse(req: Request): MockResponse {
+  // const row: MockResponse = findByUrlMethod(req.path, req.method);
+  const { activeUseCases, activeMockResponses, availableMockResponses }
+    = UseCaseCache.getAvailableMockResponses(req);
+  const getREMatchingUrlMethods = function(url) {
+    for (const key in UseCaseCache.data['REG_EXP']) {
+      if (url.match(new RegExp(key))) {
+        const url =  UseCaseCache.data['REG_EXP'][key];
+        return UseCaseCache[url];
+      }
     }
   }
-  return true;
-}
+  const urlMethods = availableMockResponses[req.path] || getREMatchingUrlMethods(req.path);
 
-function findByUrlMethod(url, method) {
-  // e.g.  /rogers_rest/documents/3293380-01020014588
-  const numExp = url.replace(/[0-9]+/g, '%');
-  // e.g.  /cms/UTE-iPhone-11-black-225x338-01.png
-  const extExp = url.replace(/([^\.\/]+)(\.[a-z]{2,4})$/, '%$2');
-
-  const sql1 = `
-    SELECT * 
-    FROM mock_responses 
-    WHERE req_url = '${url}' 
-      ${ numExp !== url ? "OR  req_url LIKE '" + numExp + "'" : '' }
-      ${ extExp !== url ? "OR  req_url LIKE '" + extExp + "'" : '' }
-      AND (req_method = '${method}' OR req_method IS NULL)
-    ORDER BY req_url is NULL
-    LIMIT 1`;
-  return BetterSqlite3.db.prepare(sql1).get();
-}
-
-function findById(id) {
-  const sql1 = `SELECT * FROM mock_responses WHERE id = ${id} LIMIT 1`;
-  return BetterSqlite3.db.prepare(sql1).get();
+  const mockResponse = 
+    availableMockResponses[req.path][req.method] || // exact method
+    availableMockResponses[req.path]['*'];  // any method
+  
+  return mockResponse;
 }
 
 export async function serveMockResponse(req: Request, res: Response, next: Function) {
@@ -48,72 +37,78 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
   }
 
   if ( // application-specific reserved urls e.g., /use-cases/index
-    req.url.startsWith('/developer/') || 
-    req.url.startsWith('/mock-responses/') ||
-    req.url.startsWith('/use-cases/') 
+    req.url.startsWith('/developer') || 
+    req.url.startsWith('/mock-responses') ||
+    req.url.startsWith('/use-cases') 
   ) {
     next();
     return;
   } 
 
-  const now = Date.now();
-  const row: MockResponse = findByUrlMethod(req.path, req.method);
+  !UseCaseCache.data[0] && UseCaseCache.setDefault();
+  const mockResp = findMockResponse(req);
 
   // if not found in DB, continue
-  if (!row) {
+  if (!mockResp) {
     next();
     return;
   }
 
-  // if payload not given, return 422 error
-  const delaySec = row.res_delay_sec || 0;
+  if (mockResp.req_payload) {
+    const missingPayload = mockResp.req_payload.split(',').map(el => el.trim())
+      .filter(payload => payload && typeof req.body[payload] === 'undefined');
+    if (missingPayload.length) {
+      // if payload not satisfied
+      res.status(422).send(`payload not matching, ${mockResp.req_payload}`);
+      return;
+    }
+  } 
+
+  // delay response if specified
+  const delaySec = mockResp.res_delay_sec || 0;
   if (delaySec) {
     console.log(`[mock-responses] Delaying ${delaySec} seconds`);
     await new Promise(resolve => setTimeout(_ => resolve(), delaySec * 1000));
   }
 
-  if (row.req_payload && !hasAllPayload(req.body, row.req_payload)) {
-    // if payload not satisfied
-    res.status(422).send(`payload not matching, ${row.req_payload}`);
-    return;
-  } 
-
-  else if ((row.res_body||'').match(/^file:\/\//)) { // file://yyyy.xxxx.js
-    // if serve from file
+  if ((mockResp.res_body||'').match(/^file:\/\//)) {
+    // if serve from file, e.., file://yyyy.xxxx.js
     const filePath = path.join(
       path.dirname(BetterSqlite3.dbPath),
-      row.res_body.replace('file://', '')
+      mockResp.res_body.replace('file://', '')
     );
     if (!fs.existsSync(filePath)) {
       res.status(404).send();
       return;
     }
-    res.setHeader('Content-Type', row.res_content_type);
+    res.setHeader('Content-Type', mockResp.res_content_type);
     const body = fs.readFileSync(filePath, 'utf8');
-    res.status(row.res_status).send(body);
+    res.status(mockResp.res_status).send(body);
     return;
   }
 
-  else if (row.res_content_type === 'function') {
+  else if (mockResp.res_content_type === 'function') {
     // if serve from function
-    console.log('[mock-responses] Serving from function' , row.res_body);
-    const rowId = (new Function('req', 'res', 'next', row.res_body))(req, res, next);
-    const dynRow = findById(rowId);
-    if (dynRow) {
-      res.setHeader('Content-Type', dynRow.res_content_type);
-      res.status(dynRow.res_status).send(dynRow.res_body);
+    console.log('[mock-responses] Serving from function' , mockResp.res_body);
+    const mockRespId = (new Function('req', 'res', 'next', mockResp.res_body))(req, res, next);
+    const sql = `SELECT * FROM mock_responses WHERE id = ${mockRespId} LIMIT 1`;
+    const dynMockResp = BetterSqlite3.db.prepare(sql).get();
+
+    if (dynMockResp) {
+      res.setHeader('Content-Type', dynMockResp.res_content_type);
+      res.status(dynMockResp.res_status).send(dynMockResp.res_body);
       return;
     } else {
-      console.log('[mock-responses] Cannot find id', rowId);
+      console.log('[mock-responses] Cannot find id', mockRespId);
     }
   } 
 
-  else if (row) {
+  else if (mockResp) {
     // if serve from body contents
-    res.setHeader('Content-Type', row.res_content_type);
-    res.status(row.res_status).send(row.res_body);
+    res.setHeader('Content-Type', mockResp.res_content_type);
+    res.status(mockResp.res_status).send(mockResp.res_body);
     return;
   }
 
-  console.log('Noooooooooooooooooooooo you shouldn\'t see this' , row);
+  console.log('Noooooooooooooooooooooo you shouldn\'t see this' , mockResp);
 }

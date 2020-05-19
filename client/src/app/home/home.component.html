@@ -5,7 +5,7 @@
     <ul class="active-use-cases">
       <li class="active-use-case active-item">
         <div><b>Default Use Case</b></div> 
-        (First created ones)
+        First created mock responses
       </li>
       <li class="active-use-case active-item"
          *ngFor="let el of activeUseCases" (click)="openUseCaseDialog(el)">
@@ -65,7 +65,8 @@
   <div class="available-section">
     <h3>Available Mock Responses</h3>
     <div class="search-section">
-      <input class="mock-response-search" size="40" 
+      <input class="mock-response-search" size="40"
+        [(ngModel)]="availMockRespSearch"
         (keyup)="setMockResponses({key: $event.target.value})"
         placeholder="Type to search mock responses" />
     </div>
@@ -76,20 +77,22 @@
         <div *ngIf="el[0] !== 'REGEXP' && el[0]; let url">
           <div *ngFor="let el of objectEntries(availableMockResponses[url]);">
             <div *ngIf="el[0]; let method">
-              <span class="flex" *ngIf="el[1]; let mockResp" title="{{mockResp.id}}">
-                <fa-icon class="play" [icon]="faPlay" (click)="play(mockResp)"></fa-icon> &nbsp;
-                <div class="req-resp">
-                  <b class="method">{{mockResp.req_method || 'ANY'}}</b>
-                  <b>{{mockResp.req_url}}</b> &nbsp;
-                  <span title="name">{{mockResp.name}}</span> &nbsp;
-                  <span title="status code">{{mockResp.res_status}}</span> &nbsp;
-                  <span title="content type">{{mockResp.res_content_type}}</span>
+              <div *ngIf="el[1]; let mockResp" title="{{mockResp.id}}">
+                <div class="flex" *ngIf="foundMockResp(mockResp, availMockRespSearch)">
+                  <fa-icon class="play" [icon]="faPlay" (click)="play(mockResp)"></fa-icon> &nbsp;
+                  <span class="req-resp">
+                    <b class="method">{{mockResp.req_method || 'ANY'}}</b>
+                    <b>{{mockResp.req_url}}</b> &nbsp;
+                    <span title="name">{{mockResp.name}}</span> &nbsp;
+                    <span title="status code">{{mockResp.res_status}}</span> &nbsp;
+                    <span title="content type">{{mockResp.res_content_type}}</span>
+                  </span>
                 </div>
-              </span>
-            </div>
-          </div>
-        </div>
-      </li>
+              </div> <!-- mockResp -->
+            </div> <!-- method -->
+          </div> <!-- methods --> 
+        </div> <!-- url --> 
+      </li> 
     </ul>
   </div>
 </div>

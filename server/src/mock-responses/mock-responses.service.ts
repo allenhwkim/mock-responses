@@ -55,7 +55,7 @@ export class MockResponsesService {
       return this.db.prepare(sql).all();
     } else if (by.useCases) {
       // return this.findAllByUseCases(by.useCases);
-      return UseCaseCache.getByUseCaseIds(by.useCases);
+      return UseCaseCache.getByUseCaseIds(by.useCases.split(','));
     } else {
       const where = getWhereFromBy(by) || '1 = 1';
       const sql = `

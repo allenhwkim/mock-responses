@@ -21,7 +21,8 @@ export const UseCaseCache = {
     const activeMockResponses = BetterSqlite3.db.prepare(sql2).all();
 
     // get from cache
-    const availableMockResponses = UseCaseCache.getByUseCaseIds(ucIds);
+    const useCaseIds = [0, ...ucIds.split(',')]; // 0 .. default
+    const availableMockResponses = UseCaseCache.getByUseCaseIds(useCaseIds);
     activeMockResponses.forEach(mockResp => {
       UseCaseCache.setMockResponse(availableMockResponses, mockResp);
     });
@@ -29,12 +30,10 @@ export const UseCaseCache = {
     return { activeUseCases, activeMockResponses, availableMockResponses}
   },
 
-  getByUseCaseIds: function (useCaseIds) { 
-    if (typeof useCaseIds === 'string') {
-      useCaseIds = useCaseIds.split(',').map(el => +el);
-    }
+  getByUseCaseIds: function (useCaseIds: Array<any>) { 
     let urls = {};
-    [0, ...useCaseIds].forEach(ucId => {
+    useCaseIds.forEach(ucId => {
+      ucId = +ucId;
       const cached = UseCaseCache.data[ucId] || UseCaseCache.set(ucId);
       urls = {...urls, ...cached};
     });

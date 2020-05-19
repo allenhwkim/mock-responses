@@ -9,6 +9,8 @@ import { AuthorizedServiceService } from '../authorized.service';
 import { UseCaseDialogComponent } from '../dialogs/use-case-dialog.component';
 import { UseCasesService } from '../use-cases/use-cases.service';
 import { MockResponseDialogComponent } from '../dialogs/mock-response-dialog.component';
+import { MockResponse } from '../models/mock-response.interface';
+import { UseCase } from '../models/use-case.interface';
 
 @Component({
   selector: 'app-home',
@@ -27,6 +29,7 @@ export class HomeComponent implements OnInit {
   useCaseSearchVisible = false;
   searchMockResponses = [];
   mockResponseSearchVisible = false;
+  availMockRespSearch: string;
 
   constructor(
     public mockResponseService: MockResponsesService,
@@ -71,22 +74,22 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  activateUseCase(useCase) {
+  activateUseCase(useCase: UseCase) {
     this.useCaseService.activateUseCase(useCase.id).toPromise()
       .then(resp => this._setProperties());
   }
 
-  deactivateUseCase(useCase) {
+  deactivateUseCase(useCase: UseCase) {
     this.useCaseService.deactivateUseCase(useCase.id).toPromise()
       .then(resp => this._setProperties());
   }
 
-  activateMockResponse(mockResponse) {
+  activateMockResponse(mockResponse: MockResponse) {
     this.mockResponseService.activateMockResponse(mockResponse.id).toPromise()
       .then(resp => this._setProperties());
   }
 
-  deactivateMockResponse(mockResponse) {
+  deactivateMockResponse(mockResponse: MockResponse) {
     this.mockResponseService.deactivateMockResponse(mockResponse.id).toPromise()
       .then(resp => this._setProperties());
   }
@@ -99,8 +102,15 @@ export class HomeComponent implements OnInit {
         this.availableMockResponses = resp.availableMockResponses;
       });
   }
+
+  foundMockResp(mockResp: MockResponse, key: string) {
+    return !key ||
+      mockResp.req_url.includes(key) || 
+      (mockResp.name || '').includes(key) || 
+      (mockResp.res_body || '').includes(key);
+  }
  
-  play(mockResp) {
+  play(mockResp: MockResponse) {
     const req = {
       url: mockResp.req_url,
       method: mockResp.req_method || 'POST',
