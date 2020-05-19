@@ -8,4 +8,8 @@ export interface MockResponse {
   res_content_type?: string;
   res_delay_sec?: number;
   res_body?: string;
+  created_at?: number | Date;
+  created_by?: string;
+  updated_at?: number | Date;
+  updated_by?: string;
 };

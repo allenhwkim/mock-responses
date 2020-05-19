@@ -4,6 +4,7 @@ import { MockResponse } from '../common/interfaces/mock-response.interface';
 import { BetterSqlite3 } from '../common/better-sqlite3';
 import { UseCaseToUseCasesService } from 'src/use-cases/use-case-to-use-cases.service';
 import { UseCaseToMockResponsesService } from 'src/use-cases/use-case-to-mock-resonses.service';
+import { UseCaseCache } from '../common/use-case-cache';
 
 function getJSON(data) {
   try {
@@ -53,7 +54,8 @@ export class MockResponsesService {
       console.log('[mock-responses] MockResponseService.findAllBy', sql);
       return this.db.prepare(sql).all();
     } else if (by.useCases) {
-      return this.findAllByUseCases(by.useCases);
+      // return this.findAllByUseCases(by.useCases);
+      return UseCaseCache.getByUseCaseIds(by.useCases);
     } else {
       const where = getWhereFromBy(by) || '1 = 1';
       const sql = `
@@ -136,57 +138,6 @@ export class MockResponsesService {
     this.db.exec(sql2);
 
     BetterSqlite3.backupToSql();
-  }
-
-  findAllByUseCases(useCaseIds) {
-    if (typeof useCaseIds === 'string') {
-      useCaseIds = useCaseIds.split(',').map(el => +el);
-    }
-    let urls = {};
-    useCaseIds.forEach(ucId => {
-      urls = {...urls, ...this.findAllByUseCase(ucId)};
-    });
-    return urls;
-  }
-
-  findAllByUseCase(useCaseId, processedOnes=[]) {
-    if (this.useCasesCached[useCaseId]) {
-      console.log('cache is already set for use case', useCaseId);
-    } else {
-      const useCaseIds = this.uc2uc.findAll(useCaseId);
-
-      const mockRespIds = this.uc2mr.findAll(useCaseId)
-        .map(el => el.mock_response_id).join(',') || '0';
-      const mockResponses = this.findAllBy({ids: mockRespIds});
-      mockResponses.forEach((mockResp: MockResponse) => {
-        this.useCasesCached[useCaseId] = this.useCasesCached[useCaseId] || {};
-        this.setUseCase(this.useCasesCached[useCaseId], mockResp);
-      });
-      processedOnes.push(useCaseId);
-
-      useCaseIds.forEach(useCase => {
-        if (processedOnes.indexOf(useCase.id) !== -1) {
-          console.log('[mock-responses] alreday process use_case id', useCase.id);
-          return false;
-        } else {
-          this.findAllByUseCase(useCase.id, processedOnes); // process child use case
-        }
-      })
-    }
-    return this.useCasesCached[useCaseId];
-  }
-
-  setUseCase(useCase, mockResp) {
-    this.mockResponsesCached[mockResp.id] = mockResp;
-    const [url, method] = [mockResp.req_url, mockResp.req_method]; 
-    useCase[url] = useCase[url] || {};
-    useCase[url][method || '*'] = this.mockResponsesCached[mockResp.id];
-
-    if (url.includes('*')) { // regular expression match
-      useCase['REGEXP'] = useCase['REGEXP'] || {};
-      const urlRegExp = url.replace(/\*/g, '(.*?)');
-      useCase['REGEXP'][urlRegExp] = url;
-    }
   }
 
 }

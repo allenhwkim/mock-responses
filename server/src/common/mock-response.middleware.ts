@@ -32,17 +32,12 @@ function findByUrlMethod(url, method) {
       AND (req_method = '${method}' OR req_method IS NULL)
     ORDER BY req_url is NULL
     LIMIT 1`;
-console.log('............', sql1);
   return BetterSqlite3.db.prepare(sql1).get();
 }
 
 function findById(id) {
   const sql1 = `SELECT * FROM mock_responses WHERE id = ${id} LIMIT 1`;
   return BetterSqlite3.db.prepare(sql1).get();
-}
-
-function delay(ms) {
-  return new Promise(resolve => setTimeout(_ => resolve(), ms));
 }
 
 export async function serveMockResponse(req: Request, res: Response, next: Function) {
@@ -74,15 +69,17 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
   const delaySec = row.res_delay_sec || 0;
   if (delaySec) {
     console.log(`[mock-responses] Delaying ${delaySec} seconds`);
-    await delay(delaySec * 1000);
+    await new Promise(resolve => setTimeout(_ => resolve(), delaySec * 1000));
   }
 
   if (row.req_payload && !hasAllPayload(req.body, row.req_payload)) {
+    // if payload not satisfied
     res.status(422).send(`payload not matching, ${row.req_payload}`);
     return;
   } 
-  // if serve from file
+
   else if ((row.res_body||'').match(/^file:\/\//)) { // file://yyyy.xxxx.js
+    // if serve from file
     const filePath = path.join(
       path.dirname(BetterSqlite3.dbPath),
       row.res_body.replace('file://', '')
@@ -95,8 +92,10 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
     const body = fs.readFileSync(filePath, 'utf8');
     res.status(row.res_status).send(body);
     return;
-  }  // `return req.query.foo === 1 ? 10 : 12;`
+  }
+
   else if (row.res_content_type === 'function') {
+    // if serve from function
     console.log('[mock-responses] Serving from function' , row.res_body);
     const rowId = (new Function('req', 'res', 'next', row.res_body))(req, res, next);
     const dynRow = findById(rowId);
@@ -107,8 +106,10 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
     } else {
       console.log('[mock-responses] Cannot find id', rowId);
     }
-  }  // if serve from body contents
+  } 
+
   else if (row) {
+    // if serve from body contents
     res.setHeader('Content-Type', row.res_content_type);
     res.status(row.res_status).send(row.res_body);
     return;

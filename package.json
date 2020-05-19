@@ -8,7 +8,7 @@
     "start": "npm stop && npm run start:server && npm run start:client",
     "start:server": "cd server && npm start & cd ..",
     "start:client": "cd client && npm start & cd ..",
-    "stop:server": "ps aux | grep -e 'nodemon\\|3331' | grep -v grep | awk '{print $2}' | xargs kill -9",
+    "stop:server": "ps aux | grep -e 'nodemon\\| 3331' | grep -v grep | awk '{print $2}' | xargs kill -9",
     "stop:client": "ps aux | grep 'ng serve' | grep -v grep | awk '{print $2}' | xargs kill -9"
   },
   "devDependencies": {

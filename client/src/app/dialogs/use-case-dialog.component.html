@@ -26,8 +26,8 @@
 
   <h4> Mock Responses </h4>
   <div *ngFor="let mockResp of useCase.mockResponses" title="{{mockResp.id}}">
+    <span class="method"><b>{{mockResp.req_method || 'ANY'}}</b></span> &nbsp;
     <span><b>{{mockResp.req_url}}</b></span> &nbsp;
-    <span><b>{{mockResp.req_method}}</b></span> &nbsp;
     <span>{{mockResp.name}}</span> &nbsp;
     <span title="status code">{{mockResp.res_status}}</span> &nbsp;
     <span title="content type">{{mockResp.res_content_type}}</span>

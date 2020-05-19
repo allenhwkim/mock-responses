@@ -53,6 +53,8 @@
     padding: 12px;  
     border-radius: 4px;
     flex: 1;
+    max-width: 50%;
+    word-break: break-word;
     .active-use-cases {
       list-style-type: none;
       margin: 0;
@@ -76,6 +78,8 @@
     padding: 12px;  
     border-radius: 4px;
     flex: 1;
+    max-width: 50%;
+    word-break: break-word;
     .available-mock-responses {
       list-style-type: none;
       margin: 0;

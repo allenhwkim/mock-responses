@@ -63,8 +63,8 @@ export class UseCaseEditComponent implements OnInit {
           this.mockResponses = [...resp.mockResponses];
         });
     } else if (!id) {
-      this.useCaseService.getUseCases({ids: 1}) // the default use case
-        .subscribe((resp:any) => this.useCases = [...resp.useCases] );
+      // this.useCaseService.getUseCases({ids: 1}) // the default use case
+      //   .subscribe((resp:any) => this.useCases = [...resp.useCases] );
     }
   }
 

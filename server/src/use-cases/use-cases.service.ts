@@ -135,7 +135,6 @@ export class UseCasesService {
     return BetterSqlite3.backupToSql();
   }
 
-
   getCookie(req, key): string {
     const cookies = {};
     (req.headers.cookie || '').split('; ').forEach(el => {

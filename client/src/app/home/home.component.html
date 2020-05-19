@@ -3,6 +3,10 @@
     <h3>Currently Active Use Cases</h3>
 
     <ul class="active-use-cases">
+      <li class="active-use-case active-item">
+        <div><b>Default Use Case</b></div> 
+        (First created ones)
+      </li>
       <li class="active-use-case active-item"
          *ngFor="let el of activeUseCases" (click)="openUseCaseDialog(el)">
         <div><b>({{el.id}}) {{el.name}}</b></div>
@@ -50,7 +54,7 @@
             <app-mock-responses-list 
               [mockResponses]="searchMockResponses"
               [collectionMode]="true"
-              (selectClicked)="activateMockResponse($event); mockResponseSearchVisible=false;">>
+              (selectClicked)="activateMockResponse($event); mockResponseSearchVisible=false;">
             </app-mock-responses-list >
           </div>
         </div>

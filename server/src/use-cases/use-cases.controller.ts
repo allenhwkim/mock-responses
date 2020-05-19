@@ -4,6 +4,7 @@ import {
 import { UseCasesService } from './use-cases.service';
 import { MockResponsesService } from '../mock-responses/mock-responses.service';
 import { UseCase } from '../common/interfaces/use-case.interface';
+import { UseCaseCache } from '../common/use-case-cache';
 
 @Controller('use-cases')
 export class UseCasesController {
@@ -11,7 +12,10 @@ export class UseCasesController {
   constructor(
     private useCase: UseCasesService,
     private mockResp: MockResponsesService
-  ) {}
+  ) {
+    // set UseCaseCache.data[0] with all first mock_responses url/method
+    UseCaseCache.setDefault(); 
+  }
 
   @Get()
   findAllBy(
@@ -22,19 +26,17 @@ export class UseCasesController {
     @Request() req
   ) {
     if (activeOnly) {
-      const ucIds = this.useCase.getCookie(req, 'UCIDS') || '0';
-      const mrIds = this.useCase.getCookie(req, 'MRIDS') || '0';
-      const activeUseCases = this.useCase.findAllBy({ids: ucIds});
-      const activeMockResponses = this.mockResp.findAllBy({ids: mrIds});
-      const availableMockResponses = this.mockResp.findAllByUseCases(ucIds);
-      activeMockResponses.forEach(mockResp => {
-        this.mockResp.setUseCase(availableMockResponses, mockResp); 
-      });
-      return { activeUseCases, activeMockResponses, availableMockResponses};
+      // { activeUseCases, activeMockResponses, availableMockResponses}
+      return UseCaseCache.getAvailableMockResponses(req);
     } else {
       const useCases = this.useCase.findAllBy({key, ids, except})
       return { useCases };
     }
+  }
+
+  @Get('cached')
+  geCached() {
+    return UseCaseCache.data;
   }
 
   @Get(':id')
