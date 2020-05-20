@@ -1,6 +1,6 @@
 <div class="main">
   <div class="currently-actives">
-    <h3>Currently Active Use Cases</h3>
+    <h2>Currently Active Use Cases</h2>
 
     <ul class="active-use-cases">
       <li class="active-use-case active-item">
@@ -31,7 +31,7 @@
       </li>
     </ul>
 
-    <h3>Currently Active Mock Responses</h3>
+    <h2>Currently Active Mock Responses</h2>
     <ul class="active-mock-responses">
       <li class="active-mock-response active-item" *ngFor="let mockResp of activeMockResponses"
         (click)="openMockResponseDialog(mockResp)" title="{{mockResp.id}}">
@@ -63,7 +63,7 @@
   </div>
 
   <div class="available-section">
-    <h3>Available Mock Responses</h3>
+    <h2>Available Mock Responses</h2>
     <div class="search-section">
       <input class="mock-response-search" size="40"
         [(ngModel)]="availMockRespSearch"
@@ -78,7 +78,7 @@
           <div *ngFor="let el of objectEntries(availableMockResponses[url]);">
             <div *ngIf="el[0]; let method">
               <div *ngIf="el[1]; let mockResp" title="{{mockResp.id}}">
-                <div class="flex" *ngIf="foundMockResp(mockResp, availMockRespSearch)">
+                <div class="flex row" *ngIf="foundMockResp(mockResp, availMockRespSearch)">
                   <fa-icon class="play" [icon]="faPlay" (click)="play(mockResp)"></fa-icon> &nbsp;
                   <span class="req-resp">
                     <b class="method">{{mockResp.req_method || 'ANY'}}</b>

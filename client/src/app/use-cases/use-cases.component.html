@@ -3,10 +3,11 @@
     placeholder="Type to search use cases"
     (keyup)="setUseCases({key: $event.target.value})"
     />
-  <a class="button" *ngIf="auth.authorized" 
+  &nbsp;
+  <button class="button" *ngIf="auth.authorized" 
     [routerLink]="['/use-cases/new']">
     <fa-icon [icon]="faPlus"></fa-icon> New
-  </a>
+  </button>
 </div>
 
 <app-use-cases-list 

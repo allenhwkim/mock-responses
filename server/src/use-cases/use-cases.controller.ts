@@ -27,7 +27,7 @@ export class UseCasesController {
   ) {
     if (activeOnly) {
       // { activeUseCases, activeMockResponses, availableMockResponses}
-      return UseCaseCache.getAvailableMockResponses(req);
+      return UseCaseCache.getAvailableMockResponses(req, true);
     } else {
       const useCases = this.useCase.findAllBy({key, ids, except})
       return { useCases };

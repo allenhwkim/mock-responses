@@ -9,7 +9,7 @@ export const UseCaseCache = {
   data:  {REGEXP: {}, 0: {}},  // use_case.id -> url -> method -> mock_response.id
   mockResponses: {}, // id -> mock_response
 
-  getAvailableMockResponses: function(req) {
+  getAvailableMockResponses: function(req, omitted=false) {
     const ucIds = UseCaseCache.getCookie(req, 'UCIDS') || '0';
     const sql1 = `SELECT * FROM use_cases WHERE id IN (${ucIds})`;
     console.log('[mock-responses] UseCaseCache', sql1);
@@ -22,10 +22,18 @@ export const UseCaseCache = {
 
     // get from cache
     const useCaseIds = [0, ...ucIds.split(',')]; // 0 .. default
-    const availableMockResponses = UseCaseCache.getByUseCaseIds(useCaseIds);
+    const availableMockResponses = Object.assign({}, UseCaseCache.getByUseCaseIds(useCaseIds));
     activeMockResponses.forEach(mockResp => {
       UseCaseCache.setMockResponse(availableMockResponses, mockResp);
     });
+
+    if (omitted) {
+      for (var url in availableMockResponses) {
+        for (var method in availableMockResponses[url]) {
+          delete availableMockResponses[url][method].res_body;
+        }
+      }
+    }
 
     return { activeUseCases, activeMockResponses, availableMockResponses}
   },

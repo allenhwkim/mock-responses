@@ -1,21 +1,16 @@
-.mock-responses .id { width: 100px; }
-.mock-responses .id-name { width: 25%; }
-.mock-responses .request {
-  width: 50%; 
-  .contents {
-    display: flex; justify-content: space-between; 
+.mock-responses {
+  text-align: left;
+  .id { width: 100px; }
+  .id-name { width: 25%; }
+  .request {
+    width: 50%; 
+    .contents {
+      display: flex; justify-content: space-between; 
+    }
   }
-}
-.mock-responses .response { width: 25%; 
-  .contents {
-    display: flex; justify-content: space-between; 
+  .response { width: 25%; 
+    .contents {
+      display: flex; justify-content: space-between; 
+    }
   }
-}
-.mock-responses .group .mock-response:not(:first-child) .expand.icon,
-.mock-responses .group.count-1 .mock-response .expand.icon,
-.mock-responses .group:not(.expanded) .mock-response:not(:first-child) {
-  display: none;
-}
-.mock-responses .group .mock-response:first-child {
-  background: #eee; border: 1px outset #eee;
 }

@@ -50,7 +50,7 @@
 
   .currently-actives {
     border: 1px solid #ccc;
-    padding: 12px;  
+    padding: 24px;  
     border-radius: 4px;
     flex: 1;
     max-width: 50%;
@@ -75,7 +75,7 @@
   .available-section {
     margin-left: 12px;
     border: 1px solid #ccc;
-    padding: 12px;  
+    padding: 24px;  
     border-radius: 4px;
     flex: 1;
     max-width: 50%;
@@ -84,15 +84,16 @@
       list-style-type: none;
       margin: 0;
       padding: 0;
-      .flex {
+      .flex.row {
         display: flex;
+        padding-bottom: 8px;
         .play {
           color: #1F88E5;
           cursor: pointer;
         }
         .method {
           display: inline-block;
-          width: 60px;
+          width: 80px;
         }
       }
     }

@@ -2,10 +2,11 @@
   <input class="mock-response-search" size="40" 
     (keyup)="setMockResponses({key: $event.target.value})"
     placeholder="Type to search mock responses" />
-  <a class="button" *ngIf="auth.authorized"
+  &nbsp;
+  <button *ngIf="auth.authorized"
     [routerLink]="['/mock-responses/new']">
     <fa-icon [icon]="faPlus"></fa-icon> New
-  </a>
+  </button>
 </div>
 
 <app-mock-responses-list

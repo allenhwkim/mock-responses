@@ -1,28 +1,40 @@
 .use-cases  {
-  .id {
-    width: 20%; 
-    overflow: hidden;
-    .contents {
-      display: flex;
-      justify-content: space-between;
+  text-align: left;
+  .use-case {
+    vertical-align: top;
+
+    .id {
+      width: 20%; 
+      overflow: hidden;
+      .contents {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+
+    .name-desc {
+      width: 30%; 
+      overflow: hidden;
+    }
+
+    .children {
+      width: 50%; 
+      overflow: hidden;
+      padding: 12px;
+      .mock-responses {
+        list-style: inside;
+        padding: 0;
+      }
+      .child-use-case {
+        display: inline-block;
+        background: #FFF;
+        padding: 12px 20px; 
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 4px;
+      }
     }
   }
-  .name-desc {
-    width: 30%; 
-    overflow: hidden;
-  }
-  .children {
-    width: 50%; 
-    overflow: hidden;
-  }
 
-  .child-use-case {
-    display: inline-block;
-    background: #FFF;
-    padding: 12px 20px; 
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    cursor: pointer;
-    margin: 4px;
-  }
 }

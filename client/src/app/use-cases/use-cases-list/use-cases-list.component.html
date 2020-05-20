@@ -6,7 +6,9 @@
       <th class="children">Use Cases<br/>/Mock Responses</th>
     </tr>
   </thead>
+
   <tr *ngFor="let useCase of useCases" class="use-case">
+
     <td class="id">
       <div class="contents">
         <div>{{useCase.id}}</div>
@@ -32,10 +34,12 @@
         </div>
       </div>
     </td>
+
     <td class="name-desc">
       <b>{{useCase.name}}</b>
       <p>{{useCase.description}}</p> 
     </td>
+
     <td class="children">
       <div class="child-use-case"
          *ngFor="let el of useCase.useCases"
@@ -43,7 +47,7 @@
          <div><b>({{el.id}}) {{el.name}}</b></div>
         <div>{{el.description}}</div>
       </div>
-      <ul><b>Mock Responses</b>
+      <ul class="mock-responses"><b>Mock Responses</b>
         <li *ngFor="let mr of useCase.mockResponses" title="{{mr.id}}"> 
           {{mr.req_url}} 
           | {{mr.name}} 
