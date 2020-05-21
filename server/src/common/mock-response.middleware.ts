@@ -41,6 +41,7 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
     req.url.startsWith('/mock-responses') ||
     req.url.startsWith('/use-cases') 
   ) {
+    console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXX not here');
     next();
     return;
   } 

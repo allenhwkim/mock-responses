@@ -3,7 +3,7 @@ import { Controller, Get, Query, Redirect } from '@nestjs/common';
 @Controller('')
 export class AppController {
 
-  @Get()
+  @Get('')
   @Redirect('/developer', 302)
   home(@Query('foo') foo) {
     // if (foo === '5') {

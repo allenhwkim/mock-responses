@@ -89,8 +89,6 @@ async function bootstrap(config) {
     return;
   });
 
-  // serve client front-end app.
-  app.use('/developer', express.static(path.join(__dirname, '..', 'client')))
   // serve mock responses
   app.use(serveMockResponse);
   // serve errors
@@ -102,7 +100,10 @@ async function bootstrap(config) {
 
 const config = getConfig(argv);
 console.log('[mock-responses] yargs argv', config);
-if (!fs.existsSync(config.dbPath)) throw `Invalid sqlite3 path ${config.dbPath}`;
+if (!fs.lstatSync(config.dbPath).isFile()) {
+  console.error(`Invalid sqlite3 path ${config.dbPath}`);
+  process.exit(1);
+}
 BetterSqlite3.initialize(config.dbPath);
 
 bootstrap(config);

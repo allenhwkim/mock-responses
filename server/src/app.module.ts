@@ -2,6 +2,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/common';
 
 import { AppController } from './app.controller';
+import { DeveloperController } from './developer.controller';
 
 import { MockResponsesController } from './mock-responses/mock-responses.controller';
 import { MockResponsesService } from './mock-responses/mock-responses.service';
@@ -16,6 +17,7 @@ import { UseCaseToUseCasesService } from './use-cases/use-case-to-use-cases.serv
     AppController,
     MockResponsesController,
     UseCasesController,
+    DeveloperController
   ],
   providers: [
     MockResponsesService,
