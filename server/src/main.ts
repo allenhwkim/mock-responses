@@ -16,27 +16,43 @@ import { serveMockResponse } from './common/mock-response.middleware';
 
 const argv = yargs
   .usage(
-    `Usage: $0 --https --db-path [path] --port [num] --assets --ssl` +
+    `Usage: $0 --db-path [path] --port [num]` +
     ` --cookie='MY_SESSION=123456789; Path=/'` +
     ` --headers='Access-Control-Allow-Headers=Content-Type, Authorization, X-Requested-With' `
   )
-  .option('db-path', {type: 'string', default: __dirname, describe: 'Sqlite3 file path'})
+  .option('config', {type:'string', describe: 'config file path'})
+  .option('dbPath', {type: 'string', default: __dirname, describe: 'Sqlite3 file path'})
   .option('ssl', {type:'boolean', default: false, describe: 'run https server'})
+  .option('sslKeyPath', {type:'string', describe: 'ssl key file. e.g. server.key'})
+  .option('sslCertPath', {type:'string', describe: 'ssl cert file. e.g. server.cert'})
   .option('port', {default: 3332, describe: 'port number'})
   .option('cookie', {type: 'string', describe: 'response cookie value'})
   .option('headers', {type: 'array', desc: 'One or more custom headers'})
   .help('h').argv;
 
 function getConfig(argv: any) {
-  const config: any = {};
-  config.dbPath = path.resolve(argv['db-path']);
-  config.port = parseInt(argv.port);
-  config.cookie = argv.cookie;
-  config.headers = argv.headers;
-  config.httpsOptions = argv.ssl ? {
-      key: fs.readFileSync(path.join(__dirname, 'server.key')),
-      cert: fs.readFileSync(path.join(__dirname, 'server.cert'))
-    } : undefined;
+  const defaultConfigPath = path.join(process.cwd(), 'mock-responses.config.js');
+  const configFile = 
+    fs.existsSync(defaultConfigPath) ? require(defaultConfigPath) :
+    fs.existsSync(argv.config) ? require(argv.config) : {};
+  const config = configFile;
+
+  ['dbPath', 'ssl', 'port', 'cookie', 'headers'].forEach(key => {
+    argv[key] && (config[key] = argv[key]);
+  });
+
+  const sslKeyPath = fs.existsSync(config.sslKeyPath) ? 
+    config.sslKeyPath : path.join(__dirname, 'server.key');
+  const sslCertPath = fs.existsSync(config.sslCertPath) ? 
+    config.sslCertPath : path.join(__dirname, 'server.cert');
+  const httpsOptions = config.ssl ? 
+    { key: fs.readFileSync(sslKeyPath), cert: fs.readFileSync(sslCertPath) } : undefined;
+
+  // if dbPath not exists, exit with error
+  if (!fs.existsSync(config.dbPath)) {
+    console.error(`Invalid sqlite3 path ${config.dbPath}`);
+    process.exit(1);
+  }
 
   return config;
 }
@@ -100,10 +116,6 @@ async function bootstrap(config) {
 
 const config = getConfig(argv);
 console.log('[mock-responses] yargs argv', config);
-if (!fs.lstatSync(config.dbPath).isFile()) {
-  console.error(`Invalid sqlite3 path ${config.dbPath}`);
-  process.exit(1);
-}
 BetterSqlite3.initialize(config.dbPath);
 
 bootstrap(config);
