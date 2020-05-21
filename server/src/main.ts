@@ -35,6 +35,9 @@ function getConfig(argv: any) {
   const configFile = 
     fs.existsSync(defaultConfigPath) ? require(defaultConfigPath) :
     fs.existsSync(argv.config) ? require(argv.config) : {};
+  if (fs.existsSync(configFile)) {
+    console.log('[mock-responses] config file found', {defaultConfigPath, argument: argv.config}, configFile);
+  }
   const config = configFile;
 
   ['dbPath', 'ssl', 'port', 'cookie', 'headers'].forEach(key => {
