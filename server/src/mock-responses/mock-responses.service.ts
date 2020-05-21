@@ -2,8 +2,8 @@ import * as username from 'username';
 import { Injectable } from '@nestjs/common';
 import { MockResponse } from '../common/interfaces/mock-response.interface';
 import { BetterSqlite3 } from '../common/better-sqlite3';
-import { UseCaseToUseCasesService } from 'src/use-cases/use-case-to-use-cases.service';
-import { UseCaseToMockResponsesService } from 'src/use-cases/use-case-to-mock-resonses.service';
+import { UseCaseToUseCasesService } from '../use-cases/use-case-to-use-cases.service';
+import { UseCaseToMockResponsesService } from '../use-cases/use-case-to-mock-resonses.service';
 import { UseCaseCache } from '../common/use-case-cache';
 
 function getJSON(data) {

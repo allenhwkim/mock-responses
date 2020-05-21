@@ -1,17 +1,52 @@
 {
   "name": "mock-responses",
   "author": "Allen Kim <allenhwkim@gmail.com>",
+  "version": "3.0.0",
   "license": "MIT",
   "homepage": "https://github.com/allenhwkim/mock-responses#readme",
+  "description": "espress-kind http request middleware",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/allenhwkim/mock-responses.git"
+  },
   "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "npm run build:server && npm run build:client && cp -R demo dist/",
+    "build:server": "cd server && npm run build",
+    "build:client": "cd client && npm run build",
+    "start": "npm stop && npm run start:server:dev && npm run start:client:dev",
+    "start:server:dev": "cd server && npm start & cd ..",
+    "start:client:dev": "cd client && npm start & cd ..",
     "stop": "npm run stop:server && npm run stop:client",
-    "start": "npm stop && npm run start:server && npm run start:client",
-    "start:server": "cd server && npm start & cd ..",
-    "start:client": "cd client && npm start & cd ..",
     "stop:server": "ps aux | grep -e 'nodemon\\| 3331' | grep -v grep | awk '{print $2}' | xargs kill -9",
     "stop:client": "ps aux | grep 'ng serve' | grep -v grep | awk '{print $2}' | xargs kill -9"
   },
+  "keywords": [
+    "angular",
+    "express",
+    "intercept",
+    "middleware"
+  ],
+  "dependencies": {
+    "@nestjs/common": "^6.7.2",
+    "@nestjs/core": "^6.7.2",
+    "@nestjs/platform-express": "^6.7.2",
+    "better-sqlite3": "^5.4.3",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.16.2",
+    "morgan": "^1.9.1",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.5.3",
+    "username": "^4.0.0",
+    "uuid-int": "^2.0.1",
+    "yargs": "^14.0.0"
+  },
   "devDependencies": {
-    "kill-port": "^1.6.0"
+    "kill-port": "^1.6.0",
+    "rimraf": "^3.0.2"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.com/"
   }
 }

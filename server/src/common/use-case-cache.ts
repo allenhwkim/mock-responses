@@ -1,9 +1,9 @@
 import * as username from 'username';
 import { MockResponse } from '../common/interfaces/mock-response.interface';
 import { BetterSqlite3 } from '../common/better-sqlite3';
-import { UseCaseToUseCasesService } from 'src/use-cases/use-case-to-use-cases.service';
-import { UseCaseToMockResponsesService } from 'src/use-cases/use-case-to-mock-resonses.service';
-import { UseCasesService } from 'src/use-cases/use-cases.service';
+import { UseCaseToUseCasesService } from '../use-cases/use-case-to-use-cases.service';
+import { UseCaseToMockResponsesService } from '../use-cases/use-case-to-mock-resonses.service';
+import { UseCasesService } from '../use-cases/use-cases.service';
 
 export const UseCaseCache = {
   data:  {REGEXP: {}, 0: {}},  // use_case.id -> url -> method -> mock_response.id
