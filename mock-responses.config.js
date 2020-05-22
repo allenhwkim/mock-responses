@@ -5,7 +5,6 @@ module.exports = {
   // sslCertPath: './demo/server.cert'
   port: 3331,
   cookie: 'MY_SESSION=123456789; Path=/',
-  clientPath: '../,
   headers: [
     'Access-Control-Allow-Headers=Content-Type, Authorization, X-Requested-With'
   ],

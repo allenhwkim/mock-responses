@@ -1,8 +1,6 @@
-node_modules
-nohup.out
 *.log
-dist
-mockserver
-initial-load.js
+*.tgz
 .DS_Store
+dist
+node_modules
 demo/mock-responses.sqlite3

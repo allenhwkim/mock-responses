@@ -1,26 +1,30 @@
 {
   "name": "mock-responses",
   "author": "Allen Kim <allenhwkim@gmail.com>",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "license": "MIT",
   "homepage": "https://github.com/allenhwkim/mock-responses#readme",
   "description": "espress-kind http request middleware",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/allenhwkim/mock-responses.git"
-  },
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "npm run build:server && npm run build:client && cp -R demo dist/",
+    "build": "npm run build:server && npm run build:client && cp -R demo *.config.js dist/",
     "build:server": "cd server && npm run build",
     "build:client": "cd client && npm run build",
     "start": "npm stop && npm run start:server:dev && npm run start:client:dev",
     "start:server:dev": "cd server && npm start & cd ..",
     "start:client:dev": "cd client && npm start & cd ..",
-    "start:server:prod": "node dist/server/main.js",
+    "start:prod": "cd dist && node server/main.js",
+    "status": "ps aux | grep -e 'nodemon\\|ts-node\\|ng serve\\|main.js' | grep -v grep; echo ''",
     "stop": "npm run stop:server && npm run stop:client",
-    "stop:server": "ps aux | grep -e 'nodemon\\| 3331\\|ts-node' | grep -v grep | awk '{print $2}' | xargs kill -9",
+    "stop:server": "ps aux | grep -e 'nodemon\\|ts-node' | grep -v grep | awk '{print $2}' | xargs kill -9",
     "stop:client": "ps aux | grep 'ng serve' | grep -v grep | awk '{print $2}' | xargs kill -9"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/allenhwkim/mock-responses.git"
   },
   "keywords": [
     "angular",
