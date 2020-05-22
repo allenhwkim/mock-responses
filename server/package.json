@@ -21,7 +21,7 @@
   "homepage": "https://github.com/allenhwkim/mock-responses#readme",
   "scripts": {
     "build": "nest build",
-    "start": "nodemon src --ext ts --exec \"ts-node -r tsconfig-paths/register src/main.ts --db-path=../demo/mock-responses.sql\" --port 3331",
+    "start": "nodemon src --ext ts --exec \"ts-node -r tsconfig-paths/register src/main.ts\"",
     "start:prod": "node dist/main.js"
   },
   "dependencies": {

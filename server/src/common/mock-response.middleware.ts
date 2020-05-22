@@ -6,7 +6,6 @@ import { Request, Response } from 'express';
 import { BetterSqlite3 } from './better-sqlite3';
 import { MockResponse } from './interfaces/mock-response.interface';
 import { UseCaseCache } from './use-case-cache';
-import { REQUEST } from '@nestjs/core';
 
 function findMockResponse(req: Request): MockResponse {
   // const row: MockResponse = findByUrlMethod(req.path, req.method);
@@ -37,11 +36,12 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
   }
 
   if ( // application-specific reserved urls e.g., /use-cases/index
+    req.url === '/' || 
     req.url.startsWith('/developer') || 
     req.url.startsWith('/mock-responses') ||
     req.url.startsWith('/use-cases') 
   ) {
-    console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXX not here');
+    console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXX not here', req.url);
     next();
     return;
   } 

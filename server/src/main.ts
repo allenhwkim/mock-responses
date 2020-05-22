@@ -16,16 +16,16 @@ import { serveMockResponse } from './common/mock-response.middleware';
 
 const argv = yargs
   .usage(
-    `Usage: $0 --db-path [path] --port [num]` +
+    `Usage: $0 --dbPath [path] --port [num]` +
     ` --cookie='MY_SESSION=123456789; Path=/'` +
     ` --headers='Access-Control-Allow-Headers=Content-Type, Authorization, X-Requested-With' `
   )
   .option('config', {type:'string', describe: 'config file path'})
-  .option('dbPath', {type: 'string', default: __dirname, describe: 'Sqlite3 file path'})
+  .option('dbPath', {type: 'string', describe: 'Sqlite3 file path'})
   .option('ssl', {type:'boolean', default: false, describe: 'run https server'})
   .option('sslKeyPath', {type:'string', describe: 'ssl key file. e.g. server.key'})
   .option('sslCertPath', {type:'string', describe: 'ssl cert file. e.g. server.cert'})
-  .option('port', {default: 3332, describe: 'port number'})
+  .option('port', {default: 3331, describe: 'port number'})
   .option('cookie', {type: 'string', describe: 'response cookie value'})
   .option('headers', {type: 'array', desc: 'One or more custom headers'})
   .help('h').argv;
@@ -52,7 +52,7 @@ function getConfig(argv: any) {
     { key: fs.readFileSync(sslKeyPath), cert: fs.readFileSync(sslCertPath) } : undefined;
 
   // if dbPath not exists, exit with error
-  if (!fs.existsSync(config.dbPath)) {
+  if (!fs.existsSync(config.dbPath) || !fs.lstatSync(config.dbPath).isFile()) {
     console.error(`Invalid sqlite3 path ${config.dbPath}`);
     process.exit(1);
   }

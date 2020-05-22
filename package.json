@@ -19,7 +19,7 @@
     "start:client:dev": "cd client && npm start & cd ..",
     "start:server:prod": "node dist/server/main.js",
     "stop": "npm run stop:server && npm run stop:client",
-    "stop:server": "ps aux | grep -e 'nodemon\\| 3331' | grep -v grep | awk '{print $2}' | xargs kill -9",
+    "stop:server": "ps aux | grep -e 'nodemon\\| 3331\\|ts-node' | grep -v grep | awk '{print $2}' | xargs kill -9",
     "stop:client": "ps aux | grep 'ng serve' | grep -v grep | awk '{print $2}' | xargs kill -9"
   },
   "keywords": [

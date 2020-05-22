@@ -1,5 +1,5 @@
 module.exports = {
-  dbPath: './demo/mock-responses.sql',
+  dbPath: '../demo/mock-responses.sql',
   // ssl: true,
   // sslKeyPath: './demo/server.key'
   // sslCertPath: './demo/server.cert'
