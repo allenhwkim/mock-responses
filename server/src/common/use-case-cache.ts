@@ -9,7 +9,7 @@ export const UseCaseCache = {
   data:  {REGEXP: {}, 0: {}},  // use_case.id -> url -> method -> mock_response.id
   mockResponses: {}, // id -> mock_response
 
-  getAvailableMockResponses: function(req, omitted=false) {
+  getAvailableMockResponses: function(req, bodyOmitted=false) {
     const ucIds = UseCaseCache.getCookie(req, 'UCIDS') || '0';
     const sql1 = `SELECT * FROM use_cases WHERE id IN (${ucIds})`;
     console.log('[mock-responses] UseCaseCache', sql1);
@@ -22,28 +22,31 @@ export const UseCaseCache = {
 
     // get from cache
     const useCaseIds = [0, ...ucIds.split(',')]; // 0 .. default
-    const availableMockResponses = Object.assign({}, UseCaseCache.getByUseCaseIds(useCaseIds));
+    const availableMockResponses = UseCaseCache.getByUseCaseIds(useCaseIds, bodyOmitted);
     activeMockResponses.forEach(mockResp => {
       UseCaseCache.setMockResponse(availableMockResponses, mockResp);
     });
 
-    if (omitted) {
-      for (var url in availableMockResponses) {
-        for (var method in availableMockResponses[url]) {
-          delete availableMockResponses[url][method].res_body;
-        }
-      }
-    }
-
     return { activeUseCases, activeMockResponses, availableMockResponses}
   },
 
-  getByUseCaseIds: function (useCaseIds: Array<any>) { 
+  getByUseCaseIds: function (useCaseIds: Array<any>, bodyOmitted=false) { 
     let urls = {};
     useCaseIds.forEach(ucId => {
       ucId = +ucId;
       const cached = UseCaseCache.data[ucId] || UseCaseCache.set(ucId);
-      urls = {...urls, ...cached};
+      if (bodyOmitted) { // for list-only, which does not need response contents. e.g. dashboard 
+        // shallow copy does not work, only deep copy works
+        const cachedCloned = JSON.parse(JSON.stringify(cached));
+        for (var url in cachedCloned) {
+          for (var method in cachedCloned[url]) {
+            delete cachedCloned[url][method].res_body;
+          }
+        }
+        urls = {...urls, ...cachedCloned};
+      } else {
+        urls = {...urls, ...cached};
+      }
     });
     return urls;
   },

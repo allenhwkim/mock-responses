@@ -51,7 +51,11 @@ export class BetterSqlite3Migration {
         CREATE TABLE IF NOT EXISTS use_cases (
           id  INTEGER PRIMARY KEY,
           name  TEXT NOT NULL,
-          description TEXT NOT NULL
+          description TEXT NOT NULL,
+          created_at	INTEGER,
+          created_by	string,
+          updated_at	INTEGER,
+          updated_by	string
         )
       `;
 
@@ -133,7 +137,7 @@ export class BetterSqlite3Migration {
 
   rebuildUseCases() {
     try {
-      this.db.exec('select category from use_cases limit 1');
+      this.db.exec('select category from use_cases limit 1'); // it means this needs to be executed.
       console.log('[mock-responses] running migration for deleting columns for use_cases');
       const sql = `
         BEGIN TRANSACTION;
@@ -145,16 +149,17 @@ export class BetterSqlite3Migration {
           created_at	INTEGER,
           created_by	string,
           updated_at	INTEGER,
-          updated_by	string,
+          updated_by	string
         );
         INSERT INTO use_cases
-          SELECT id, name, description
+          SELECT id, name, description, NULL, NULL, NULL, NULL
           FROM use_cases_old;
         DROP TABLE use_cases_old;
         COMMIT;
       `;
       this.db.exec(sql);
     } catch(e) {
+      // console.log('............................. error', e)
     }
   }
 

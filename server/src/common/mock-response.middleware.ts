@@ -37,6 +37,7 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
 
   if ( // application-specific reserved urls e.g., /use-cases/index
     req.url === '/' || 
+    req.url === '/favicon.ico' ||
     req.url.startsWith('/developer') || 
     req.url.startsWith('/mock-responses') ||
     req.url.startsWith('/use-cases') 

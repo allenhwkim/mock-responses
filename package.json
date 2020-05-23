@@ -1,13 +1,17 @@
 {
   "name": "mock-responses",
   "author": "Allen Kim <allenhwkim@gmail.com>",
-  "version": "3.0.1",
+  "version": "3.0.4",
   "license": "MIT",
   "homepage": "https://github.com/allenhwkim/mock-responses#readme",
   "description": "espress-kind http request middleware",
+  "main": "dist/server/main.js",
+  "bin": {
+    "mock-responses": "dist/server/main.js"
+  },
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "npm run build:server && npm run build:client && cp -R demo *.config.js dist/",
+    "build": "npm run build:server && npm run build:client",
     "build:server": "cd server && npm run build",
     "build:client": "cd client && npm run build",
     "start": "npm stop && npm run start:server:dev && npm run start:client:dev",

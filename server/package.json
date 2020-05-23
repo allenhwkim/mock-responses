@@ -1,26 +1,6 @@
 {
-  "name": "mock-responses",
-  "version": "2.3.0",
-  "description": "espress-kind http request middleware",
-  "main": "dist/main.js",
-  "bin": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/allenhwkim/mock-responses.git"
-  },
-  "keywords": [
-    "express",
-    "intercept",
-    "middleware"
-  ],
-  "author": "Allen Kim <allenhwkim@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/allenhwkim/mock-responses/issues"
-  },
-  "homepage": "https://github.com/allenhwkim/mock-responses#readme",
   "scripts": {
-    "build": "nest build",
+    "build": "nest build && cp -R ../demo ../*.config.js ../dist && cp src/server.* ../dist/server",
     "start": "nodemon src --ext ts --exec \"ts-node -r tsconfig-paths/register src/main.ts\"",
     "start:prod": "node dist/main.js"
   },
@@ -70,17 +50,5 @@
     "tsconfig-paths": "^3.9.0",
     "tslint": "^5.20.0",
     "typescript": "^3.6.3"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".spec.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    }
   }
 }
