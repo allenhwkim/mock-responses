@@ -137,8 +137,25 @@ export class BetterSqlite3Migration {
 
   rebuildUseCases() {
     try {
-      this.db.exec('select category from use_cases limit 1'); // it means this needs to be executed.
+      this.db.exec('select category, mock_responses from use_cases limit 1'); // it means this needs to be executed.
       console.log('[mock-responses] running migration for deleting columns for use_cases');
+
+      const useCases = BetterSqlite3.db.prepare(`SELECT * FROM use_cases`).all();
+      useCases.forEach(useCase => {
+        const mockRespIds = useCase.mock_responses.split(',').map(num => +num);
+        mockRespIds.forEach((mockRespId, index) => {
+          const sql0 = `SELECT * from use_case_to_mock_responses
+            WHERE use_case_id = ${useCase.id} AND mock_response_id = ${mockRespId}`;
+          const existing = this.db.prepare(sql0).get();
+          if (!existing) {
+            const sql = `INSERT INTO use_case_to_mock_responses
+              (use_case_id, mock_response_id, sequence)
+              VALUES (${useCase.id}, ${mockRespId}, ${index})`;
+            this.db.exec(sql);
+          }
+        })
+      });
+
       const sql = `
         BEGIN TRANSACTION;
         ALTER TABLE use_cases RENAME TO use_cases_old;
