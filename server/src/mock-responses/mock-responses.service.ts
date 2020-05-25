@@ -54,8 +54,11 @@ export class MockResponsesService {
       console.log('[mock-responses] MockResponseService.findAllBy', sql);
       return this.db.prepare(sql).all();
     } else if (by.useCases) {
-      // return this.findAllByUseCases(by.useCases);
-      return UseCaseCache.getByUseCaseIds(by.useCases.split(','));
+      const useCaseIds =  by.useCases.split(',');
+      // set cache to UseCaseCache[ucId] if not defined
+      useCaseIds.forEach(ucId => !(UseCaseCache.data[+ucId]) && UseCaseCache.set(+ucId));
+
+      return UseCaseCache.getByUseCaseIds(useCaseIds); // get data from cache
     } else {
       const where = getWhereFromBy(by) || '1 = 1';
       const sql = `
@@ -104,14 +107,14 @@ export class MockResponsesService {
 
   update(data) {
     const columns = [];
-    data.req_url && columns.push(`req_url = '${data.req_url}'`);
-    data.req_name && columns.push(`req_name = '${data.req_name}'`);
-    data.req_method && columns.push(`req_method = '${data.req_method}'`);
-    data.req_payload && columns.push(`req_payload = '${data.req_palyload}'`);
-    data.res_status && columns.push(`res_status = ${data.res_status}`);
-    data.res_delay_sec && columns.push(`res_delay_sec = ${data.res_delay_sec}`);
-    data.res_content_type && columns.push(`res_content_type = '${data.res_content_type}'`);
-    data.res_body && columns.push(`res_body = '${data.res_body.replace(/'/g, '\'\'')}'`);
+    for (var key in data) {
+      if (key === 'res_status' || key === 'res_delay_sec') { // boolean, number types
+        columns.push(`${key} = ${data[key]}`);
+      } else if (key !== 'id') { // string types
+        columns.push(`${key} = '${data[key]}'`);
+      }
+    }
+    console.log('>>>>>>>>>>>', {data, columns})
 
     const sql = `
       UPDATE mock_responses SET

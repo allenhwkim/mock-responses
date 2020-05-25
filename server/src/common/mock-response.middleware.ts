@@ -24,7 +24,7 @@ function findMockResponse(req: Request): MockResponse {
   const mockResponse = 
     availableMockResponses[req.path][req.method] || // exact method
     availableMockResponses[req.path]['*'];  // any method
-  
+
   return mockResponse;
 }
 

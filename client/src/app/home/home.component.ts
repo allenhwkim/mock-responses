@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { faPlay, faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
@@ -35,17 +36,26 @@ export class HomeComponent implements OnInit {
     public mockResponseService: MockResponsesService,
     private useCaseService: UseCasesService,
     public auth: AuthorizedServiceService,
+    public route: ActivatedRoute,
+    private router: Router,
     private dialog: MatDialog,
     private http: HttpClient,
     private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
-    this._setProperties();
+    this._setProperties().then(resp => {
+      this.availMockRespSearch = this.route.snapshot.queryParamMap.get('search');
+    });
   }
 
   setMockResponses(by = {key: ''}) {
     // filter available mock responses
+    this.router.navigate([], { 
+      relativeTo: this.route,
+      queryParams: { search: by.key },
+      queryParamsHandling: 'merge'
+    });
   }
 
   openUseCaseDialog(useCase) {

@@ -9,7 +9,10 @@ export const UseCaseCache = {
   data:  {REGEXP: {}, 0: {}},  // use_case.id -> url -> method -> mock_response.id
   mockResponses: {}, // id -> mock_response
 
-  getAvailableMockResponses: function(req, bodyOmitted=false) {
+  // get available mock-responses from cookies; UCIDS, MRIDS
+  // if MRIDS is given, it deep-clones the cached cache data and return it, so that it does not touch data.
+  // When try to get mock-responses from cache and cache is not set, it also set cache data
+  getAvailableMockResponses: function(req) {
     const ucIds = UseCaseCache.getCookie(req, 'UCIDS') || '0';
     const sql1 = `SELECT * FROM use_cases WHERE id IN (${ucIds})`;
     console.log('[mock-responses] UseCaseCache', sql1);
@@ -20,37 +23,40 @@ export const UseCaseCache = {
     console.log('[mock-responses] UseCaseCache', sql2);
     const activeMockResponses = BetterSqlite3.db.prepare(sql2).all();
 
-    // get from cache
     const useCaseIds = [0, ...ucIds.split(',')]; // 0 .. default
-    const availableMockResponses = UseCaseCache.getByUseCaseIds(useCaseIds, bodyOmitted);
-    activeMockResponses.forEach(mockResp => {
-      UseCaseCache.setMockResponse(availableMockResponses, mockResp);
-    });
 
-    return { activeUseCases, activeMockResponses, availableMockResponses}
+    // set UseCaseCache[ucId] if not defined
+    useCaseIds.forEach(ucId => !(UseCaseCache.data[ucId]) && UseCaseCache.set(+ucId)); 
+
+    if (activeMockResponses.length) {
+      // NOT to update cache, do deep clone for mock-responses
+      const cached = UseCaseCache.getByUseCaseIds(useCaseIds); // get data from cache
+      console.log('>>>>>>>>>>>>>>>>>>>>. cached', {cached})
+      const deepCloned = JSON.parse(JSON.stringify(cached));
+      console.log('>>>>>>>>>>>>>>>>>>>>. deepCloned', {deepCloned})
+      activeMockResponses.forEach(mockResp => {
+        // this does not update cache, because deepCloned is a separate object
+        UseCaseCache.setMockResponse(deepCloned, mockResp);
+      });
+      return { activeUseCases, activeMockResponses, availableMockResponses: deepCloned}
+    } else {
+      const cached = UseCaseCache.getByUseCaseIds(useCaseIds);  // get data from cache
+      return { activeUseCases, activeMockResponses, availableMockResponses: cached}
+    }
   },
 
-  getByUseCaseIds: function (useCaseIds: Array<any>, bodyOmitted=false) { 
+  // get UseCaseCache.data[usecaseId] -> GET, POST, PUT.. from multiple usecase ids.
+  // the response is merged data by last one prioritized
+  getByUseCaseIds: function (useCaseIds: Array<any>) { 
     let urls = {};
     useCaseIds.forEach(ucId => {
-      ucId = +ucId;
-      const cached = UseCaseCache.data[ucId] || UseCaseCache.set(ucId);
-      if (bodyOmitted) { // for list-only, which does not need response contents. e.g. dashboard 
-        // shallow copy does not work, only deep copy works
-        const cachedCloned = JSON.parse(JSON.stringify(cached));
-        for (var url in cachedCloned) {
-          for (var method in cachedCloned[url]) {
-            delete cachedCloned[url][method].res_body;
-          }
-        }
-        urls = {...urls, ...cachedCloned};
-      } else {
-        urls = {...urls, ...cached};
-      }
+      const cached = UseCaseCache.data[+ucId];
+      urls = {...urls, ...cached};
     });
     return urls;
   },
 
+  // set UseCaseCache.data[usecaseId] -> GET, POST, PUT.., by respecting child use cases
   set: function (useCaseId, processedOnes=[]) {
     if (UseCaseCache.data[useCaseId]) {
       console.log('cache is already set for use case', useCaseId);
@@ -78,6 +84,8 @@ export const UseCaseCache = {
     return UseCaseCache.data[useCaseId];
   },
 
+  // set UseCaseCaceh.mockResponses[id] cache, 
+  // so that it does not read from data base when UseCaseCache.getAvailableMockResponses() is called
   setMockResponse: function (availMockResponses, mockResp) {
     UseCaseCache.mockResponses[mockResp.id] = mockResp;
 
@@ -94,6 +102,7 @@ export const UseCaseCache = {
     return availMockResponses;
   },
 
+  // set default mock-responses, UseCacahe.data[0], as default with the first mock responses
   setDefault: function() {
     const sql = `SELECT * FROM mock_responses 
       GROUP BY req_url, req_method ORDER BY req_url, req_method, created_at`;
