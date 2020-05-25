@@ -5,7 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppRoutingModule } from './app.route';
 import { AppComponent } from './app.component';
@@ -41,6 +42,7 @@ import { MockResponseDialogComponent } from './dialogs/mock-response-dialog.comp
     HttpClientModule,
     MatSnackBarModule,
     MatDialogModule,
+    DragDropModule
   ],
   providers: [],
   bootstrap: [AppComponent],

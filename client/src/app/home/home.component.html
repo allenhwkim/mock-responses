@@ -17,7 +17,7 @@
         <span (click)="showUseCasesSearch()">Add</span>
         <div class="search-use-case" *ngIf="useCaseSearchVisible">
           <div class="blocker" (click)="useCaseSearchVisible=false"></div>
-          <div class="contents">
+          <div class="contents" cdkDrag>
             <input class="use-case-search" size="40" 
               (keyup)="showUseCasesSearch({key: $event.target.value})"
               placeholder="Type to search use-cases" />
@@ -47,7 +47,7 @@
         <span (click)="showMockResponsesSearch()">Add</span>
         <div *ngIf="mockResponseSearchVisible">
           <div class="blocker" (click)="mockResponseSearchVisible=false"></div>
-          <div class="contents">
+          <div class="contents" cdkDrag>
             <input class="mock-response-search" size="40" 
               (keyup)="showMockResponsesSearch({key: $event.target.value})"
               placeholder="Type to search mock response" />
