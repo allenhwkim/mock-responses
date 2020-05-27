@@ -11,5 +11,9 @@
 
 <app-mock-responses-list
   [mockResponses]="mockResponses"
+  [availableIds]="availableIds"
+  [activeIds]="activeIds"
+  (activateClicked)="activateClicked($event)"
+  (deactivateClicked)="deactivateClicked($event)"
   (deleteClicked)="deleteClicked($event)">
 </app-mock-responses-list>

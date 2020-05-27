@@ -43,7 +43,22 @@ export const UseCaseCache = {
       });
     }
 
-    return { activeUseCases, activeMockResponses, availableMockResponses: deepCloned}
+    return { 
+      activeUseCases,
+      activeMockResponses,
+      availableMockResponses: deepCloned,
+      mockResponseIds: UseCaseCache.getMockResponseIds(deepCloned)
+    }
+  },
+
+  getMockResponseIds(useCase) { // useCase url -> method -> id
+    const mockResponseIds = [];
+    for (var url in useCase) {
+      for (var method in useCase[url]) {
+        mockResponseIds.push(useCase[url][method].id || useCase[url][method]);
+      }
+    }
+    return mockResponseIds;
   },
 
   // get UseCaseCache.data[usecaseId] -> GET, POST, PUT.. from multiple usecase ids.

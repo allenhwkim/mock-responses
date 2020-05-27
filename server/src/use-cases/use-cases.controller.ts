@@ -27,11 +27,13 @@ export class UseCasesController {
   ) {
     if (activeOnly) {
       const avail = UseCaseCache.getAvailableMockResponses(req);
+      // avail.availableMockResponses only has ids, x.setMockResponses replace id to the object
       UseCaseCache.setMockResponse(avail.availableMockResponses, false);
       return {
         activeUseCases: avail.activeUseCases, // based on UCIDS cookie
         activeMockResponses: avail.activeMockResponses, // based on MRIDS cookie
-        availableMockResponses: avail.availableMockResponses // based on MRIDS, deep-cloned
+        availableMockResponses: avail.availableMockResponses, // based on MRIDS, deep-cloned
+        mockResponseIds: avail.mockResponseIds
       }
     } else {
       const useCases = this.useCase.findAllBy({key, ids, except})

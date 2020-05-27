@@ -12,9 +12,13 @@ export class MockResponsesListComponent implements OnInit {
   @Input() mockResponses: any;
   @Input() collectionMode: boolean;
   @Input() listMode: boolean;
+  @Input() availableIds: Array<number>;
+  @Input() activeIds: Array<number>; 
 
   @Output() deleteClicked = new EventEmitter();
   @Output() selectClicked = new EventEmitter();
+  @Output() activateClicked = new EventEmitter();
+  @Output() deactivateClicked = new EventEmitter();
 
   faEdit = faEdit; faFile = faFile; faTrashAlt = faTrashAlt;
 

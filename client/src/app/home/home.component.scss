@@ -91,12 +91,11 @@
           color: #1F88E5;
           cursor: pointer;
         }
+        .method {
+          min-width: 80px;
+        }
         .req-resp {
           cursor: pointer;
-          .method {
-            display: inline-block;
-            width: 80px;
-          }
         }
       }
     }

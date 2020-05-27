@@ -83,12 +83,12 @@
               <div *ngIf="el[1]; let mockResp" title="{{mockResp.id}}">
                 <div class="flex row" *ngIf="foundMockResp(mockResp, availMockRespSearch)">
                   <fa-icon class="play" [icon]="faPlay" (click)="play(mockResp)"></fa-icon> &nbsp;
+                  <b class="method">{{mockResp.req_method || 'ANY'}}</b>
                   <span class="req-resp" (click)="openMockResponseDialog(mockResp)">
-                    <b class="method">{{mockResp.req_method || 'ANY'}}</b>
-                    <b>{{mockResp.req_url}}</b> &nbsp;
-                    <span title="name">{{mockResp.name}}</span> &nbsp;
                     <span title="status code">{{mockResp.res_status}}</span> &nbsp;
-                    <span title="content type">{{mockResp.res_content_type}}</span>
+                    <b>{{mockResp.req_url}}</b> &nbsp;
+                    <!-- <span title="content type">{{mockResp.res_content_type}}</span> -->
+                    <span title="name">{{mockResp.name}}</span> &nbsp;
                   </span>
                 </div>
               </div> <!-- mockResp -->

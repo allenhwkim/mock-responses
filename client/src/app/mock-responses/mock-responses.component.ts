@@ -14,8 +14,10 @@ import { UseCasesService } from '../use-cases/use-cases.service';
   styleUrls: ['./mock-responses.component.scss']
 })
 export class MockResponsesComponent implements OnInit {
-  useCases: any;
-  mockResponses: any;
+  useCases: any; // actvieeMockResponses, activeUseCases, mockResponseIds, availableMockRespnses
+  mockResponses: any; // mock_resonses table data
+  availableIds: Array<number>; // mock response ids from useCases.availableMockResponese
+  activeIds: Array<number>; // avail mock responses ids, which is set by activating it
   faPlus = faPlus; faSearch = faSearch;
 
   constructor(
@@ -29,11 +31,12 @@ export class MockResponsesComponent implements OnInit {
     this.setMockResponses({key:''});
   }
 
-  setMockResponses(by) {
-    this.mockResponseService.getMockResponses(by)
-      .subscribe( (resp:any) => {
-        this.mockResponses = resp.mockResponses;
-      })
+  async setMockResponses(by) {
+    const mockResps: any = await this.mockResponseService.getMockResponses(by).toPromise();
+    const useCases: any = await this.useCaseService.getUseCases({activeOnly:1}).toPromise();
+    this.mockResponses = mockResps.mockResponses;
+    this.activeIds = useCases.activeMockResponses.map(el => el.id), // based on MRIDS,
+    this.availableIds = useCases.mockResponseIds;
   }
 
   deleteClicked(event) {
@@ -41,4 +44,13 @@ export class MockResponsesComponent implements OnInit {
       .subscribe( (resp: any) => this.setMockResponses({key:''}) );
   }
 
+  async activateClicked(event) {
+    await this.mockResponseService.activateMockResponse(event.id).toPromise();
+    this.setMockResponses({key:''});
+  }
+
+  async deactivateClicked(event) {
+    await this.mockResponseService.deactivateMockResponse(event.id).toPromise();
+    this.setMockResponses({key:''});
+  }
 }
