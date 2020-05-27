@@ -1,7 +1,7 @@
 {
   "name": "mock-responses",
   "author": "Allen Kim <allenhwkim@gmail.com>",
-  "version": "3.0.5",
+  "version": "3.1.0",
   "license": "MIT",
   "homepage": "https://github.com/allenhwkim/mock-responses#readme",
   "description": "espress-kind http request middleware",
