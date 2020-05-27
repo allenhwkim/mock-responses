@@ -4,6 +4,8 @@ import { BetterSqlite3 } from '../common/better-sqlite3';
 import { UseCaseToUseCasesService } from '../use-cases/use-case-to-use-cases.service';
 import { UseCaseToMockResponsesService } from '../use-cases/use-case-to-mock-resonses.service';
 import { UseCasesService } from '../use-cases/use-cases.service';
+import { MockResponseCache } from './mock-response-cache';
+import { isRegExp } from 'util';
 
 export const UseCaseCache = {
   data:  {REGEXP: {}, 0: {}},  // use_case.id -> url -> method -> mock_response.id
@@ -28,21 +30,20 @@ export const UseCaseCache = {
     // set UseCaseCache[ucId] if not defined
     useCaseIds.forEach(ucId => !(UseCaseCache.data[ucId]) && UseCaseCache.set(+ucId)); 
 
+    const cached = UseCaseCache.getByUseCaseIds(useCaseIds); // get data from cache
+    const deepCloned = JSON.parse(JSON.stringify(cached));   // to keep cache data not touched
     if (activeMockResponses.length) {
-      // NOT to update cache, do deep clone for mock-responses
-      const cached = UseCaseCache.getByUseCaseIds(useCaseIds); // get data from cache
-      console.log('>>>>>>>>>>>>>>>>>>>>. cached', {cached})
-      const deepCloned = JSON.parse(JSON.stringify(cached));
-      console.log('>>>>>>>>>>>>>>>>>>>>. deepCloned', {deepCloned})
       activeMockResponses.forEach(mockResp => {
         // this does not update cache, because deepCloned is a separate object
-        UseCaseCache.setMockResponse(deepCloned, mockResp);
+        // UseCaseCache.setMockResponse(deepCloned, mockResp);
+        MockResponseCache.set(mockResp);
+        const {id, req_url, req_method} = mockResp;
+        deepCloned[req_url] = deepCloned[req_url] || {};
+        deepCloned[req_url][req_method || '*'] = id;
       });
-      return { activeUseCases, activeMockResponses, availableMockResponses: deepCloned}
-    } else {
-      const cached = UseCaseCache.getByUseCaseIds(useCaseIds);  // get data from cache
-      return { activeUseCases, activeMockResponses, availableMockResponses: cached}
     }
+
+    return { activeUseCases, activeMockResponses, availableMockResponses: deepCloned}
   },
 
   // get UseCaseCache.data[usecaseId] -> GET, POST, PUT.. from multiple usecase ids.
@@ -61,12 +62,19 @@ export const UseCaseCache = {
     if (UseCaseCache.data[useCaseId]) {
       console.log('cache is already set for use case', useCaseId);
     } else {
+      UseCaseCache.data[useCaseId] = UseCaseCache.data[useCaseId] || {};
+
       const mockRespIds = UseCaseCache.findMockResponseIdsByUseCaseId(useCaseId)
         .map(el => el.mock_response_id).join(',') || '0';
+
+      const useCaseCached = UseCaseCache.data[useCaseId];
       const mockResponses = UseCaseCache.findMockResponsesByIds(mockRespIds);
       mockResponses.forEach((mockResp: MockResponse) => {
-        UseCaseCache.data[useCaseId] = UseCaseCache.data[useCaseId] || {};
-        UseCaseCache.setMockResponse(UseCaseCache.data[useCaseId], mockResp)
+        MockResponseCache.set(mockResp);
+        // UseCaseCache.setMockResponse(UseCaseCache.data[useCaseId], mockResp);
+        const {id, req_url, req_method} = mockResp;
+        useCaseCached[req_url] = useCaseCached[req_url] || {};
+        useCaseCached[req_url][req_method || '*'] = id; 
       });
       processedOnes.push(useCaseId);
 
@@ -84,34 +92,20 @@ export const UseCaseCache = {
     return UseCaseCache.data[useCaseId];
   },
 
-  // set UseCaseCaceh.mockResponses[id] cache, 
-  // so that it does not read from data base when UseCaseCache.getAvailableMockResponses() is called
-  setMockResponse: function (availMockResponses, mockResp) {
-    UseCaseCache.mockResponses[mockResp.id] = mockResp;
-
-    const [url, method] = [mockResp.req_url, mockResp.req_method]; 
-    availMockResponses[url] = availMockResponses[url] || {};
-    availMockResponses[url][method || '*'] = UseCaseCache.mockResponses[mockResp.id];
-
-    if (url.includes('*')) { // regular expression match
-      UseCaseCache.data.REGEXP = UseCaseCache.data.REGEXP || {};
-      const urlRegExp = url.replace(/\*/g, '(.*?)');
-      UseCaseCache.data.REGEXP[urlRegExp] = url;
-    }
-    
-    return availMockResponses;
-  },
-
   // set default mock-responses, UseCacahe.data[0], as default with the first mock responses
   setDefault: function() {
     const sql = `SELECT * FROM mock_responses 
       GROUP BY req_url, req_method ORDER BY req_url, req_method, created_at`;
     console.log('[mock-responses] UseCaseCache', sql);
     const mockResponses = BetterSqlite3.db.prepare(sql).all();
+    const defaultUseCase = UseCaseCache.data[0];
 
     mockResponses.forEach(mockResp => {
-      UseCaseCache.mockResponses[mockResp.id] = mockResp; 
-      UseCaseCache.setMockResponse(UseCaseCache.data[0], mockResp);
+      MockResponseCache.set(mockResp);
+      // UseCaseCache.setMockResponse(UseCaseCache.data[0], mockResp)
+      const {id, req_url, req_method} = mockResp;
+      defaultUseCase[req_url] = defaultUseCase[req_url] || {};
+      defaultUseCase[req_url][req_method || '*'] = id;
     });
     return UseCaseCache.data[0];
   },
@@ -123,6 +117,19 @@ export const UseCaseCache = {
       cookies[k] = v;
     });
     return cookies[key] ? decodeURIComponent(cookies[key]) : undefined;
+  },
+
+  setMockResponse(useCase, completeResBody=true) {
+    for (var url in useCase) {
+      for (var method in useCase[url]) {
+        const mockRespId = useCase[url][method];
+        const mockResp = MockResponseCache.get(mockRespId);
+        useCase[url][method] =  {...mockResp};
+        if (!completeResBody) {
+          delete useCase[url][method].res_body;
+        }
+      }
+    }
   },
 
   findUseCaseIdsByUseCaseId: function(useCaseId) {
@@ -144,5 +151,12 @@ export const UseCaseCache = {
     console.log('[mock-responses] MockResponseService.findAllBy', sql);
     return BetterSqlite3.db.prepare(sql).all();
   },
+
+  reset() {
+    UseCaseCache.data = {REGEXP: {}, 0: {}};
+    MockResponseCache.data = {REGEXP: {}};
+
+    UseCaseCache.setDefault();
+  }
 
 }

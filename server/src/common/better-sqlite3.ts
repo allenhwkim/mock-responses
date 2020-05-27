@@ -23,7 +23,7 @@ export class BetterSqlite3 {
       throw '[mock-respones] error. db path not found.';
     }
 
-    console.log('[mock-responses] .................... constructing BetterSqlite3')
+    console.log('[mock-responses] constructing BetterSqlite3')
     const sqlPath = dbPath.replace(/\.sqlite3$/, '.sql'); 
     const sqlite3Path = dbPath.replace(/\.sql$/, '.sqlite3'); 
 

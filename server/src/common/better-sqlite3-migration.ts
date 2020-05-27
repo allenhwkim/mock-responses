@@ -176,7 +176,7 @@ export class BetterSqlite3Migration {
       `;
       this.db.exec(sql);
     } catch(e) {
-      // console.log('............................. error', e)
+      // console.log('[mock-response] migration exception', e)
     }
   }
 

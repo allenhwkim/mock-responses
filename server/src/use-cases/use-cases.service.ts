@@ -6,6 +6,7 @@ import { BetterSqlite3 } from '../common/better-sqlite3';
 import { MockResponsesService } from '../mock-responses/mock-responses.service';
 import { UseCaseToUseCasesService } from './use-case-to-use-cases.service';
 import { UseCaseToMockResponsesService } from './use-case-to-mock-resonses.service';
+import { UseCaseCache } from 'common/use-case-cache';
 
 @Injectable()
 export class UseCasesService {
@@ -90,6 +91,7 @@ export class UseCasesService {
     data.useCaseIds && this.uc2ucs.updateAllChildren(useCaseId, data.useCaseIds);
     data.mockResponseIds && this.uc2mrs.updateAllChildren(useCaseId, data.mockResponseIds);
 
+    UseCaseCache.set(useCaseId);
     return BetterSqlite3.backupToSql();
   }
 
@@ -116,6 +118,8 @@ export class UseCasesService {
     data.useCaseIds && this.uc2ucs.updateAllChildren(data.id, data.useCaseIds);
     data.mockResponseIds && this.uc2mrs.updateAllChildren(data.id, data.mockResponseIds);
 
+    delete UseCaseCache.data[id];
+    UseCaseCache.set(id);
     return BetterSqlite3.backupToSql();
   }
 
@@ -132,6 +136,7 @@ export class UseCasesService {
     console.log('[mock-responses] UseCaseService', sql3);
     this.db.exec(sql3);
 
+    delete UseCaseCache.data[id];
     return BetterSqlite3.backupToSql();
   }
 

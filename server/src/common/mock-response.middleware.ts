@@ -6,8 +6,10 @@ import { Request, Response } from 'express';
 import { BetterSqlite3 } from './better-sqlite3';
 import { MockResponse } from './interfaces/mock-response.interface';
 import { UseCaseCache } from './use-case-cache';
+import { MockResponseCache } from './mock-response-cache';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
-function findMockResponse(req: Request): MockResponse {
+function getMockResponse(req: Request): MockResponse {
   // const row: MockResponse = findByUrlMethod(req.path, req.method);
   const { activeUseCases, activeMockResponses, availableMockResponses }
     = UseCaseCache.getAvailableMockResponses(req);
@@ -19,13 +21,19 @@ function findMockResponse(req: Request): MockResponse {
       }
     }
   }
-  const urlMethods = availableMockResponses[req.path] || getREMatchingUrlMethods(req.path);
 
-  const mockResponse = 
-    availableMockResponses[req.path][req.method] || // exact method
-    availableMockResponses[req.path]['*'];  // any method
+  let mockRespId;
+  if (availableMockResponses[req.path]) {
+    if (availableMockResponses[req.path][req.method]) {
+      mockRespId = availableMockResponses[req.path][req.method];
+    } else {
+      mockRespId = availableMockResponses[req.path]['*'];
+    }
+  } else {
+    mockRespId = getREMatchingUrlMethods(req.path);
+  }
 
-  return mockResponse;
+  return mockRespId && MockResponseCache.get(mockRespId);
 }
 
 export async function serveMockResponse(req: Request, res: Response, next: Function) {
@@ -47,7 +55,7 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
   } 
 
   !UseCaseCache.data[0] && UseCaseCache.setDefault();
-  const mockResp = findMockResponse(req);
+  const mockResp = getMockResponse(req);
 
   // if not found in DB, continue
   if (!mockResp) {
@@ -57,7 +65,9 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
 
   if (mockResp.req_payload) {
     const missingPayload = mockResp.req_payload.split(',').map(el => el.trim())
-      .filter(payload => payload && typeof req.body[payload] === 'undefined');
+      .filter(payload => {
+        return typeof req.body[payload] === 'undefined'
+      });
     if (missingPayload.length) {
       // if payload not satisfied
       res.status(422).send(`payload not matching, ${mockResp.req_payload}`);
@@ -101,6 +111,8 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
       return;
     } else {
       console.log('[mock-responses] Cannot find id', mockRespId);
+      res.status(404).send(`Cannot find mock_responses #${mockRespId}`);
+      return;
     }
   } 
 
@@ -111,5 +123,5 @@ export async function serveMockResponse(req: Request, res: Response, next: Funct
     return;
   }
 
-  console.log('Noooooooooooooooooooooo you shouldn\'t see this' , mockResp);
+  console.log('Noooooooooooooooooooooo you shouldn\'t see this' , {mockResp});
 }

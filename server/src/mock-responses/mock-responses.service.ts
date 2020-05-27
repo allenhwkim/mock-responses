@@ -99,6 +99,7 @@ export class MockResponsesService {
     console.log('[mock-responses] MockResponseService create', sql);
     try {
       this.db.exec(sql) && BetterSqlite3.backupToSql();
+      UseCaseCache.reset(); // clear cache and set defaults
     } catch (err) {
       console.log("[mock-responses] MockResponseService failed to insert query\n", err);
     }
@@ -114,7 +115,6 @@ export class MockResponsesService {
         columns.push(`${key} = '${data[key]}'`);
       }
     }
-    console.log('>>>>>>>>>>>', {data, columns})
 
     const sql = `
       UPDATE mock_responses SET
@@ -125,6 +125,7 @@ export class MockResponsesService {
       `;
 
     if (this.db.exec(sql)) {
+      UseCaseCache.reset(); // clear cache and set defaults
       BetterSqlite3.backupToSql();
     } else {
       throw '[mock-responses] error update mock_responses'
@@ -140,6 +141,7 @@ export class MockResponsesService {
     console.log('[mock-responses] MockResponseService ', sql2);
     this.db.exec(sql2);
 
+    UseCaseCache.reset(); // clear cache and set defaults
     BetterSqlite3.backupToSql();
   }
 

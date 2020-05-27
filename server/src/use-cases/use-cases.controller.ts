@@ -27,18 +27,11 @@ export class UseCasesController {
   ) {
     if (activeOnly) {
       const avail = UseCaseCache.getAvailableMockResponses(req);
-      const availableMockResponses = JSON.parse(JSON.stringify(avail.availableMockResponses));
-      console.log('..>>>>>>>>>>>>>>>>>>>>>>>>>>', avail)
-      for (var url in availableMockResponses) {
-        for (var method in availableMockResponses[url]) {
-          // res_body is too big and we don't need this
-          delete availableMockResponses[url][method].res_body;
-        }
-      }
+      UseCaseCache.setMockResponse(avail.availableMockResponses, false);
       return {
-        activeUseCases: avail.activeMockResponses, // based on UCIDS cookie
+        activeUseCases: avail.activeUseCases, // based on UCIDS cookie
         activeMockResponses: avail.activeMockResponses, // based on MRIDS cookie
-        availableMockResponses: availableMockResponses // based on MRIDS, deep-cloned
+        availableMockResponses: avail.availableMockResponses // based on MRIDS, deep-cloned
       }
     } else {
       const useCases = this.useCase.findAllBy({key, ids, except})

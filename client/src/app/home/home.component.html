@@ -60,6 +60,9 @@
         </div>
       </li>
     </ul>
+
+    <a href="/use-cases/cached">Use Cases &lt;-&gt; Responses</a>
+
   </div>
 
   <div class="available-section">
@@ -80,7 +83,7 @@
               <div *ngIf="el[1]; let mockResp" title="{{mockResp.id}}">
                 <div class="flex row" *ngIf="foundMockResp(mockResp, availMockRespSearch)">
                   <fa-icon class="play" [icon]="faPlay" (click)="play(mockResp)"></fa-icon> &nbsp;
-                  <span class="req-resp">
+                  <span class="req-resp" (click)="openMockResponseDialog(mockResp)">
                     <b class="method">{{mockResp.req_method || 'ANY'}}</b>
                     <b>{{mockResp.req_url}}</b> &nbsp;
                     <span title="name">{{mockResp.name}}</span> &nbsp;

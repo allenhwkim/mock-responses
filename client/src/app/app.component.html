@@ -6,6 +6,8 @@
         <a [routerLink]="['/mock-responses']">Mock Responses</a> |
         <a [routerLink]="['/use-cases']">Use Cases</a>
         <input class="passcode public" 
+          [(ngModel)]="authKey"
+          maxlength="1"
           title="Enter passcode here to enable edit mode"
           (keypress)="authorizedChanged($event)"/>
       </div>
