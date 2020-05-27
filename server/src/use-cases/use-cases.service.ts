@@ -6,7 +6,7 @@ import { BetterSqlite3 } from '../common/better-sqlite3';
 import { MockResponsesService } from '../mock-responses/mock-responses.service';
 import { UseCaseToUseCasesService } from './use-case-to-use-cases.service';
 import { UseCaseToMockResponsesService } from './use-case-to-mock-resonses.service';
-import { UseCaseCache } from 'common/use-case-cache';
+import { UseCaseCache } from '../common/use-case-cache';
 
 @Injectable()
 export class UseCasesService {
