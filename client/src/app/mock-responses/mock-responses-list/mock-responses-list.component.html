@@ -18,34 +18,41 @@
             <div class="req_payload" *ngIf="el.req_payload">Payload: {{el.req_payload}}</div>
           </div>
           <div class="actions">
-            <span *ngIf="!activeIds.includes(el.id) && availableIds.includes(el.id)" class="active"> 
-              <!-- set by use cases including default ones -->
-              Active
-            </span>
-            <a *ngIf="activeIds.includes(el.id)" class="activate" 
-              (click)="deactivateClicked.emit(el)">
-              Deactivate 
-            </a>
-            <a *ngIf="!activeIds.includes(el.id) && !availableIds.includes(el.id)" class="deactivate" 
-              (click)="activateClicked.emit(el)">
-              Activate 
-            </a>
+            <div class="activate-buttons" *ngIf="auth.authorized && !collectionMode && !listMode">
+              <span *ngIf="!activeIds.includes(el.id) && availableIds.includes(el.id)" class="active"> 
+                <!-- set by use cases including default ones -->
+                Active
+              </span>
+              <a *ngIf="activeIds.includes(el.id)" class="activate" 
+                (click)="deactivateClicked.emit(el)">
+                Deactivate 
+              </a>
+              <a *ngIf="!activeIds.includes(el.id) && !availableIds.includes(el.id)" class="deactivate" 
+                (click)="activateClicked.emit(el)">
+                Activate 
+              </a>
+            </div>
+
             <a class="button icon" *ngIf="auth.authorized && !collectionMode && !listMode " 
               [routerLink]="['/mock-responses', el.id, 'edit']">
               <fa-icon [icon]="faEdit"></fa-icon>
             </a>
+
             <a class="button icon" *ngIf="!auth.authorized && !collectionMode && !listMode"
               [routerLink]="['/mock-responses', el.id, 'edit']">
               <fa-icon [icon]="faFile"></fa-icon>
             </a>
+
             <a class="button icon delete" *ngIf="auth.authorized && listMode"
               (click)="deleteClicked.emit(el)">
               <fa-icon [icon]="faTrashAlt"></fa-icon>
             </a>
+
             <button *ngIf="collectionMode"
               (click)="selectClicked.emit(el)">
               Select
             </button>&nbsp;
+
           </div>
         </div>
       </td>

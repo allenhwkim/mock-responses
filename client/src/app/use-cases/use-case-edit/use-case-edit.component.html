@@ -82,7 +82,9 @@
 
     <br/>
     <div class="buttons for-edit">
-      <button *ngIf="auth.authorized && useCase.id" (click)="updateUseCase()">
+      <button *ngIf="auth.authorized && useCase.id"
+        [disabled]="!updatable"
+        (click)="updateUseCase()">
         <fa-icon [icon]="faEdit"></fa-icon> Update
       </button>
       <a class="button" *ngIf="auth.authorized && useCase.id"
@@ -93,7 +95,9 @@
       <button *ngIf="auth.authorized && useCase.id" (click)="deleteUseCase()">
         <fa-icon [icon]="faTrashAlt"></fa-icon> Delete 
       </button>
-      <button *ngIf="auth.authorized && !useCase.id" (click)="createUseCase()">
+      <button *ngIf="auth.authorized && !useCase.id" 
+        [disabled]="!creatable"
+        (click)="createUseCase()">
         <fa-icon [icon]="faPlusCircle"></fa-icon> Create 
       </button>
     </div>

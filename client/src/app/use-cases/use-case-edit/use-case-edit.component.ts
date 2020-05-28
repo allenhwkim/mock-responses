@@ -33,6 +33,17 @@ export class UseCaseEditComponent implements OnInit {
   searchMockResponses = [];
   mockResponseSearchVisible = false;
 
+  get updatable() {
+    return Object.keys(this.getUpdatedUseCase()).length > 1; // id is default
+  }
+
+  get creatable() {
+    const useCase = this.getUpdatedUseCase();
+    return !!(
+        useCase.name && useCase.description && (useCase.useCaseIds || useCase.mockResponseIds)
+      );
+  }
+
   constructor(
     public auth: AuthorizedServiceService,
     public mockResponseService: MockResponsesService,

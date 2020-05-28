@@ -18,6 +18,16 @@ export class MockResponseEditComponent implements OnInit {
   mockResponse: MockResponse = {};
   faEdit = faEdit; faPlusCircle = faPlusCircle; faTrashAlt = faTrashAlt;
 
+  get updatable() {
+    return Object.keys(this.getUpdatedMockResponse()).length > 1; // id is default
+  }
+
+  get creatable() {
+    const mockResp: MockResponse = this.getUpdatedMockResponse();
+    console.log({mockResp})
+    return !!(mockResp.name && mockResp.req_url && mockResp.res_body);
+  }
+
   constructor(
     public auth: AuthorizedServiceService,
     private mockResp: MockResponsesService,

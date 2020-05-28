@@ -36,6 +36,10 @@ button {
   font-size: 16px; 
   white-space: nowrap;
 }
+button:disabled {
+  background-color: #CCC;
+  color: #999;
+}
 
 button.no-style {
   background-color: transparent;

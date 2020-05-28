@@ -79,7 +79,7 @@
   </fieldset>
 
   <div *ngIf="auth.authorized" class="buttons">
-    <button *ngIf="mockResponse.id" (click)="updateMockResponse()">
+    <button *ngIf="mockResponse.id" [disabled]="!updatable" (click)="updateMockResponse()">
       <fa-icon [icon]="faEdit"></fa-icon>
       Update Mock Response 
     </button>
@@ -93,7 +93,7 @@
       <fa-icon [icon]="faTrashAlt"></fa-icon>
       Delete Mock Resoponse
     </button>
-    <button *ngIf="!mockResponse.id"
+    <button *ngIf="!mockResponse.id" [disabled]="!creatable"
       (click)="createMockResponse()">
       <fa-icon [icon]="faPlusCircle"></fa-icon>
       Create Mock Response 
