@@ -65,7 +65,7 @@ INSERT INTO mock_responses VALUES(1000000000000014,'function row','/api/func',NU
 INSERT INTO mock_responses VALUES(1000000000000015,'with ?foo=1','/api/func',NULL,'',200,0,'text/plain','this is from /api/func?foo=1',1571759051272,'allen.kim',1571759960626,'allen.kim');
 INSERT INTO mock_responses VALUES(1000000000000016,'with ?foo=2','/api/func',NULL,'',200,0,'text/plain','this is from /api/func?foo=2',1571759059184,'allen.kim',1571759946567,'allen.kim');
 INSERT INTO mock_responses VALUES(1000000000000017,'500 error','/api/503','POST','',500,0,'application/json',replace('{\n  "error": 503\n}','\n',char(10)),1574278844811,'allen.kim',1589345235977,'allen.kim');
-INSERT INTO mock_responses VALUES(1000000000000018,'/api/documents/3293380-01020014588','/api/documents/*','GET','',200,0,'application/json','{"success":1}',1588307833390,'allen.kim',1590556135526,'allen.kim');
+INSERT INTO mock_responses VALUES(1000000000000018,'/api/documents/3293380-01020014588','/api/documents/*','GET','',200,0,'application/json','{"success":1}',1588307833390,'allen.kim',1590633031642,'allen.kim');
 INSERT INTO mock_responses VALUES(1000000000000019,'/cms/UTE-iPhone-11-black-225x338-01.png','/cms/*.png',NULL,'',200,0,'image/png','data:image/png;base64,R0lGODlhDAAMAKIFAF5LAP/zxAAAANyuAP/gaP///wAAAAAAACH5BAEAAAUALAAAAAAMAAwAAAMlWLPcGjDKFYi9lxKBOaGcF35DhWHamZUW0K4mAbiwWtuf0uxFAgA7',1588308635797,'allen.kim',1590553454636,'allen.kim');
 CREATE TABLE use_cases (
           id  INTEGER PRIMARY KEY,
@@ -81,5 +81,5 @@ INSERT INTO use_cases VALUES(3,'hup downgrade x','users can do	wngrade their acc
 INSERT INTO use_cases VALUES(5,'hup all the way 2','hardware upgrades for all',NULL,NULL,1589693134707,'allen.kim');
 INSERT INTO use_cases VALUES(12,'woo','owo',NULL,NULL,NULL,NULL);
 INSERT INTO use_cases VALUES(13,'polls','canada huper',NULL,NULL,NULL,NULL);
-INSERT INTO use_cases VALUES(3333825585217536,'test 22','test 222',NULL,NULL,1590556604554,'allen.kim');
+INSERT INTO use_cases VALUES(3333825585217536,'test 221','test 222',NULL,NULL,1590633341877,'allen.kim');
 COMMIT;

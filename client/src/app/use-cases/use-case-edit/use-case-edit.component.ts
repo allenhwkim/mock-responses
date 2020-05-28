@@ -88,8 +88,10 @@ export class UseCaseEditComponent implements OnInit {
 
   updateUseCase() {
     const updated = this.getUpdatedUseCase();
-    this.useCaseService.updateUseCase(this.orgUseCase.id, updated)
-      .subscribe(resp => this.router.navigate(['/use-cases']) );
+    if (Object.keys(updated).length > 1) { // id is default
+      this.useCaseService.updateUseCase(this.orgUseCase.id, updated)
+        .subscribe(resp => this.router.navigate(['/use-cases']) );
+    }
   }
 
   createUseCase() {

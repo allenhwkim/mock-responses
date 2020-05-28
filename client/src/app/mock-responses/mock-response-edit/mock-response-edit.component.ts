@@ -64,8 +64,10 @@ export class MockResponseEditComponent implements OnInit {
 
   updateMockResponse() {
     const updated = this.getUpdatedMockResponse();
-    this.mockResp.updateMockResponse(updated)
-      .subscribe(resp => this.router.navigate(['/mock-responses']) );
+    if (Object.keys(updated).length > 1) {
+      this.mockResp.updateMockResponse(updated)
+        .subscribe(resp => this.router.navigate(['/mock-responses']) );
+    }
   }
 
   createMockResponse() {
