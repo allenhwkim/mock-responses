@@ -1,80 +1,46 @@
-# **Table of Contents**
+# mock-responses
+Intentionally NOT-real API server for front-end development
 
-### To Start
-  * For Development: `npm start`
-  * For Production: ?????????
+## To Start
 
-### For Development
+### Install
+```
+$ npm init # only if package.json not exists
+$ npm i mock-responses -D
+```
+
+### Start / Setup
+```
+$ npx mock-resonses # modify this file
+$ open http://localhost:9001/developer/#/ # to see the main dashboard
+```
+
+### Configuration File
+Update mock-responses.config.js for detailed setup.
+ * dbPath: required, mock-responses .sql file (get this from [demo](https://github.com/allenhwkim/mock-responses/blob/master/demo/mock-responses.sql))
+ * ssl: optional, false in default. If true, the server starts in ssl mode.
+ * sslKeyPath: optional, ssl key file path. If not defined, it uses a defaul key file.
+ * sslCertPath: optional, ssl dert. file path. If not defined, it uses a defaul cert file.
+ * port: optional, default 3331. port number for server
+ * cookie: optional, sring. if set, all mock responses reply with this cookie.
+ * headers: optional, array, if set, all mock resonses reply with this headers.
+```
+module.exports = {
+  dbPath: './mock-server/mock-responses.sql',
+  ssl: true,
+  port: 9200,
+  cookie: 'MY_SESSION=ACCTNBR=123456789; Path=/',
+  headers: [
+    'Access-Control-Allow-Headers=Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With'
+  ]
+};
+```
+
+### To start with nodemon
+nodemon keeps your server up-and-running even with failure.
+```
+```
+
+### Techinical Spec. 
   * server: NestJS
   * client: Angular9
-  
-
-- [**Table of Contents**](#table-of-contents)
-- [How to install and start](#how-to-install-and-start)
-    - [To Start With Forever](#to-start-with-forever)
-    - [To Start Manally](#to-start-manally)
-- [Documentation](#documentation)
-- [Mock Response Features](#mock-response-features)
-  - [create mock-responses](#create-mock-responses)
-  - [update mock-response](#update-mock-response)
-  - [search mock-response](#search-mock-response)
-  - [create use-cases](#create-use-cases)
-  - [update use-case](#update-use-case)
-  - [activate use-case](#activate-use-case)
-
-<br> 
-
-# How to install and start
-
-### To Start With Forever
-
-`forever start -c "npm run dev:start" ./`
-
-### To Start Manally
-
-`$ kill-port 9300`
-
-`$ ts-node src/main.ts --db-path=demo/mock-responses.sql --port=9300 --cookie='PLAY_SESSION=ACCTNBR=123456789; Path=/'`
-
-**After Starting, go to** `http://localhost:3000/developer/#`
-
-<br>
-
-# Documentation
-
-[Mock Response Documentation]("./../documentation/api/mock-responses.md)
-
-[Use Case Documentation]("./../documentation/api/use-cases.md)
-
-<br>
-
-# Mock Response Features
-
-## create mock-responses
-
-<img src="./documentation/images/new-page.png">
-
-## update mock-response
-
-<img src="./documentation/images/edit-page.png">
-
-## search mock-response
-
-<img src="./documentation/images/home-page.png">
-
-Note: the search looks for matching strings in 'name', 'url', and 'body' column.
-
-## create use-cases
-
-<img src="./documentation/images/use-case-create-page.png">
-
-
-## update use-case
-
-<img src="./documentation/images/use-case-edit-page.png">
-
-Note: Use the search bar on the right side to search mock services, then click the service to add it to the use case. Click the trash can icon to remove the mock service from a use case.
-
-## activate use-case
-
-Activates all mock services under that use case.

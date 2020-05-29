@@ -13,6 +13,10 @@
       .actions {
         min-width: 120px;
         text-align: right;
+        .activate-buttons {
+          display: inline-block;
+          padding-right: 8px;
+        }
         .activate, 
         .deactivate {
           cursor: pointer;

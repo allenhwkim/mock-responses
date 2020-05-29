@@ -32,12 +32,26 @@ const argv = yargs
 
 function getConfig(argv: any) {
   const defaultConfigPath = path.join(process.cwd(), 'mock-responses.config.js');
-  const configFile = fs.existsSync(defaultConfigPath) ? require(defaultConfigPath) :
-      fs.existsSync(path.resolve(argv.config)) ? require(path.resolve(argv.config)) : {};
+  const configFile = argv.config || defaultConfigPath;
+
+  // if config not exists, create one
   if (fs.existsSync(configFile)) {
-    console.log('[mock-responses] config file found', {defaultConfigPath, argument: argv.config}, configFile);
+    console.log('[mock-responses] config file defined', { defaultConfigPath, argument: argv.config }, configFile);
+  } else {
+    console.error('[mock-responses] config file NOT found. Creating one');
+    const configFileContents =`module.exports = {\n  dbPath: './mock-responses.sql',\n   port: 3331\n};`;
+    fs.writeFileSync('mock-responses.config.js', configFileContents, 'utf8');
   }
-  const config = configFile;
+  const config  = require(configFile);
+
+  // if dbPath not exists, create one
+  if (!fs.existsSync(config.dbPath) || !fs.lstatSync(config.dbPath).isFile()) {
+    console.error(`Invalid sqlite3 path ${config.dbPath}, creating one`);
+    const demoSql = fs.readFileSync(path.resolve(
+      path.join(__dirname, '..', 'demo', 'mock-responses.sql')
+    ));
+    fs.writeFileSync('mock-responses.sql', demoSql, 'utf8');
+  }
 
   ['dbPath', 'ssl', 'sslKeyPath', 'sslCertPath', 'port', 'cookie', 'headers']
     .forEach( key => argv[key] && (config[key] = argv[key]) );
