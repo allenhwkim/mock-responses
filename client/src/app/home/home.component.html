@@ -1,0 +1,101 @@
+<div class="main">
+  <div class="currently-actives">
+    <h2>Currently Active Use Cases</h2>
+
+    <ul class="active-use-cases">
+      <li class="active-use-case active-item">
+        <div><b>Default Use Case</b></div> 
+        First created mock responses
+      </li>
+      <li class="active-use-case active-item"
+         *ngFor="let el of activeUseCases" (click)="openUseCaseDialog(el)">
+        <div><b>({{el.id}}) {{el.name}}</b></div>
+        <div>{{el.description}}</div>
+        <button class="no-style delete" (click)="deactivateUseCase(el); $event.stopPropagation()">x</button>
+      </li>
+      <li class="add-use-case add-available" [ngClass]="{expanded: useCaseSearchVisible}">
+        <span (click)="showUseCasesSearch()">Add</span>
+        <div class="search-use-case" *ngIf="useCaseSearchVisible">
+          <div class="blocker" (click)="useCaseSearchVisible=false"></div>
+          <div class="contents" cdkDrag>
+            <input class="use-case-search" size="40" 
+              (keyup)="showUseCasesSearch({key: $event.target.value})"
+              placeholder="Type to search use-cases" />
+            <app-use-cases-list 
+              [useCases]="searchUseCases"
+              [collectionMode]="true"
+              (selectClicked)="activateUseCase($event); useCaseSearchVisible=false;">
+            </app-use-cases-list>
+          </div>
+        </div>
+      </li>
+    </ul>
+
+    <h2>Currently Active Mock Responses</h2>
+    <ul class="active-mock-responses">
+      <li class="active-mock-response active-item" *ngFor="let mockResp of activeMockResponses"
+        (click)="openMockResponseDialog(mockResp)" title="{{mockResp.id}}">
+        <b class="method">{{mockResp.req_method || 'ANY'}}</b>
+        <b>{{mockResp.req_url}}</b> &nbsp;
+        <span title="name">{{mockResp.name}}</span> &nbsp;
+        <span title="status code">{{mockResp.res_status}}</span> &nbsp;
+        <span title="content type">{{mockResp.res_content_type}}</span>
+        <a class="button icon delete"
+          (click)="deactivateMockResponse(mockResp); $event.stopPropagation()"> x </a>
+      </li>
+      <li class="add-mock-response add-available" [ngClass]="{expanded: mockResponseSearchVisible}">
+        <span (click)="showMockResponsesSearch()">Add</span>
+        <div *ngIf="mockResponseSearchVisible">
+          <div class="blocker" (click)="mockResponseSearchVisible=false"></div>
+          <div class="contents" cdkDrag>
+            <input class="mock-response-search" size="40" 
+              (keyup)="showMockResponsesSearch({key: $event.target.value})"
+              placeholder="Type to search mock response" />
+            <app-mock-responses-list 
+              [mockResponses]="searchMockResponses"
+              [collectionMode]="true"
+              (selectClicked)="activateMockResponse($event); mockResponseSearchVisible=false;">
+            </app-mock-responses-list >
+          </div>
+        </div>
+      </li>
+    </ul>
+
+    <a href="/use-cases/cached">Use Cases &lt;-&gt; Responses</a>
+
+  </div>
+
+  <div class="available-section">
+    <h2>Available Mock Responses</h2>
+    <div class="search-section">
+      <input class="mock-response-search" size="40"
+        [(ngModel)]="availMockRespSearch"
+        (keyup)="setMockResponses({key: $event.target.value})"
+        placeholder="Type to search mock responses" />
+    </div>
+    <br/>
+
+    <ul class="available-mock-responses"  *ngIf="availableMockResponses">
+      <li class="mock-response" *ngFor="let el of objectEntries(availableMockResponses);">
+        <div *ngIf="el[0] !== 'REGEXP' && el[0]; let url">
+          <div *ngFor="let el of objectEntries(availableMockResponses[url]);">
+            <div *ngIf="el[0]; let method">
+              <div *ngIf="el[1]; let mockResp" title="{{mockResp.id}}">
+                <div class="flex row" *ngIf="foundMockResp(mockResp, availMockRespSearch)">
+                  <fa-icon class="play" [icon]="faPlay" (click)="play(mockResp)"></fa-icon> &nbsp;
+                  <b class="method">{{mockResp.req_method || 'ANY'}}</b>
+                  <span class="req-resp" (click)="openMockResponseDialog(mockResp)">
+                    <span title="status code">{{mockResp.res_status}}</span> &nbsp;
+                    <b>{{mockResp.req_url}}</b> &nbsp;
+                    <!-- <span title="content type">{{mockResp.res_content_type}}</span> -->
+                    <span title="name">{{mockResp.name}}</span> &nbsp;
+                  </span>
+                </div>
+              </div> <!-- mockResp -->
+            </div> <!-- method -->
+          </div> <!-- methods --> 
+        </div> <!-- url --> 
+      </li> 
+    </ul>
+  </div>
+</div>

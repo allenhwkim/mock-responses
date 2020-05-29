@@ -1,0 +1,29 @@
+.mock-responses {
+  text-align: left;
+  .id { width: 100px; }
+  .id-name { width: 25%; }
+  .request {
+    width: 50%; 
+    .contents {
+      display: flex; 
+      justify-content: space-between; 
+      .req {
+        width: 80%;
+      }
+      .actions {
+        min-width: 120px;
+        text-align: right;
+        .activate, 
+        .deactivate {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  .response { width: 25%; 
+    .contents {
+      display: flex;
+      justify-content: space-between; 
+    }
+  }
+}

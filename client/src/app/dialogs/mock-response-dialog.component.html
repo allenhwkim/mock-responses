@@ -1,0 +1,43 @@
+<div class="mock-response" *ngIf="mockResponse">
+  <div class="id">
+    <b>Id: </b> {{mockResponse.id}}
+  </div>
+  <div class="name">
+    <b>Name: </b> {{mockResponse.name}}
+  </div>
+
+  <fieldset>
+    <legend>Request</legend>
+    <div class="req_url">
+      <b>URL: </b> {{mockResponse.req_url}}
+    </div>
+    <div class="req_method">
+      <b>Method: </b> {{mockResponse.req_method}}
+    </div>
+    <div class="req_payload">
+      <b>Payload: </b> {{mockResponse.req_payload}}
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Response</legend>
+    <div class="res_status">
+      <b>Status: </b> {{mockResponse.res_status}}
+    </div>
+    <div class="res_delay_sec">
+      <b>Delay Seconds: </b> {{mockResponse.res_delay_sec}}
+    </div>
+    <div class="res_content_type">
+      <b>Content Type: </b> {{mockResponse.res_content_type}}
+    </div>
+    <pre class="res_body">{{mockResponse.res_body}}</pre>
+  </fieldset>
+  <div>
+    Created at {{mockResponse.created_at}} by {{mockResponse.created_by}}
+  </div>
+  <div>
+    Updated at {{mockResponse.created_at}} by {{mockResponse.created_by}}
+  </div>
+
+</div>
+

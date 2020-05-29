@@ -1,0 +1,77 @@
+.mock-responses .left .desc {  height: 44px; padding: 4px; }
+.mock-responses .middle { width: 24px; text-align: center; font-size: 2em; padding-top: 80px; }
+.mock-responses .right .search { padding: 8px 0; text-align: right; }
+.mock-responses .right .list { max-height: 300px; overflow: auto;}
+.mock-responses .row > * {display: inline-block}
+.mock-responses .row * { overflow-wrap: break-word;}
+.mock-responses .row.header > * { background: #CCC; padding: 4px;}
+.mock-responses .row.mock-response:nth-child(even) { background: #EEE;}
+.mock-responses .row .id { width: 48px; }
+.mock-responses .row .name {  width: 120px;  }
+.mock-responses .row .req_method { width: 80px;}
+.mock-responses .row .req_url { width: 240px; }
+.mock-responses .row .action { width: 1em; }
+.mock-responses .row button { background: none; border: none; cursor: pointer; padding: 0; color: blue; }
+
+.use-case.form .column  { padding: 4px 0; }
+.use-case.form .column label { display: inline-block; width: 100px; }
+
+.use-cases,
+.mock-responses {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  .use-case, 
+  .mock-response {
+    position: relative;
+    display: inline-block;
+    padding: 12px 20px; 
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 4px;
+    vertical-align: top;
+    .delete {
+      position: absolute;
+      top: 4px;
+      right: 8px;
+    }
+    &.add-use-case:not(.expanded),
+    &.add-mock-response:not(.expanded) {
+      border: none;
+      cursor: pointer;
+    }
+  }
+  .add-use-case,
+  .add-mock-response {
+    position: relative;
+    display: inline-block;
+    padding: 12px 20px; 
+    width: 800px;
+    border: none;
+    .blocker {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+    }
+    .contents {
+      position: absolute;
+      background: #FFF;
+      z-index: 1;
+      padding: 12px;
+      width: 800px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-shadow: 0 0 24px #333;
+      ::ng-deep .mock-responses,
+      ::ng-deep .use-cases {
+        max-height: 300px;
+        display: block;
+        margin: 12px 0;
+        overflow: auto;
+      }
+    }
+  }
+}

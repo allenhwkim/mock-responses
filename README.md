@@ -1,5 +1,14 @@
 # **Table of Contents**
 
+### To Start
+  * For Development: `npm start`
+  * For Production: ?????????
+
+### For Development
+  * server: NestJS
+  * client: Angular9
+  
+
 - [**Table of Contents**](#table-of-contents)
 - [How to install and start](#how-to-install-and-start)
     - [To Start With Forever](#to-start-with-forever)

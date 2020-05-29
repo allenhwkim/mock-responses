@@ -1,0 +1,52 @@
+.mock-response.form { 
+  .column { 
+    padding: 4px 0; 
+    label { 
+      display: inline-block; 
+      width: 120px;
+      vertical-align: top;
+    }
+
+    &.id {
+      padding-left: 12px;
+    }
+
+    &.name {
+      padding-left: 12px;
+      #name { width: 400px; }
+    }
+
+    &.res_body {
+      .beautify-button {
+        cursor: pointer;
+        color: #00F;
+      }
+      #res_body { 
+        width: calc(100% - 120px);
+        height: 120px; 
+        resize: vertical; 
+        padding: 12px;
+      }
+    }
+
+    #req_method { width: 6em; }
+    #req_url { width: 400px; }
+    #req_payload { width: 400px; }
+    #res_status { width: 6em; }
+    #res_delay_sec { width: 6em; }
+  }
+
+  .buttons {
+    button {
+      margin-right: 12px;
+    }
+  }
+
+  .request-group,
+  .response-group {
+    margin: 12px 0;
+    border: 1px solid #ccc;
+  }
+}
+
+

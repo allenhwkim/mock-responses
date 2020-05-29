@@ -1,0 +1,106 @@
+
+  <h3 *ngIf="useCase.id"> Update Use Case </h3>
+  <h3 *ngIf="!useCase.id"> Create Use Case </h3>
+  
+  <div class="use-case form">
+    <div class="id column" *ngIf="useCase.id">
+      <label for="id">Id</label>
+      <input id="id" readonly [(ngModel)]="useCase.id" />
+    </div>
+  
+    <div class="name column">
+      <label for="name">Name *</label>
+      <input *ngIf="auth.authorized" id="name" size="40" [(ngModel)]="useCase.name" />
+      <span *ngIf="!auth.authorized">{{useCase.name}}</span>
+    </div>
+  
+    <div class="description column">
+      <label for="description">Description *</label>
+      <input *ngIf="auth.authorized" id="description" size="80" [(ngModel)]="useCase.description" />
+      <span *ngIf="!auth.authorized">{{useCase.description}}</span>
+    </div>
+  
+    <h4 class="list">Use Cases</h4>
+
+    <ul class="use-cases">
+      <li class="use-case" *ngFor="let useCase of useCases"
+        (click)="openUseCaseDialog(useCase)">
+        <span>({{useCase.id}})</span> 
+        <span>{{useCase.name}}</span>
+        <div>{{useCase.description}}</div>
+        <a *ngIf="auth.authorized" class="button icon delete"
+          (click)="setUseCases('remove', useCase.id); $event.stopPropagation();"> x </a>
+      </li>
+      <li class="use-case add-use-case" [ngClass]="{expanded: useCaseSearchVisible}">
+        <span (click)="openUseCasesSearch()">Add</span>
+        <div *ngIf="useCaseSearchVisible">
+          <div class="blocker" (click)="useCaseSearchVisible=false"></div>
+          <div class="contents" cdkDrag>
+            <input class="use-case-search" size="40" 
+              (keyup)="openUseCasesSearch({key: $event.target.value})"
+              placeholder="Type to search use-cases" />
+            <app-use-cases-list 
+              [useCases]="searchUseCases"
+              [collectionMode]="true"
+              (selectClicked)="setUseCases('add', $event.id); useCaseSearchVisible=false;">
+            </app-use-cases-list>
+          </div>
+        </div>
+      </li>
+    </ul>
+
+    <h4> Mock Responses </h4>
+
+    <ul class="mock-responses">
+      <li class="mock-response" *ngFor="let mockResp of mockResponses"
+        (click)="openMockResponseDialog(mockResp)" title="{{mockResp.id}}">
+        <b>{{mockResp.req_method}}</b><b *ngIf="!mockResp.method">&nbsp; &nbsp;</b> &nbsp;
+        <b>{{mockResp.req_url}}</b> &nbsp;
+        <span title="name">{{mockResp.name}}</span> &nbsp;
+        <span title="status code">{{mockResp.res_status}}</span> &nbsp;
+        <span title="content type">{{mockResp.res_content_type}}</span>
+        <a *ngIf="auth.authorized" class="button icon delete"
+          (click)="setMockResponses('remove', mockResp.id); $event.stopPropagation();"> x </a>
+      </li>
+      <li class="mock-response add-mock-response" [ngClass]="{expanded: mockResponseSearchVisible}">
+        <span (click)="showMockResponsesSearch()">Add</span>
+        <div *ngIf="mockResponseSearchVisible">
+          <div class="blocker" (click)="mockResponseSearchVisible=false"></div>
+          <div class="contents" cdkDrag>
+            <input class="mock-response-search" size="40" 
+              (keyup)="showMockResponsesSearch({key: $event.target.value})"
+              placeholder="Type to search mock response" />
+            <app-mock-responses-list 
+              [mockResponses]="searchMockResponses"
+              [collectionMode]="true"
+              (selectClicked)="setMockResponses('add', $event.id); mockResponseSearchVisible=false;">
+            </app-mock-responses-list >
+          </div>
+        </div>
+      </li>
+    </ul>
+
+    <br/>
+    <div class="buttons for-edit">
+      <button *ngIf="auth.authorized && useCase.id"
+        [disabled]="!updatable"
+        (click)="updateUseCase()">
+        <fa-icon [icon]="faEdit"></fa-icon> Update
+      </button>
+      <a class="button" *ngIf="auth.authorized && useCase.id"
+        [routerLink]="['/use-cases/new']"
+        [queryParams]="{from: useCase.id}">
+        Duplicate
+      </a>
+      <button *ngIf="auth.authorized && useCase.id" (click)="deleteUseCase()">
+        <fa-icon [icon]="faTrashAlt"></fa-icon> Delete 
+      </button>
+      <button *ngIf="auth.authorized && !useCase.id" 
+        [disabled]="!creatable"
+        (click)="createUseCase()">
+        <fa-icon [icon]="faPlusCircle"></fa-icon> Create 
+      </button>
+    </div>
+  </div>
+  
+  

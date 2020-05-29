@@ -1,0 +1,24 @@
+<div class="main">
+  <div class="contents">
+    <div class="top-header">
+      <div class="left">
+        <a [routerLink]="['/home']">Home</a> |
+        <a [routerLink]="['/mock-responses']">Mock Responses</a> |
+        <a [routerLink]="['/use-cases']">Use Cases</a>
+        <input class="passcode public" 
+          [(ngModel)]="authKey"
+          maxlength="1"
+          title="Enter passcode here to enable edit mode"
+          (keypress)="authorizedChanged($event)"/>
+      </div>
+      <div>
+        <a href="https://github.com/allenhwkim/mock-responses">
+          <sup>github</sup>
+        </a>
+      </div>
+    </div>
+    <div class="main-route">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
