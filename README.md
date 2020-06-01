@@ -6,7 +6,7 @@ Intentionally NOT-real API server for front-end development
 ### Install
 ```
 $ npm init # only if package.json not exists
-$ npm i mock-responses -D
+$ npm i mock-responses @nestjs/platform-express -D
 ```
 
 ### Start / Setup

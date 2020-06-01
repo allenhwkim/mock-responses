@@ -5,6 +5,7 @@ import { UseCasesService } from './use-cases.service';
 import { MockResponsesService } from '../mock-responses/mock-responses.service';
 import { UseCase } from '../common/interfaces/use-case.interface';
 import { UseCaseCache } from '../common/use-case-cache';
+import { CookieService } from '../common/cookie-service';
 
 @Controller('use-cases')
 export class UseCasesController {
@@ -28,7 +29,7 @@ export class UseCasesController {
     if (activeOnly) {
       const avail = UseCaseCache.getAvailableMockResponses(req);
       // avail.availableMockResponses only has ids, x.setMockResponses replace id to the object
-      UseCaseCache.setMockResponse(avail.availableMockResponses, false);
+      UseCaseCache.replaceMockResponseIdToMockResponse(avail.availableMockResponses);
       return {
         activeUseCases: avail.activeUseCases, // based on UCIDS cookie
         activeMockResponses: avail.activeMockResponses, // based on MRIDS cookie
@@ -54,12 +55,12 @@ export class UseCasesController {
 
   @Put(':id/activate')
   activate(@Param() params, @Response() res, @Request() req) {
-    const activeUseCases = (this.useCase.getCookie(req, 'UCIDS') || '')
+    const activeUseCases = (CookieService.getCookie(req, 'UCIDS') || '')
       .split(',').filter(el => el).map(el => +el);
     const useCase: UseCase = this.useCase.find(+params.id);
     if (useCase) {
       const newActiveUseCases = [...activeUseCases, useCase.id];
-      this.useCase.setCookie(req, res, 'UCIDS', newActiveUseCases.join(','));
+      CookieService.setCookie(req, res, 'UCIDS', newActiveUseCases.join(','));
       res.send(newActiveUseCases);
     } else {
       res.send(activeUseCases);
@@ -68,12 +69,12 @@ export class UseCasesController {
 
   @Put(':id/deactivate')
   deactivate(@Param() params, @Response() res, @Request() req) {
-    const activeUseCases = (this.useCase.getCookie(req, 'UCIDS') || '')
+    const activeUseCases = (CookieService.getCookie(req, 'UCIDS') || '')
       .split(',').filter(el => el).map(el => +el);
     const useCase: UseCase = this.useCase.find(+params.id);
     if (useCase) {
       const newActiveUseCases = activeUseCases.filter(el => +el !== +params.id);
-      this.useCase.setCookie(req, res, 'UCIDS', newActiveUseCases.join(','));
+      CookieService.setCookie(req, res, 'UCIDS', newActiveUseCases.join(','));
       res.send(newActiveUseCases);
     } else {
       res.send(activeUseCases);

@@ -4,6 +4,8 @@ import {
 import { MockResponsesService } from './mock-responses.service';
 import { MockResponse } from '../common/interfaces';
 import { UseCasesService } from '../use-cases/use-cases.service';
+import { UseCaseCache } from '../common/use-case-cache';
+import { CookieService } from '../common/cookie-service';
 
 function cookies(req) {
   const cookies = {};
@@ -50,12 +52,12 @@ export class MockResponsesController {
 
   @Put(':id/activate')
   activate(@Param() params, @Response() res, @Request() req) {
-    const activeMockResponses = (this.useCase.getCookie(req, 'MRIDS') || '')
+    const activeMockResponses = (CookieService.getCookie(req, 'MRIDS') || '')
       .split(',').filter(el => el).map(el => +el);
     const mockResponse: MockResponse = this.mockResp.find(+params.id);
     if (mockResponse) {
       const newActiveMockResponses = [...activeMockResponses, mockResponse.id];
-      this.useCase.setCookie(req, res, 'MRIDS', newActiveMockResponses.join(','));
+      CookieService.setCookie(req, res, 'MRIDS', newActiveMockResponses.join(','));
       res.send(newActiveMockResponses);
     } else {
       res.send(activeMockResponses);
@@ -64,12 +66,12 @@ export class MockResponsesController {
 
   @Put(':id/deactivate')
   deactivate(@Param() params, @Response() res, @Request() req) {
-    const activeMockResponses = (this.useCase.getCookie(req, 'MRIDS') || '')
+    const activeMockResponses = (CookieService.getCookie(req, 'MRIDS') || '')
       .split(',').filter(el => el).map(el => +el)
     const mockResponse: MockResponse = this.mockResp.find(+params.id);
     if (mockResponse) {
       const newActiveMockResponses = activeMockResponses.filter(el => +el !== +params.id);
-      this.useCase.setCookie(req, res, 'MRIDS', newActiveMockResponses.join(','));
+      CookieService.setCookie(req, res, 'MRIDS', newActiveMockResponses.join(','));
       res.send(newActiveMockResponses);
     } else {
       res.send(activeMockResponses);

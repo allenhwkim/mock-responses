@@ -61,8 +61,11 @@ export class MockResponsesService {
       return UseCaseCache.getByUseCaseIds(useCaseIds); // get data from cache
     } else {
       const where = getWhereFromBy(by) || '1 = 1';
+      const columns = 'id, name, req_method, req_url, req_payload, ' + 
+        'res_status, res_content_type, res_delay_sec, ' + // no res_body(too big)
+        'created_at, created_by, updated_at, updated_by';
       const sql = `
-        SELECT * FROM mock_responses 
+        SELECT ${columns} FROM mock_responses 
         WHERE ${ where }
         ORDER BY updated_at DESC`;
       console.log('[mock-responses] MockResponseService.findAllBy', sql);

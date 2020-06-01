@@ -2,10 +2,10 @@ import { MockResponse } from './interfaces/mock-response.interface';
 import { BetterSqlite3 } from './better-sqlite3';
 import { CacheModule } from '@nestjs/common';
 
-export const MockResponseCache = {
-  data:  {REGEXP: {}},  // id -> mock_responses
+export class MockResponseCache {
+  static data = {REGEXP: {}};  // id -> mock_responses
 
-  get: function (id) {
+  static get(id) {
     const cached = MockResponseCache.data[id];
     if (!cached) {
       const mockResponse = BetterSqlite3.db.prepare(`SELECT * FROM mock_responses where id=${id}`).get();
@@ -14,9 +14,9 @@ export const MockResponseCache = {
     } else {
       return cached;
     }
-  },
+  }
 
-  set: function (mockResponse) {
+  static set(mockResponse) {
     const {id, req_url, req_method} = mockResponse;
 
     // set db cache
