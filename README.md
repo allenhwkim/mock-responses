@@ -36,11 +36,6 @@ module.exports = {
 };
 ```
 
-### To start with nodemon
-nodemon keeps your server up-and-running even with failure.
-```
-```
-
 ### Techinical Spec. 
   * server: NestJS
   * client: Angular9
