@@ -2,6 +2,7 @@
 Intentionally NOT-real API server for front-end development
 
 ## To Start
+[Introduction](https://medium.com/allenhwkim/fake-it-until-make-it-mock-responses-9a9eb3361312)
 
 ### Install
 ```
