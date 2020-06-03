@@ -32,7 +32,7 @@ const argv = yargs
 
 function getConfig(argv: any) {
   const defaultConfigPath = path.join(process.cwd(), 'mock-responses.config.js');
-  const configFile = argv.config || defaultConfigPath;
+  const configFile = path.resolve(argv.config || defaultConfigPath);
 
   // if config not exists, create one
   if (fs.existsSync(configFile)) {
