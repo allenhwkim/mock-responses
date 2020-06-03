@@ -2,6 +2,7 @@
 Intentionally NOT-real API server for front-end development
 
 ## To Start
+[Introduction](https://medium.com/allenhwkim/fake-it-until-make-it-mock-responses-9a9eb3361312)
 
 ### Install
 ```
@@ -34,11 +35,6 @@ module.exports = {
     'Access-Control-Allow-Headers=Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With'
   ]
 };
-```
-
-### To start with nodemon
-nodemon keeps your server up-and-running even with failure.
-```
 ```
 
 ### Techinical Spec. 
