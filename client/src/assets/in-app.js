@@ -12,10 +12,11 @@ const html = `<div class="mock-responses in-app js">
       border: 1px solid #ccc; border-radius: 5px; 
       width: 800px; height: calc(100vh - 100px);
     }
+    .mock-responses.in-app.settings { display: inline-block; position: fixed; top: 0; left: 0; }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 
-  <button onclick="showDialog()">
+  <button onclick="showDialog()" class="mock-responses in-app settings">
     <i class="fa fa-cog" aria-hidden="true"></i>
   </button>
   <div class="mock-responses in-app dialog">
