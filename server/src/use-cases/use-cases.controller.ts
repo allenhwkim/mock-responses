@@ -47,6 +47,12 @@ export class UseCasesController {
     return UseCaseCache.data;
   }
 
+  @Get('last')
+  findLast(@Param() params) {
+    const useCase: UseCase = this.useCase.findLast();
+    return useCase;
+  }
+
   @Get(':id')
   findOne(@Param() params) {
     const useCase: UseCase = this.useCase.find(params.id);

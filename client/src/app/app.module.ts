@@ -17,6 +17,7 @@ import { MockResponsesListComponent } from './mock-responses/mock-responses-list
 import { UseCaseEditComponent } from './use-cases/use-case-edit/use-case-edit.component';
 import { UseCasesListComponent } from './use-cases/use-cases-list/use-cases-list.component';
 import { HomeComponent } from './home/home.component';
+import { SetUseCaseComponent } from './home/set-use-case.component';
 import { UseCaseDialogComponent } from './dialogs/use-case-dialog.component';
 import { MockResponseDialogComponent } from './dialogs/mock-response-dialog.component';
 
@@ -31,7 +32,8 @@ import { MockResponseDialogComponent } from './dialogs/mock-response-dialog.comp
     UseCaseEditComponent,
     UseCasesListComponent,
     UseCaseDialogComponent,
-    HomeComponent
+    HomeComponent,
+    SetUseCaseComponent
   ],
   imports: [
     BrowserModule,

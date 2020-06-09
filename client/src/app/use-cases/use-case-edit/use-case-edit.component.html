@@ -4,8 +4,8 @@
   
   <div class="use-case form">
     <div class="id column" *ngIf="useCase.id">
-      <label for="id">Id</label>
-      <input id="id" readonly [(ngModel)]="useCase.id" />
+      <label for="id">Id *</label>
+      <input id="id" [(ngModel)]="useCase.id" />
     </div>
   
     <div class="name column">
@@ -82,20 +82,23 @@
 
     <br/>
     <div class="buttons for-edit">
-      <button *ngIf="auth.authorized && useCase.id"
+      <button *ngIf="auth.authorized && mode === 'edit'"
         [disabled]="!updatable"
         (click)="updateUseCase()">
         <fa-icon [icon]="faEdit"></fa-icon> Update
       </button>
-      <a class="button" *ngIf="auth.authorized && useCase.id"
+      &nbsp;
+      <button *ngIf="auth.authorized && mode === 'edit'"
         [routerLink]="['/use-cases/new']"
         [queryParams]="{from: useCase.id}">
         Duplicate
-      </a>
-      <button *ngIf="auth.authorized && useCase.id" (click)="deleteUseCase()">
+      </button>
+      &nbsp;
+      <button *ngIf="auth.authorized && mode === 'edit'" (click)="deleteUseCase()">
         <fa-icon [icon]="faTrashAlt"></fa-icon> Delete 
       </button>
-      <button *ngIf="auth.authorized && !useCase.id" 
+      &nbsp;
+      <button *ngIf="auth.authorized && mode === 'new'" 
         [disabled]="!creatable"
         (click)="createUseCase()">
         <fa-icon [icon]="faPlusCircle"></fa-icon> Create 

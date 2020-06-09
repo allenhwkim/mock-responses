@@ -1,6 +1,6 @@
 <div class="main">
   <div class="contents">
-    <div class="top-header">
+    <div class="top-header" *ngIf="showHeader">
       <div class="left">
         <a [routerLink]="['/home']">Home</a> |
         <a [routerLink]="['/mock-responses']">Mock Responses</a> |

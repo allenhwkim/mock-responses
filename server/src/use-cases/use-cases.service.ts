@@ -35,6 +35,12 @@ export class UseCasesService {
     return useCase;
   }
 
+  findLast() {
+    const row = this.db.prepare(`SELECT * FROM use_cases ORDER BY id DESC LIMIT 1`);
+    const useCase = row.get();
+    return useCase;
+  }
+
   findAllBy(by) {
     if (by.ids) {
       const sql = `SELECT * FROM use_cases WHERE id IN (${by.ids})`;
@@ -76,7 +82,8 @@ export class UseCasesService {
     const name = data.name.trim().replace(/'/g, '\'\'');
     const description = data.description.trim().replace(/'/g, '\'\'');
     const UUID = require('uuid-int');
-    const useCaseId = UUID(0).uuid();
+    // const useCaseId = UUID(0).uuid();
+    const useCaseId = data.id.trim();
     const createdAt = new Date().getTime();
     const sql = `
       INSERT INTO use_cases 
@@ -96,7 +103,7 @@ export class UseCasesService {
   }
 
   update(id, data: UseCase) {
-    if (data.name || data.description) {
+    if (data.id || data.name || data.description) {
       const columns = [];
       data.id && 
         columns.push(`id = '${data.id.toString().trim()}'`);

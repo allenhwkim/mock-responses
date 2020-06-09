@@ -40,7 +40,7 @@ export class BetterSqlite3 {
 
   static importFromSql(sqlPath, sqlite3Path) {
     console.log('[mock-responses] .sql file found. re-creating .sqlite3 file from it', sqlPath);
-    runCommand(`rm -rf ${sqlite3Path}`);
+    runCommand(`rm -f ${sqlite3Path}`);
     runCommand(`sqlite3 ${sqlite3Path} < ${sqlPath}`)
   }
 

@@ -5,6 +5,7 @@ import { UseCasesComponent } from './use-cases/use-cases.component';
 import { MockResponseEditComponent } from './mock-responses/mock-response-edit/mock-response-edit.component';
 import { UseCaseEditComponent } from './use-cases/use-case-edit/use-case-edit.component';
 import { HomeComponent } from './home/home.component';
+import { SetUseCaseComponent } from './home/set-use-case.component';
 
 const routes: Routes = [
   { path: 'mock-responses/:id/edit', component: MockResponseEditComponent },
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path: 'use-cases/:id/edit', component: UseCaseEditComponent },
   { path: 'use-cases/new', component: UseCaseEditComponent },
   { path: 'use-cases', component: UseCasesComponent },
+  { path: 'set-use-case', component: SetUseCaseComponent, data: {showHeader: false} },
   { path: 'home', component: HomeComponent },
   { path: '', component: HomeComponent },
 ];

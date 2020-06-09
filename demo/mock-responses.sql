@@ -81,5 +81,4 @@ INSERT INTO use_cases VALUES(3,'hup downgrade x','users can do	wngrade their acc
 INSERT INTO use_cases VALUES(5,'hup all the way 2','hardware upgrades for all',NULL,NULL,1589693134707,'allen.kim');
 INSERT INTO use_cases VALUES(12,'woo','owo',NULL,NULL,NULL,NULL);
 INSERT INTO use_cases VALUES(13,'polls','canada huper',NULL,NULL,NULL,NULL);
-INSERT INTO use_cases VALUES(3333825585217536,'test 221','test 222',NULL,NULL,1590633341877,'allen.kim');
 COMMIT;

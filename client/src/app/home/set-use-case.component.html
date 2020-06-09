@@ -1,0 +1,22 @@
+<h2> Click A Use Case To Activate</h2>
+<div style="display: none">
+activeUseCases: {{activeUseCases | json}}
+</div>
+
+<div class="main">
+  <ul class="use-cases">
+    <li class="use-case"
+      *ngFor="let el of useCases.useCases" title="{{el.id}}"
+      [ngClass]="{active: isActive(el)}"
+      (click)="activateUseCase(el)"> 
+      <b class="id">UC{{el.id}}</b> &nbsp;
+      <b>{{el.name}}</b> &nbsp;
+      <span>{{el.description}}</span>
+      <span *ngIf="isActive(el)"> &nbsp;(Active)</span>
+    </li>
+  </ul>
+</div>
+
+<div class="note">
+  NOTE: If you can find a use case to activate, please ask OneView engineers. 
+</div>

@@ -33,15 +33,23 @@ export class UseCaseEditComponent implements OnInit {
   searchMockResponses = [];
   mockResponseSearchVisible = false;
 
+  get mode() {
+    const paths = this.route.snapshot.url.map(el => el.path);
+    return paths.slice(-1)[0];
+  }
+
   get updatable() {
-    return Object.keys(this.getUpdatedUseCase()).length > 1; // id is default
+    return Object.keys(this.getUpdatedUseCase()).length;
   }
 
   get creatable() {
     const useCase = this.getUpdatedUseCase();
     return !!(
-        useCase.name && useCase.description && (useCase.useCaseIds || useCase.mockResponseIds)
-      );
+      useCase.id && 
+      useCase.name && 
+      useCase.description && 
+      (useCase.useCaseIds || useCase.mockResponseIds)
+    );
   }
 
   constructor(
@@ -56,6 +64,7 @@ export class UseCaseEditComponent implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     const from = this.route.snapshot.queryParamMap.get('from');
+    console.log(this.route.snapshot.url);
     if (id) {
       this.useCaseService.getUseCase(id)
         .subscribe((resp:any) => {
@@ -74,13 +83,16 @@ export class UseCaseEditComponent implements OnInit {
           this.mockResponses = [...resp.mockResponses];
         });
     } else if (!id) {
-      // this.useCaseService.getUseCases({ids: 1}) // the default use case
-      //   .subscribe((resp:any) => this.useCases = [...resp.useCases] );
+      this.useCaseService.getUseCase('last')
+        .subscribe((resp: any) => {
+          const newId = (Math.floor(parseInt(resp.id) / 100) + 1) * 100; // increase id by 100
+          this.useCase.id = ''+newId;
+        });
     }
   }
 
   getUpdatedUseCase() {
-    const updated: any = {id: this.useCase.id};
+    const updated: any = {};
     for(var key in this.useCase) {
       if (this.orgUseCase[key] !== this.useCase[key]) {
         updated[key] = this.useCase[key];
@@ -99,7 +111,7 @@ export class UseCaseEditComponent implements OnInit {
 
   updateUseCase() {
     const updated = this.getUpdatedUseCase();
-    if (Object.keys(updated).length > 1) { // id is default
+    if (Object.keys(updated).length) {
       this.useCaseService.updateUseCase(this.orgUseCase.id, updated)
         .subscribe(resp => this.router.navigate(['/use-cases']) );
     }

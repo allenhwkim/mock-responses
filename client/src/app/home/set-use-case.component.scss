@@ -1,0 +1,25 @@
+
+.use-cases {
+  list-style: none;
+  padding: 0;
+  .use-case {
+    padding: 12px;
+    border-bottom: 1px solid #ccc;
+    cursor: pointer;
+    .id {
+      display: inline-block;
+      width: 100px;
+    }
+    &.active {
+      background: #1F88E5;
+      color: #FFF;
+      a {
+        color: #FFF;
+      }
+    }
+  }
+}
+
+.note {
+  color: #999;
+}
