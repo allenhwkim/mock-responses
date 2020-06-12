@@ -4,16 +4,17 @@
     vertical-align: top;
 
     .id {
-      width: 20%; 
+      width: 10%; 
       overflow: hidden;
       .contents {
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
       }
     }
 
     .name-desc {
-      width: 30%; 
+      width: 40%; 
       overflow: hidden;
     }
 
@@ -24,6 +25,9 @@
       .mock-responses {
         list-style: inside;
         padding: 0;
+        .mock-response {
+          cursor: pointer;
+        }
       }
       .child-use-case {
         display: inline-block;

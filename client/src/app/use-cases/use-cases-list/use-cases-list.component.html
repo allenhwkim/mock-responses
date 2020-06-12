@@ -47,12 +47,14 @@
          <div><b>({{el.id}}) {{el.name}}</b></div>
         <div>{{el.description}}</div>
       </div>
-      <ul class="mock-responses"><b>Mock Responses</b>
-        <li *ngFor="let mr of useCase.mockResponses" title="{{mr.id}}"> 
-          {{mr.req_url}} 
-          | {{mr.name}} 
-          | {{mr.res_status}}
-          | {{mr.res_content_type}}
+      <ul class="mock-responses">
+        <li class="mock-response" 
+          *ngFor="let mr of useCase.mockResponses" 
+          (click)="openMockResponseDialog(mr)"
+          title="{{mr.id}}"> 
+          <span class="req_status"> {{mr.res_status}} </span>
+          <span class="req_url">{{mr.req_url}} </span>
+          <span class="name">{{mr.name}} </span> 
         </li>
       </ul>
     </td>

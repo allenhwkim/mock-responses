@@ -5,7 +5,7 @@
   <div class="use-case form">
     <div class="id column" *ngIf="useCase.id">
       <label for="id">Id *</label>
-      <input id="id" [(ngModel)]="useCase.id" />
+      <input id="id" [readonly]="!auth.authorized" [(ngModel)]="useCase.id" />
     </div>
   
     <div class="name column">
@@ -16,8 +16,14 @@
   
     <div class="description column">
       <label for="description">Description *</label>
-      <input *ngIf="auth.authorized" id="description" size="80" [(ngModel)]="useCase.description" />
-      <span *ngIf="!auth.authorized">{{useCase.description}}</span>
+      <textarea id="description"
+        placeholder="Example:
+        As an wireless account holder,
+        Given an error condition with device upgrade,
+        When I click an hardware upgrade from overview page,
+        Then I see an error message and I must not be able to click it again."
+        [readonly]="!auth.authorized"
+        size="80" [(ngModel)]="useCase.description">{{useCase.description}}</textarea>
     </div>
   
     <h4 class="list">Use Cases</h4>

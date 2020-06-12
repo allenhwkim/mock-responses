@@ -41,4 +41,10 @@ export class UseCaseToUseCasesService {
     return BetterSqlite3.backupToSql();
   }
 
+  replaceUseCaseId(oldId, newId) {
+    const updateSql = `UPDATE use_case_to_use_cases SET use_case_id = ${newId} where use_case_id=${oldId}`;
+    console.log('[mock-responses] UseCaseToUseCasesService updateAllChildren', updateSql);
+    this.db.exec(updateSql);
+  }
+
 }

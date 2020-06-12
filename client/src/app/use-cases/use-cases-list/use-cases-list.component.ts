@@ -3,7 +3,8 @@ import { AuthorizedServiceService } from '../../authorized.service';
 import { UseCasesService } from '../use-cases.service';
 import { faEdit, faFile, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
-import { UseCaseDialogComponent } from 'src/app/dialogs/use-case-dialog.component';
+import { UseCaseDialogComponent } from '../../dialogs/use-case-dialog.component';
+import { MockResponseDialogComponent } from '../../dialogs/mock-response-dialog.component';
 
 @Component({
   selector: 'app-use-cases-list',
@@ -34,5 +35,8 @@ export class UseCasesListComponent implements OnInit {
     const dialogRef = this.dialog.open(UseCaseDialogComponent, { data: { useCase } });
   }
 
+  openMockResponseDialog(mockResponse) {
+    const dialogRef = this.dialog.open(MockResponseDialogComponent, { data: { mockResponse } });
+  }
   
 }

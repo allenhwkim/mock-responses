@@ -120,10 +120,14 @@ export class UseCasesService {
         `;
       console.log('[mock-responses] UseCaseService', sql);
       this.db.exec(sql);
+      if (id !== data.id) { // if id is changed
+        this.uc2ucs.replaceUseCaseId(id, data.id);
+        this.uc2mrs.replaceUseCaseId(id, data.id);
+      }
     }
 
-    data.useCaseIds && this.uc2ucs.updateAllChildren(data.id, data.useCaseIds);
-    data.mockResponseIds && this.uc2mrs.updateAllChildren(data.id, data.mockResponseIds);
+    data.useCaseIds && this.uc2ucs.updateAllChildren(data.id || id, data.useCaseIds);
+    data.mockResponseIds && this.uc2mrs.updateAllChildren(data.id || id, data.mockResponseIds);
 
     delete UseCaseCache.data[id];
     UseCaseCache.set(id);

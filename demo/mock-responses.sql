@@ -8,9 +8,10 @@ CREATE TABLE use_case_to_use_cases (
         );
 INSERT INTO use_case_to_use_cases VALUES(1,1,3,1);
 INSERT INTO use_case_to_use_cases VALUES(2,3,5,1);
-INSERT INTO use_case_to_use_cases VALUES(3,5,12,1);
 INSERT INTO use_case_to_use_cases VALUES(4,12,13,1);
 INSERT INTO use_case_to_use_cases VALUES(5,3333825585217536,1,1);
+INSERT INTO use_case_to_use_cases VALUES(6,50,1,1);
+INSERT INTO use_case_to_use_cases VALUES(7,50,12,2);
 CREATE TABLE use_case_to_mock_responses (
           id  INTEGER PRIMARY KEY,
           use_case_id INTEGER NOT NULL,
@@ -19,8 +20,8 @@ CREATE TABLE use_case_to_mock_responses (
         );
 INSERT INTO use_case_to_mock_responses VALUES(1,1,1000000000000017,1);
 INSERT INTO use_case_to_mock_responses VALUES(2,3,1000000000000011,1);
-INSERT INTO use_case_to_mock_responses VALUES(3,5,1000000000000011,1);
-INSERT INTO use_case_to_mock_responses VALUES(4,5,1000000000000019,2);
+INSERT INTO use_case_to_mock_responses VALUES(3,50,1000000000000011,1);
+INSERT INTO use_case_to_mock_responses VALUES(4,50,1000000000000019,2);
 INSERT INTO use_case_to_mock_responses VALUES(5,12,1000000000000015,1);
 INSERT INTO use_case_to_mock_responses VALUES(6,12,1000000000000016,2);
 INSERT INTO use_case_to_mock_responses VALUES(7,13,1000000000000002,1);
@@ -78,7 +79,7 @@ CREATE TABLE use_cases (
         );
 INSERT INTO use_cases VALUES(1,'Default Use Case 2','222 hups',NULL,NULL,1589693128217,'allen.kim');
 INSERT INTO use_cases VALUES(3,'hup downgrade x','users can do	wngrade their account',NULL,NULL,1589693117054,'allen.kim');
-INSERT INTO use_cases VALUES(5,'hup all the way 2','hardware upgrades for all',NULL,NULL,1589693134707,'allen.kim');
 INSERT INTO use_cases VALUES(12,'woo','owo',NULL,NULL,NULL,NULL);
 INSERT INTO use_cases VALUES(13,'polls','canada huper',NULL,NULL,NULL,NULL);
+INSERT INTO use_cases VALUES(50,'hup all the way2','hardware upgrades for all',NULL,NULL,1591984388087,'allen.kim');
 COMMIT;
