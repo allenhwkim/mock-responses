@@ -120,7 +120,7 @@ export class UseCasesService {
         `;
       console.log('[mock-responses] UseCaseService', sql);
       this.db.exec(sql);
-      if (id !== data.id) { // if id is changed
+      if (data.id && id !== data.id) { // if id is changed
         this.uc2ucs.replaceUseCaseId(id, data.id);
         this.uc2mrs.replaceUseCaseId(id, data.id);
       }
