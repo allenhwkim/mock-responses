@@ -58,14 +58,15 @@
       </td>
       <td class="id-name">({{el.id}}) <br/> {{el.name}}</td>
       <td class="response">
-        <div class="contents">
-          <div>
-            <div>
-              <b>Status</b>: {{el.res_status}}
-              <span *ngIf="el.res_delay_sec"> after delay: {{el.res_delay_sec}}</span>
-            </div>
-            <div><b>Type</b>: {{el.res_content_type}}</div>
-          </div>
+        <div>
+          <b>Status</b>: {{el.res_status}}
+          <span *ngIf="el.res_delay_sec"> after delay: {{el.res_delay_sec}}</span>
+          <a class="button icon" (click)="openMockResponseDialog(el.id)">
+            <fa-icon [icon]="faQuestionCircle"></fa-icon>
+          </a>
+        </div>
+        <div>
+          <b>Type</b>: {{el.res_content_type}}
         </div>
       </td>
 

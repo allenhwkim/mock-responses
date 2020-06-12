@@ -24,10 +24,10 @@
       }
     }
   }
-  .response { width: 25%; 
-    .contents {
-      display: flex;
-      justify-content: space-between; 
+  .response { 
+    width: 25%;
+    .icon { 
+      cursor: pointer;
     }
   }
 }

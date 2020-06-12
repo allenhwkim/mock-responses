@@ -1,14 +1,16 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { AuthorizedServiceService } from '../../authorized.service';
 import { MockResponsesService } from '../mock-responses.service';
-import { faEdit, faFile, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faFile, faTrashAlt, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import { MockResponseDialogComponent } from '../../dialogs/mock-response-dialog.component';
 
 @Component({
   selector: 'app-mock-responses-list',
   templateUrl: './mock-responses-list.component.html',
   styleUrls: ['./mock-responses-list.component.scss']
 })
-export class MockResponsesListComponent implements OnInit {
+export class MockResponsesListComponent {
   @Input() mockResponses: any;
   @Input() collectionMode: boolean;
   @Input() listMode: boolean;
@@ -20,14 +22,18 @@ export class MockResponsesListComponent implements OnInit {
   @Output() activateClicked = new EventEmitter();
   @Output() deactivateClicked = new EventEmitter();
 
-  faEdit = faEdit; faFile = faFile; faTrashAlt = faTrashAlt;
+  faEdit = faEdit; faFile = faFile; faTrashAlt = faTrashAlt; faQuestionCircle = faQuestionCircle;
 
   constructor(
     public auth: AuthorizedServiceService,
-    public mockResponseService: MockResponsesService
+    public mockResponseService: MockResponsesService,
+    public dialog: MatDialog
   ) { }
 
-  ngOnInit(): void {
+  openMockResponseDialog(id) {
+    this.mockResponseService.getMockResponse(id).subscribe(resp => {
+      const dialogRef = this.dialog.open(MockResponseDialogComponent, { data: { mockResponse: resp } });
+    })
   }
   
 }
