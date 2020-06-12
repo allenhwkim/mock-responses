@@ -10,8 +10,8 @@ activeUseCases: {{activeUseCases | json}}
       [ngClass]="{active: isActive(el)}"
       (click)="activateUseCase(el)"> 
       <b class="id">UC{{el.id}}</b> &nbsp;
-      <b>{{el.name}}</b> &nbsp;
-      <span>{{el.description}}</span>
+      <b class="name">{{el.name}}</b> &nbsp;
+      <span class="description">{{el.description}}</span>
       <span *ngIf="isActive(el)"> &nbsp;(Active)</span>
     </li>
   </ul>

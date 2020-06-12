@@ -2,7 +2,6 @@ import { Component, Inject, Output, OnInit, EventEmitter } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UseCasesService } from '../use-cases/use-cases.service';
 import { UseCase } from '../models/use-case.interface';
-import { BlockScrollStrategy } from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-use-case-dialog',

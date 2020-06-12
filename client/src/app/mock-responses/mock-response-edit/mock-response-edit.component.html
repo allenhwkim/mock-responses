@@ -70,9 +70,9 @@
         Body <br/>
         <a class="beautify-button" (click)="beautifyJSON()"><sub>Beautify JSON</sub></a>
       </label>
-      <textarea *ngIf="auth.authorized"
-        #resBody
+      <textarea #resBody
         id="res_body" required 
+        [readonly]="!auth.authorized"
         (keypress)="autoGrow()"
         [(ngModel)]="mockResponse.res_body"></textarea>
     </div>

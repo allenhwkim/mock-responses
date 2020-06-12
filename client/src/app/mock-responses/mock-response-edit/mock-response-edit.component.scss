@@ -27,6 +27,11 @@
         resize: vertical; 
         padding: 12px;
       }
+      #res_body:read-only {
+        outline: none;
+        border: 0;
+        background: #FFF;
+      }
     }
 
     #req_method { width: 6em; }

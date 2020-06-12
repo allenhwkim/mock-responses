@@ -16,6 +16,9 @@
     .name-desc {
       width: 40%; 
       overflow: hidden;
+      .description {
+        white-space: pre-wrap;
+      }
     }
 
     .children {
