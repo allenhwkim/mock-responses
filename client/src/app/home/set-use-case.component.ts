@@ -22,13 +22,17 @@ export class SetUseCaseComponent implements OnInit {
   }
 
   activateUseCase(useCase: UseCase) {
-    const result = window.confirm(`Do you want to activate use case "${useCase.name}"?`);
+    const activeIds = this.activeUseCases.map(el => el.id);
+    const activate = !activeIds.includes(useCase.id);
+    const activateStr = activate ? 'activate' : 'deactivate';
+    const result = 
+      window.confirm(`Do you want to ${activateStr} use case ${useCase.id}-${useCase.name}"?`);
     if (result) {
       const deactivates = (this.activeUseCases || [])
         .map(el => this.useCaseService.deactivateUseCase(el.id).toPromise());
-
       Promise.all(deactivates).then(resps => {
-        return this.useCaseService.activateUseCase(useCase.id).toPromise();
+        return activate ?
+          this.useCaseService.activateUseCase(useCase.id).toPromise() : Promise.resolve({});
       }).then(resp => {
         this._setProperties();
       });
