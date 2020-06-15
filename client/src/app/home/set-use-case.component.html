@@ -1,4 +1,13 @@
-<h2> Click A Use Case To Activate</h2>
+<div class="header-section">
+  <h2 class="header"> Click A Use Case To Activate</h2>
+  <div class="search">
+    <input class="search-input" placeholder="Search Use Case" 
+      (keyup)="filter({key: $event.target.value})" />
+    &nbsp;
+    <a class="reset" (click)="filter({key: ''})">reset</a>
+  </div>
+</div>
+
 <div style="display: none">
 activeUseCases: {{activeUseCases | json}}
 </div>
@@ -6,13 +15,16 @@ activeUseCases: {{activeUseCases | json}}
 <div class="main">
   <ul class="use-cases">
     <li class="use-case"
-      *ngFor="let el of useCases.useCases" title="{{el.id}}"
-      [ngClass]="{active: isActive(el)}"
-      (click)="activateUseCase(el)"> 
-      <b class="id">UC{{el.id}}</b> &nbsp;
-      <b class="name">{{el.name}}</b> &nbsp;
-      <span class="description">{{el.description}}</span>
-      <span *ngIf="isActive(el)"> &nbsp;(Active)</span>
+      *ngFor="let el of filteredUseCases" title="{{el.id}}"
+      [ngClass]="{active: isActive(el)}"> 
+      <b class="id" (click)="filter({group: el.id})">
+        UC{{el.id}}
+      </b>
+      <span class="name-desc" (click)="activateUseCase(el)">
+        <b class="name">{{el.name}}</b> &nbsp;
+        <span class="description">{{el.description}}</span>
+        <span *ngIf="isActive(el)"> &nbsp;(Active)</span>
+      </span>
     </li>
   </ul>
 </div>

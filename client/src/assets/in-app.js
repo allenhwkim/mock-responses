@@ -3,9 +3,11 @@
 const html = `<div class="mock-responses in-app js">
   <style>
     .mock-responses.in-app.js { z-index: 10000; position: fixed; top: 0; left: 0; }
+    .mock-responses.in-app.settings {border: none; background: transparent;}
     .mock-responses.in-app.dialog { display: none; }
-    .mock-responses.in-app.dialog.open { display: block; height:100%; }
-
+    .mock-responses.in-app.dialog.open {
+      display: block; position:fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    }
     .mock-responses.in-app.dialog .blocker { 
       position: absolute; display: block; background: rgba(0,0,0,.5); 
       top: 0; left: 0; bottom: 0; right: 0; 
@@ -29,6 +31,9 @@ const html = `<div class="mock-responses in-app js">
 </div>`;
 function showDialog() {
   document.querySelector('.mock-responses.in-app.dialog').classList.add('open');
+  const iframe = document.querySelector('.mock-responses.in-app.dialog.open #iframe');
+  const iframeSettings = iframe && iframe.contentDocument.querySelector('.settings');
+  iframeSettings && (iframeSettings.style.display = 'none');
 }
 function hideDialog() {
   document.querySelector('.mock-responses.in-app.dialog').classList.remove('open');

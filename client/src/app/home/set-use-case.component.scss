@@ -1,14 +1,21 @@
-
+.header-section {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  .reset { 
+    cursor: pointer;
+  }
+}
 .use-cases {
   list-style: none;
   padding: 0;
   .use-case {
     padding: 12px;
     border-bottom: 1px solid #ccc;
-    cursor: pointer;
     .id {
       display: inline-block;
       width: 100px;
+      cursor: pointer;
     }
     &.active {
       background: #1F88E5;
@@ -17,10 +24,13 @@
         color: #FFF;
       }
     }
-    .description {
-      white-space: pre-wrap;
-      display: inline-block;
-      vertical-align: top;
+    .name-desc {
+      cursor: pointer;
+      .description {
+        white-space: pre-wrap;
+        display: inline-block;
+        vertical-align: top;
+      }
     }
   }
 }

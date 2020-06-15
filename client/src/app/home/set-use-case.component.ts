@@ -10,7 +10,8 @@ import { UseCase } from '../models/use-case.interface';
 })
 export class SetUseCaseComponent implements OnInit {
   activeUseCases: any = [];
-  useCases : any = {useCases: []};
+  filteredUseCases = [];
+  useCases : any = {useCases: []}; // API response
 
   constructor(
     private useCaseService: UseCasesService
@@ -36,13 +37,30 @@ export class SetUseCaseComponent implements OnInit {
 
   _setProperties() {
     return this.useCaseService.getUseCases({key: ''}).toPromise()
-      .then((resp: any) => this.useCases = resp)
-      .then((resp: any) => this.useCaseService.getUseCases({activeOnly: 1}).toPromise())
-      .then((resp: any) => this.activeUseCases = resp.activeUseCases);
+      .then((resp: any) => {
+        this.useCases = resp;
+        this.filteredUseCases = this.useCases.useCases;
+      })
+      .then(resp => this.useCaseService.getUseCases({activeOnly: 1}).toPromise())
+      .then((resp:any) => this.activeUseCases = resp.activeUseCases );
   }
 
   isActive(useCase) {
     return this.activeUseCases.map(el => el.id).includes(useCase.id);
+  }
+
+  filter(by) {
+    if (by.group) {
+      const min = Math.floor(by.group / 100) * 100;
+      const max = min + 100;
+      this.filteredUseCases = this.useCases.useCases.filter(el => {
+        return el.id >= min && el.id < max;
+      }).sort( (a, b) => a.id > b.id ? 1 : -1);
+    } else if ( by.key !== undefined) {
+      this.filteredUseCases = this.useCases.useCases.filter(el => {
+        return el.name.includes(by.key) || el.description.includes(by.key);
+      })
+    }
   }
 
 }
