@@ -1,7 +1,7 @@
 {
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --proxy-config proxy.config.js --port 3332 --open",
+    "start:client": "ng serve --proxy-config proxy.config.js --port 8100  --host 0.0.0.0  --disable-host-check",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

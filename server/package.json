@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build": "nest build && cp -R ../demo ../*.config.js ../dist && cp src/server.* ../dist/server",
-    "start": "nodemon src --ext ts --exec \"ts-node -r tsconfig-paths/register src/main.ts\"",
+    "start:server": "nodemon src --ext ts --exec \"ts-node -r tsconfig-paths/register src/main.ts\"",
     "start:prod": "node dist/main.js"
   },
   "dependencies": {

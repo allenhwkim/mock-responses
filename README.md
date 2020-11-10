@@ -1,20 +1,20 @@
 # mock-responses
 Intentionally NOT-real API server for front-end development
-
-## To Start
 [Introduction](https://medium.com/allenhwkim/fake-it-until-make-it-mock-responses-9a9eb3361312)
 
-### Install
+### Start server(NestJS)
 ```
-$ npm init # only if package.json not exists
-$ npm i mock-responses @nestjs/platform-express -D
+$ cd server 
+$ npm i
+$ npm run build
+$ cd dist/server && node main.js
 ```
 
-### Start / Setup
-```
-$ npx mock-resonses # modify this file
-$ open http://localhost:9001/developer/#/ # to see the main dashboard
-```
+### Start Client(Angular9)
+$ cd client
+$ npm i
+$ npm run build
+$ cd dist/client && open index.html
 
 ### Configuration File
 Update mock-responses.config.js for detailed setup.
@@ -36,7 +36,3 @@ module.exports = {
   ]
 };
 ```
-
-### Techinical Spec. 
-  * server: NestJS
-  * client: Angular9
