@@ -12,4 +12,5 @@ export interface MockResponse {
   created_by?: string;
   updated_at?: number | Date;
   updated_by?: string;
+  username?: string;
 };

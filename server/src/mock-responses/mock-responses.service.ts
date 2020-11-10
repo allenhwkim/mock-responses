@@ -82,7 +82,8 @@ export class MockResponsesService {
     const resStatus = data.res_status || 200;
     const resBody = getJSON(data.res_body);
     const resContentType = data.res_content_type || 'application/json';
-    const UUID = require('uuid-int');
+    const id = data.id || require('uuid-int')[0].uuid();
+    const userName = data.username || username.sync();
     const sql = `
       INSERT INTO mock_responses(
           id, name,
@@ -91,11 +92,11 @@ export class MockResponsesService {
           res_content_type, res_body,
           created_at, created_by, updated_at, updated_by
         ) VALUES (
-          ${UUID(0).uuid()}, ${reqName},
+          ${id}, ${reqName},
           '${data.req_url}', ${reqMethod}, '${reqPayload}',
           ${resStatus}, ${resDelaySec},
           '${resContentType}', '${resBody}',
-          ${createdAt}, '${username.sync()}', ${createdAt}, '${username.sync()}'
+          ${createdAt}, '${userName}', ${createdAt}, '${userName}'
         )
       `;
 
@@ -106,7 +107,6 @@ export class MockResponsesService {
     } catch (err) {
       console.log("[mock-responses] MockResponseService failed to insert query\n", err);
     }
-    
   }
 
   update(data) {
