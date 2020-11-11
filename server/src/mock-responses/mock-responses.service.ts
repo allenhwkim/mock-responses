@@ -82,7 +82,7 @@ export class MockResponsesService {
     const resStatus = data.res_status || 200;
     const resBody = getJSON(data.res_body);
     const resContentType = data.res_content_type || 'application/json';
-    const id = data.id || require('uuid-int')[0].uuid();
+    const id = data.id || require('uuid-int')(0).uuid();
     const userName = data.username || username.sync();
     const sql = `
       INSERT INTO mock_responses(
