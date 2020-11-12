@@ -33,9 +33,9 @@ export class SetUseCaseComponent implements OnInit {
       Promise.all(deactivates).then(resps => {
         return activate ?
           this.useCaseService.activateUseCase(useCase.id).toPromise() : Promise.resolve({});
-      }).then(resp => {
-        this._setProperties();
-      });
+      })
+      .then(resp => this._setProperties() )
+      .then(resp => window.parent && window.parent.location.reload() );
     }
   }
 
@@ -61,8 +61,9 @@ export class SetUseCaseComponent implements OnInit {
         return el.id >= min && el.id < max;
       }).sort( (a, b) => a.id > b.id ? 1 : -1);
     } else if ( by.key !== undefined) {
+      const str = by.key.toLowerCase();
       this.filteredUseCases = this.useCases.useCases.filter(el => {
-        return el.name.includes(by.key) || el.description.includes(by.key);
+        return `${el.id} ${el.name} ${el.description}`.toLowerCase().includes(str);
       })
     }
   }

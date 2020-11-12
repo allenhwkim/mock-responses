@@ -1,7 +1,13 @@
-<div class="main">
-  <div class="currently-actives">
-    <h2>Currently Active Use Cases</h2>
+<div class="tabs">
+  <div [ngClass]="{active: tab === 'use-cases'}"
+    (click)="tab = 'use-cases'">Active Responses</div>
+  <div [ngClass]="{active: tab === 'mock-responses'}"
+    (click)="tab = 'mock-responses'">All Active Mock Responses</div>
+</div>
 
+<div class="main">
+  <div *ngIf="tab === 'use-cases'">
+    <h3>Use Cases</h3>
     <ul class="active-use-cases">
       <li class="active-use-case active-item">
         <div><b>Default Use Case</b></div> 
@@ -31,7 +37,7 @@
       </li>
     </ul>
 
-    <h2>Currently Active Mock Responses</h2>
+    <h3>Mock Responses</h3>
     <ul class="active-mock-responses">
       <li class="active-mock-response active-item" *ngFor="let mockResp of activeMockResponses"
         (click)="openMockResponseDialog(mockResp)" title="{{mockResp.id}}">
@@ -62,11 +68,9 @@
     </ul>
 
     <a href="/use-cases/cached">Use Cases &lt;-&gt; Responses</a>
-
   </div>
 
-  <div class="available-section">
-    <h2>Available Mock Responses</h2>
+  <div *ngIf="tab === 'mock-responses'" class="available-section">
     <div class="search-section">
       <input class="mock-response-search" size="40"
         [(ngModel)]="availMockRespSearch"
@@ -98,4 +102,5 @@
       </li> 
     </ul>
   </div>
+
 </div>

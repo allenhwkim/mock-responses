@@ -1,10 +1,22 @@
-.main {
+.tabs {
   display: flex;
-  
+  > * {
+    font-size: 18px;
+    border: 1px solid #CCC;
+    padding: 12px;
+    border-radius: 4px;
+  }
+  > *.active {
+    font-weight: bold;
+  }
+}
+.main {
+  min-height: 400px;
+  border: 1px solid #CCC;
+  padding: 12px;
+  border-radius: 4px;
   .add-available {
     position: relative;
-    display: inline-block;
-    padding: 12px 20px; 
     .blocker {
       position: fixed;
       top: 0;
@@ -74,9 +86,7 @@
 
   .available-section {
     margin-left: 12px;
-    border: 1px solid #ccc;
     padding: 24px;  
-    border-radius: 4px;
     flex: 1;
     max-width: 50%;
     word-break: break-word;
