@@ -10,7 +10,7 @@
     "mock-responses": "dist/server/main.js"
   },
   "scripts": {
-    "prebuild": "npm i && cd client && npm i && cd - && cd server && npm i && cd - && rimraf dist",
+    "prebuild": "cd client && npm i && cd - && cd server && npm i && cd - && rm -rf dist",
     "build": "npm run build:server && npm run build:client",
     "build:server": "cd server && npm run build",
     "build:client": "cd client && npm run build",
