@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "nest build && cp -R ./*.config.js ./*.sql src ../dist/server",
+    "build": "nest build && cp -R ./*.config.js ./*.sql src src/server.* ../dist/server",
     "start:server": "nodemon src --ext ts --exec \"ts-node -r tsconfig-paths/register src/main.ts\"",
     "start:prod": "node dist/main.js"
   },
