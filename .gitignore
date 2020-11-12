@@ -3,4 +3,5 @@
 .DS_Store
 dist
 node_modules
-demo/mock-responses.sqlite3
+server/mock-responses.sql
+server/mock-responses.sqlite3
