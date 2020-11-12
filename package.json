@@ -9,6 +9,9 @@
   "bin": {
     "mock-responses": "dist/server/main.js"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "scripts": {
     "prebuild": "cd client && npm i && cd - && cd server && npm i && cd - && rm -rf dist",
     "build": "npm run build:server && npm run build:client",
@@ -30,7 +33,20 @@
     "intercept",
     "middleware"
   ],
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+  "dependencies": {
+    "@nestjs/common": "^6.7.2",
+    "@nestjs/core": "^6.7.2",
+    "@nestjs/platform-express": "^6.7.2",
+    "@nestjs/serve-static": "^2.1.1",
+    "better-sqlite3": "^5.4.3",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.16.2",
+    "morgan": "^1.9.1",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.5.3",
+    "username": "^4.0.0",
+    "uuid-int": "^2.0.1",
+    "yargs": "^14.0.0"
   }
 }
