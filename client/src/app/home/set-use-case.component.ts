@@ -35,7 +35,10 @@ export class SetUseCaseComponent implements OnInit {
           this.useCaseService.activateUseCase(useCase.id).toPromise() : Promise.resolve({});
       })
       .then(resp => this._setProperties() )
-      .then(resp => window.parent && window.parent.location.reload() );
+      .then(resp => {
+        window.parent.postMessage('reload', '*');
+        // window.alert('DONE!, please reload');
+      });
     }
   }
 

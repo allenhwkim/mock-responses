@@ -29,6 +29,7 @@ const html = `<div class="mock-responses in-app js">
     </div>
   </div>
 </div>`;
+
 function showDialog() {
   document.querySelector('.mock-responses.in-app.dialog').classList.add('open');
   const iframe = document.querySelector('.mock-responses.in-app.dialog.open #iframe');
@@ -38,6 +39,7 @@ function showDialog() {
 function hideDialog() {
   document.querySelector('.mock-responses.in-app.dialog').classList.remove('open');
 }
+
 document.addEventListener('DOMContentLoaded', function() {
   try {
     const iframeSrc = document.querySelector('script#in-app').getAttribute('iframe-src');
@@ -50,3 +52,9 @@ document.addEventListener('DOMContentLoaded', function() {
     throw e;
   }
 }, false);
+
+window.addEventListener('message', event => {
+  if (event.data === 'reload') {
+    window.location.reload();
+  }
+});
