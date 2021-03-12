@@ -13,11 +13,22 @@ function getMockResponse(req: Request): MockResponse {
   // const row: MockResponse = findByUrlMethod(req.path, req.method);
   const { activeUseCases, activeMockResponses, availableMockResponses }
     = UseCaseCache.getAvailableMockResponses(req);
+  // const getREMatchingUrlMethods = function(url) {
+  //   for (const key in UseCaseCache.data['REG_EXP']) {
+  //     if (url.match(new RegExp(key))) {
+  //       const url =  UseCaseCache.data['REG_EXP'][key];
+  //       return UseCaseCache[url];
+  //     }
+  //   }
+  // }
   const getREMatchingUrlMethods = function(url) {
-    for (const key in UseCaseCache.data['REG_EXP']) {
+    for (const key in MockResponseCache.data.REGEXP) {
       if (url.match(new RegExp(key))) {
-        const url =  UseCaseCache.data['REG_EXP'][key];
-        return UseCaseCache[url];
+        const url =  MockResponseCache.data.REGEXP[key];
+        const mockResp = availableMockResponses[url];
+        if (mockResp) {
+          return mockResp[req.method] || mockResp['*']
+        }
       }
     }
   }

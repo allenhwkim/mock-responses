@@ -24,7 +24,7 @@ export class MockResponseCache {
 
     // set regular expression index cache
     if (req_url.includes('*')) { // regular expression match
-      const urlRegExp = req_url.replace(/\*/g, '(.*?)');
+      const urlRegExp = req_url.replace(/\*/g, '(.+?)');
       MockResponseCache.data.REGEXP[urlRegExp] = req_url;
     }
   }
