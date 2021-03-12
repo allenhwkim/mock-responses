@@ -2,13 +2,15 @@
 Intentionally NOT-real API server for front-end development
 [Introduction](https://medium.com/allenhwkim/fake-it-until-make-it-mock-responses-9a9eb3361312)
 
-### Start server(NestJS)
+### Start server(NestJS) for production
 ```
 $ cd server 
 $ npm i
 $ npm run build
 $ cd dist/server && node main.js
 ```
+### Start server(NestJS) for development
+$ cd server && npm i && ts-node src/main.ts
 
 ### Start Client(Angular9)
 $ cd client
