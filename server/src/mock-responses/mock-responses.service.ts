@@ -8,11 +8,11 @@ import { UseCaseCache } from '../common/use-case-cache';
 
 function getJSON(data) {
   try {
-    return JSON.stringify(JSON.parse(data)).replace(/'/g, '\'\'');
+    return JSON.stringify(JSON.parse(data));
   } catch (e) {
     // EMPTY
   }
-  return data.replace(/'/g, '\'\'');
+  return data;
 }
 
 function getWhereFromBy(by) {
@@ -80,7 +80,7 @@ export class MockResponsesService {
     const reqPayload = data.req_payload || '';
     const resDelaySec = data.res_delay_sec ? data.res_delay_sec : 0;
     const resStatus = data.res_status || 200;
-    const resBody = getJSON(data.res_body);
+    const resBody = getJSON(data.res_body).replace(/'/g, "''");
     const resContentType = data.res_content_type || 'application/json';
     const id = data.id || require('uuid-int')(0).uuid();
     const userName = data.username || username.sync();
@@ -115,7 +115,7 @@ export class MockResponsesService {
       if (key === 'res_status' || key === 'res_delay_sec') { // boolean, number types
         columns.push(`${key} = ${data[key]}`);
       } else if (key !== 'id') { // string types
-        columns.push(`${key} = '${data[key]}'`);
+        columns.push(`${key} = '${data[key].replace(/'/g, "''")}'`);
       }
     }
 
