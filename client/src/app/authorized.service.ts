@@ -3,14 +3,14 @@ import { Injectable } from '@angular/core';
 @Injectable({providedIn: 'root'})
 export class AuthorizedServiceService {
   get key() {
-    return sessionStorage.getItem('auth-key');
+    return localStorage.getItem('auth-key');
   };
 
   set key(val) {
     if (val === '2') {
-      sessionStorage.setItem('auth-key', val);
+      localStorage.setItem('auth-key', val);
     } else {
-      sessionStorage.removeItem('auth-key');
+      localStorage.removeItem('auth-key');
     }
   }
 
