@@ -21,6 +21,10 @@ export class AppComponent implements OnInit {
     this.authKey = event.key;
   }
 
+  authorized() {
+    return this.authorizedService.authorized;
+  }
+
   ngOnInit() {
     this.router.events.subscribe(event => {
       if (event instanceof RoutesRecognized) {

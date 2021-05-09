@@ -29,6 +29,9 @@
   border: none;
   background: none;
 }
+.mode {
+  font-size: 16px;
+}
 
 /* for list only item, hide .for-edit / .for-dialog items */
 .for-list {display: none;} /* this is only for list and availible under .list */
@@ -54,4 +57,3 @@
 
 .for-not-authorized {display: none;}
 .main:not(.authorized) .for-not-authorized { display: initial;}
-

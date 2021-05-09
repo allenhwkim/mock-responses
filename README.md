@@ -1,3 +1,6 @@
+To get username
+username.sync()
+
 # mock-responses
 Intentionally NOT-real API server for front-end development
 [Introduction](https://medium.com/allenhwkim/fake-it-until-make-it-mock-responses-9a9eb3361312)

@@ -1,10 +1,12 @@
 import * as username from 'username';
+import * as fetch from 'node-fetch';
 import { Injectable } from '@nestjs/common';
 import { MockResponse } from '../common/interfaces/mock-response.interface';
 import { BetterSqlite3 } from '../common/better-sqlite3';
 import { UseCaseToUseCasesService } from '../use-cases/use-case-to-use-cases.service';
 import { UseCaseToMockResponsesService } from '../use-cases/use-case-to-mock-resonses.service';
 import { UseCaseCache } from '../common/use-case-cache';
+import { resolve } from 'dns';
 
 function getJSON(data) {
   try {
@@ -35,15 +37,64 @@ export class MockResponsesService {
   db = BetterSqlite3.db;
   useCasesCached = {}; // use_case.id -> url -> method -> mock_response.id
   mockResponsesCached = {}; // mock_response.id -> MockResponse
+  ARCHIVE_JOB_STATUS = 'NOT_STARTED';
+  LAST_ARCHIVED_TIME;
 
   constructor(
     private uc2uc: UseCaseToUseCasesService,
     private uc2mr: UseCaseToMockResponsesService
-  ) {}
+  ) {
+    // start archive job
+  }
 
   find(id: number) {
     const row = this.db.prepare(`SELECT * FROM mock_responses WHERE id = ${id}`);
     return row.get();
+  }
+
+  lastArchived(userName) {
+    const url = `/mock-responses/lastArchived/${userName}`;
+    const row = this.db.prepare(`SELECT * FROM mock_responses WHERE req_url = '${url}'`);
+    const existing = row.get();
+    if (existing) {
+      return existing.res_body;
+    } else {
+      const id = require('uuid-int')(0).uuid();
+      const resBody = `{"lastArchived": "${new Date().getTime()}"}`;
+      const createdAt = new Date().getTime();
+      const sql = `INSERT INTO mock_responses(
+          id, name, req_url, res_content_type, res_body,
+          created_at, created_by, updated_at, updated_by
+        ) VALUES (
+          ${id}, 'Last Archived', '${url}', 'application/json', '${resBody}',
+          ${createdAt}, '${userName}', ${createdAt}, '${userName}'
+        )`;
+      try {
+        this.db.exec(sql) && BetterSqlite3.backupToSql();
+        return resBody;
+      } catch (err) {
+        console.log("[mock-responses] MockResponseService failed to insert query\n", err);
+      }
+    }
+  }
+
+  archive(username: string, mock: MockResponse) {
+    // 1) check if the same url/response exists
+    const sql = `SELECT * FROM mock_responses
+      WHERE rea_url = '${mock.req_url.trim()}' AND res_body = '${mock.res_body.trim()}'`;
+    const existing = this.db.prepare(sql).get();
+    if (!existing) {
+      // 2) if exists, update LAST_ARCHIVED time as now and return it
+    } else {
+      // 3) if not, insert a row, update LAST_ARCHIVED and return it
+      this.create(mock);
+    }
+
+    const resBody = `{"lastArchived": ${new Date().getTime()}}`;
+    const sql2 = `UPDATE mock_responses SET
+      res_body='${resBody}', updated_at=${new Date().getTime()}, updated_by='${username}'
+      WHERE req_url = '/mock-responses/last-archived/${username}'`;
+    return this.db.exec(sql) && resBody;
   }
 
   findAllBy(by:any ={}) {
@@ -104,6 +155,13 @@ export class MockResponsesService {
     try {
       this.db.exec(sql) && BetterSqlite3.backupToSql();
       UseCaseCache.reset(); // clear cache and set defaults
+
+      if (BetterSqlite3.archiveApi && BetterSqlite3.archiveApi.archiveUrl) {
+        const payload = { username: username.sync(), data };
+        fetch(BetterSqlite3.archiveApi.archiveUrl, {method: 'POST', body: JSON.stringify(payload)})
+          .then(resp => resp.json())
+          .then(resp => console.log('[mock-responses] single archive', resp))
+      }
     } catch (err) {
       console.log("[mock-responses] MockResponseService failed to insert query\n", err);
     }
@@ -148,4 +206,38 @@ export class MockResponsesService {
     BetterSqlite3.backupToSql();
   }
 
+  runInitialArchive() {
+    // 0) if config.archiveServer not exists, exit
+    if (!BetterSqlite3.archiveApi) return;
+
+    // 0) get LAST_ARCHIVED time stamp, if success set it, if 500, exit
+    const userName = username.sync();
+    const checkUrl = BetterSqlite3.archiveApi.statusCheckUrl.repplace('{{username}}', userName);
+    fetch(BetterSqlite3.archiveApi.statusCheckUrl).then(resp => resp.json())
+      .then(resp => {
+        this.LAST_ARCHIVED_TIME = resp.lastArchived;
+        // 1) set ARCHIVE_JOB_STATUS as STARTED
+        this.ARCHIVE_JOB_STATUS = 'STARTED'; 
+        // 2) get all mock-responses after LAST_ARCHIVED time
+        const sql = `SELECT * FROM mock_responses WHERE updated_at > ${resp.lastArchived}`;
+        return this.db.prepare(sql).all();
+      }).then(mockResps => {
+        // 3) Search all mock responses to archive
+        let processed = 0;
+        return new Promise(resolve => {
+          mockResps.forEach(mockResponse => {
+            const data = { username, mockResponse };
+            fetch(BetterSqlite3.archiveApi.archiveurl, {method: 'POST', body: JSON.stringify(data)})
+              .then(resp => {
+                console.log('[mock-responses] initial archive', mockResponse.req_url, resp.status);
+                ((processed++) >= mockResps.length) && resolve(mockResps.length);
+                return resp.json()
+              });
+          })
+        })
+      }).then(resp => {
+        // 5) when finished, update ARCHIVE_JOB_STATUS as COMPLETED   
+        this.LAST_ARCHIVED_TIME = new Date().getTime();
+      })
+  }
 }

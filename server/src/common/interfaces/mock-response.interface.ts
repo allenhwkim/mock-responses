@@ -14,3 +14,8 @@ export interface MockResponse {
   updated_by?: string;
   username?: string;
 };
+
+export interface ArchiveData {
+  userName: string;
+  mockResponse: MockResponse;
+}

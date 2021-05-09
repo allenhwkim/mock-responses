@@ -2,14 +2,22 @@
   <div class="contents">
     <div class="top-header" *ngIf="showHeader">
       <div class="left">
-        <a [routerLink]="['/home']">Home</a> |
-        <a [routerLink]="['/mock-responses']">Mock Responses</a> |
-        <a [routerLink]="['/use-cases']">Use Cases</a>
+        <a [routerLink]="['/home']">Home</a> 
+        &nbsp; &nbsp; &nbsp; &nbsp; | &nbsp; &nbsp; &nbsp; &nbsp;
+        <a [routerLink]="['/mock-responses']">All Mock Responses</a>
+        &nbsp; &nbsp; &nbsp; &nbsp; | &nbsp; &nbsp; &nbsp; &nbsp;
+        <a [routerLink]="['/use-cases']">All  Use Cases</a>
+      </div>
+      <span class="mode" *ngIf="this.authorized()">
+        Write Mode
+      </span>
+      <span class="mode" *ngIf="!this.authorized()">
+        Read Mode
         <input class="passcode public" 
           maxlength="1"
           title="Enter passcode here to enable edit mode"
           (keypress)="authorizedChanged($event)"/>
-      </div>
+      </span>
       <div>
         <a href="https://github.com/allenhwkim/mock-responses">
           <sup>github</sup>

@@ -61,8 +61,9 @@
         <div>
           <b>Status</b>: {{el.res_status}}
           <span *ngIf="el.res_delay_sec"> after delay: {{el.res_delay_sec}}</span>
-          <a class="button icon" (click)="openMockResponseDialog(el.id)">
-            <fa-icon [icon]="faQuestionCircle"></fa-icon>
+          <a class="button icon" style="float:right" (click)="openMockResponseDialog(el.id)">
+            detail
+            <!-- <fa-icon [icon]="faQuestionCircle"></fa-icon> -->
           </a>
         </div>
         <div>

@@ -61,16 +61,18 @@
       background: #FFF;
       z-index: 1;
       padding: 12px;
-      width: 800px;
+      width: 80%;
+      max-height: 95%;
+      overflow: auto;
       border: 1px solid #ccc;
       border-radius: 4px;
       box-shadow: 0 0 24px #333;
       ::ng-deep .mock-responses,
       ::ng-deep .use-cases {
-        max-height: 300px;
+        // max-height: ;
         display: block;
         margin: 12px 0;
-        overflow: auto;
+        // overflow: auto;
       }
     }
   }

@@ -9,4 +9,8 @@ module.exports = {
     'Access-Control-Allow-Headers=Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, Ocp-Apim-Subscription-Key, requestId, flow',
     'Access-Control-Allow-Methods=GET,POST,PATCH,DELETE,PUT'
   ],
+  archiveApi: {
+    archiveUrl: 'http://oneview-dev.rogers.com/mock-responses/archive', // POST
+    statusCheckUrl: 'http://oneview-dev.rogers.com/mock-responses/last-archived/{{username}}'
+  }
 };

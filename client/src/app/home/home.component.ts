@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
   searchMockResponses = [];
   mockResponseSearchVisible = false;
   availMockRespSearch: string;
-  tab = 'use-cases';
+  tab = 'mock-responses';
 
   constructor(
     public mockResponseService: MockResponsesService,

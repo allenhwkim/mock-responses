@@ -1,10 +1,9 @@
 import {
-  Body, Controller, Delete, Get, Param, Post, Put, Query, Request, Response
+  Body, Controller, Delete, Get, Param, Post, Put, Query, Request, Response, Headers
 } from '@nestjs/common';
 import { MockResponsesService } from './mock-responses.service';
-import { MockResponse } from '../common/interfaces';
+import { MockResponse, ArchiveData } from '../common/interfaces';
 import { UseCasesService } from '../use-cases/use-cases.service';
-import { UseCaseCache } from '../common/use-case-cache';
 import { CookieService } from '../common/cookie-service';
 
 function cookies(req) {
@@ -33,6 +32,20 @@ export class MockResponsesController {
   @Get(':id')
   findOne(@Param() params) {
     return this.mockResp.find(params.id);
+  }
+
+  @Get('last-archived/:username')
+  findLastArchived(@Param() params, @Headers() headers) {
+    // if request is from the same host, exit
+    console.log('...................', headers);
+    return this.mockResp.lastArchived(params.username);
+  }
+
+  @Post('archive')
+  archive(@Body() data: ArchiveData, @Headers() headers) {
+    // if request is from the same host, exit
+    console.log('...................', headers);
+    return this.mockResp.archive(data.userName, data.mockResponse);
   }
 
   @Post()

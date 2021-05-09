@@ -6,6 +6,9 @@
     width: 50%; 
     .contents {
       display: flex; 
+      width: 80%;
+      max-height: 95%;
+      overflow: auto;
       justify-content: space-between; 
       .req {
         width: 80%;

@@ -22,6 +22,7 @@ td, th { padding: 10px; word-break: break-word; }
 tr:nth-child(even) { background-color: rgb(230, 230, 230); }
 th { background: #ccc; font-weight: bold; }
 
+input {height: 38px}
 input, textarea { font-size: 16px; padding: 4px; border: 1px solid #ccc; background-color: whitesmoke; }
 input:invalid, textarea:invalid { color: red; border: 1px solid red; }
 input[readonly] { border: none; background: #FFF; outline: none; } 

@@ -17,6 +17,7 @@ export class BetterSqlite3 {
   static db;
   static dbPath;
   static backupToSqlTimer: any = 0;
+  static archiveApi;
 
   static initialize(dbPath) {
     if (!fs.existsSync(dbPath)) {

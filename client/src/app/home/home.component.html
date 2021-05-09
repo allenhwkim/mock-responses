@@ -1,13 +1,32 @@
 <div class="tabs">
-  <div [ngClass]="{active: tab === 'use-cases'}"
-    (click)="tab = 'use-cases'">Active Responses</div>
   <div [ngClass]="{active: tab === 'mock-responses'}"
-    (click)="tab = 'mock-responses'">All Active Mock Responses</div>
+    (click)="tab = 'mock-responses'">Active Mock Responses</div>
+  <div [ngClass]="{active: tab === 'use-cases'}"
+    (click)="tab = 'use-cases'">Active Use Cases</div>
 </div>
+<a style="float:right" target="_blank" href="/use-cases/cached">/use-cases/cached</a>
 
 <div class="main">
   <div *ngIf="tab === 'use-cases'">
-    <h3>Use Cases</h3>
+
+    <h3>
+      Active Use Cases
+      <span class="add" (click)="showUseCasesSearch()">✚</span>
+    </h3>
+    <div class="search-use-case dialog" *ngIf="useCaseSearchVisible">
+      <div class="blocker" (click)="useCaseSearchVisible=false"></div>
+      <div class="contents">
+        <input class="use-case-search" size="40" 
+          (keyup)="showUseCasesSearch({key: $event.target.value})"
+          placeholder="Type to search use-cases" />
+        <app-use-cases-list 
+          [useCases]="searchUseCases"
+          [collectionMode]="true"
+          (selectClicked)="activateUseCase($event); useCaseSearchVisible=false;">
+        </app-use-cases-list>
+      </div>
+    </div>
+
     <ul class="active-use-cases">
       <li class="active-use-case active-item">
         <div><b>Default Use Case</b></div> 
@@ -19,25 +38,30 @@
         <div>{{el.description}}</div>
         <button class="no-style delete" (click)="deactivateUseCase(el); $event.stopPropagation()">x</button>
       </li>
-      <li class="add-use-case add-available" [ngClass]="{expanded: useCaseSearchVisible}">
-        <span (click)="showUseCasesSearch()">Add</span>
-        <div class="search-use-case dialog" *ngIf="useCaseSearchVisible">
-          <div class="blocker" (click)="useCaseSearchVisible=false"></div>
-          <div class="contents">
-            <input class="use-case-search" size="40" 
-              (keyup)="showUseCasesSearch({key: $event.target.value})"
-              placeholder="Type to search use-cases" />
-            <app-use-cases-list 
-              [useCases]="searchUseCases"
-              [collectionMode]="true"
-              (selectClicked)="activateUseCase($event); useCaseSearchVisible=false;">
-            </app-use-cases-list>
-          </div>
-        </div>
-      </li>
     </ul>
 
-    <h3>Mock Responses</h3>
+    <h3>
+      Activte Mock Responses
+      <span class="add" (click)="showMockResponsesSearch()">✚</span>
+    </h3>
+    <div class="dialog" *ngIf="mockResponseSearchVisible">
+      <div class="blocker" (click)="mockResponseSearchVisible=false"></div>
+      <div class="contents">
+        <input class="mock-response-search" size="40" 
+          (keyup)="showMockResponsesSearch({key: $event.target.value})"
+          placeholder="Type to search mock response" />
+        <app-mock-responses-list 
+          [mockResponses]="searchMockResponses"
+          [collectionMode]="true"
+          (selectClicked)="activateMockResponse($event); mockResponseSearchVisible=false;">
+        </app-mock-responses-list >
+      </div>
+    </div>
+    <div *ngIf="!activeMockResponses.length">
+      There is no mock-responses activated by you except those activated by active use cases.
+      To activate your own mock-responses, click '+' sign. or, activate from 'All Mock Responses' 
+    </div>
+
     <ul class="active-mock-responses">
       <li class="active-mock-response active-item" *ngFor="let mockResp of activeMockResponses"
         (click)="openMockResponseDialog(mockResp)" title="{{mockResp.id}}">
@@ -49,28 +73,13 @@
         <a class="button icon delete"
           (click)="deactivateMockResponse(mockResp); $event.stopPropagation()"> x </a>
       </li>
-      <li class="add-mock-response add-available" [ngClass]="{expanded: mockResponseSearchVisible}">
-        <span (click)="showMockResponsesSearch()">Add</span>
-        <div class="dialog" *ngIf="mockResponseSearchVisible">
-          <div class="blocker" (click)="mockResponseSearchVisible=false"></div>
-          <div class="contents">
-            <input class="mock-response-search" size="40" 
-              (keyup)="showMockResponsesSearch({key: $event.target.value})"
-              placeholder="Type to search mock response" />
-            <app-mock-responses-list 
-              [mockResponses]="searchMockResponses"
-              [collectionMode]="true"
-              (selectClicked)="activateMockResponse($event); mockResponseSearchVisible=false;">
-            </app-mock-responses-list >
-          </div>
-        </div>
-      </li>
     </ul>
 
-    <a href="/use-cases/cached">Use Cases &lt;-&gt; Responses</a>
   </div>
 
   <div *ngIf="tab === 'mock-responses'" class="available-section">
+    This shows all currently active mock responses by active use cases and mock-responses activated by you.
+    <br/><br/>
     <div class="search-section">
       <input class="mock-response-search" size="40"
         [(ngModel)]="availMockRespSearch"
@@ -78,7 +87,6 @@
         placeholder="Type to search mock responses" />
     </div>
     <br/>
-
     <ul class="available-mock-responses"  *ngIf="availableMockResponses">
       <li class="mock-response" *ngFor="let el of objectEntries(availableMockResponses);">
         <div *ngIf="el[0] !== 'REGEXP' && el[0]; let url">
