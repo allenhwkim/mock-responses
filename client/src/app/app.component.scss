@@ -12,13 +12,6 @@
 .main .top-header a {
   color: #FFF;
 }
-.main .top-header .passcode {
-  width: 24px;
-  height: 24px;
-  background: inherit;
-  border: none;
-  color: #FFF;
-}
 .main .main-route {
   padding: 24px;
 }
@@ -29,8 +22,9 @@
   border: none;
   background: none;
 }
+
 .mode {
-  font-size: 16px;
+  cursor: pointer;
 }
 
 /* for list only item, hide .for-edit / .for-dialog items */

@@ -10,7 +10,8 @@ module.exports = {
     'Access-Control-Allow-Methods=GET,POST,PATCH,DELETE,PUT'
   ],
   archiveApi: {
-    archiveUrl: 'http://oneview-dev.rogers.com/mock-responses/archive', // POST
-    statusCheckUrl: 'http://oneview-dev.rogers.com/mock-responses/last-archived/{{username}}'
+    localDomainName: 'localhost',
+    archiveUrl: 'http://localhost:8100/mock-responses/archive', // POST
+    statusCheckUrl: 'http://localhost:8100/mock-responses/last-archived/{{username}}'
   }
 };

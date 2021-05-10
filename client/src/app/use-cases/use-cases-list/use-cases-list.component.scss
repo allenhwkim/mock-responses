@@ -4,7 +4,7 @@
     vertical-align: top;
 
     .id {
-      width: 10%; 
+      // width: 10%; 
       overflow: hidden;
       .contents {
         display: flex;
@@ -12,9 +12,15 @@
         justify-content: space-between;
       }
     }
+    .actions {
+      white-space: nowrap;
+      .fa-lg {
+        padding: 2px;
+      }
+    }
 
     .name-desc {
-      width: 40%; 
+      // width: 40%; 
       overflow: hidden;
       .description {
         white-space: pre-wrap;

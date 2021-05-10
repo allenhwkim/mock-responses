@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 import { UseCasesService } from './use-cases.service';
 import { AuthorizedServiceService } from '../authorized.service';
@@ -11,7 +10,7 @@ import { AuthorizedServiceService } from '../authorized.service';
 })
 export class UseCasesComponent implements OnInit {
   useCases: any;
-  faPlus = faPlus;
+  error: any;
 
   constructor(
     private useCaseService: UseCasesService,
@@ -24,8 +23,9 @@ export class UseCasesComponent implements OnInit {
 
   setUseCases(by) {
     this.useCaseService.getUseCases(by)
-      .subscribe( (resp:any) => {
-        this.useCases = resp.useCases;
-      })
+      .subscribe(
+       (resp:any) => { this.useCases = resp.useCases; },
+       error => this.error = error.message
+      )
   }
 }

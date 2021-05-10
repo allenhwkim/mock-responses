@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthorizedServiceService } from '../../authorized.service';
 import { MockResponsesService } from '../mock-responses.service';
-import { faEdit, faFile, faTrashAlt, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { MockResponseDialogComponent } from '../../dialogs/mock-response-dialog.component';
 
 @Component({
@@ -21,8 +20,6 @@ export class MockResponsesListComponent {
   @Output() selectClicked = new EventEmitter();
   @Output() activateClicked = new EventEmitter();
   @Output() deactivateClicked = new EventEmitter();
-
-  faEdit = faEdit; faFile = faFile; faTrashAlt = faTrashAlt; faQuestionCircle = faQuestionCircle;
 
   constructor(
     public auth: AuthorizedServiceService,

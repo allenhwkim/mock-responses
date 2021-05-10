@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { faPlay, faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -20,7 +19,6 @@ import { UseCase } from '../models/use-case.interface';
 })
 export class HomeComponent implements OnInit {
   objectEntries = Object.entries;
-  faPlay = faPlay; faPlus = faPlus; faSearch = faSearch;
 
   activeUseCases = [];
   activeMockResponses = [];
@@ -32,6 +30,8 @@ export class HomeComponent implements OnInit {
   mockResponseSearchVisible = false;
   availMockRespSearch: string;
   tab = 'mock-responses';
+
+  error;
 
   constructor(
     public mockResponseService: MockResponsesService,
@@ -65,6 +65,7 @@ export class HomeComponent implements OnInit {
 
   openMockResponseDialog(mockResponse) {
     const dialogRef = this.dialog.open(MockResponseDialogComponent, { data: { mockResponse } });
+    this.play(mockResponse);
   }
 
   showUseCasesSearch(by = {key: ''}) {
@@ -111,7 +112,8 @@ export class HomeComponent implements OnInit {
         this.activeUseCases = resp.activeUseCases;
         this.activeMockResponses = resp.activeMockResponses;
         this.availableMockResponses = resp.availableMockResponses;
-      });
+      })
+      .catch(e => this.error = e.message);
   }
 
   foundMockResp(mockResp: MockResponse, key: string) {

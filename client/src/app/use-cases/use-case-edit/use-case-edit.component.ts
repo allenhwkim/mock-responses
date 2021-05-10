@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faEdit, faTrashAlt, faPlusCircle, faBan, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import { AuthorizedServiceService } from '../../authorized.service';
 import { MockResponse } from 'src/app/models/mock-response.interface';
@@ -22,9 +21,6 @@ export class UseCaseEditComponent implements OnInit {
   useCase: UseCase = {useCases: [], mockResponses: []};
   orgUseCase: UseCase = {useCases: [], mockResponses: []};
  
-  faSearch = faSearch; faBan = faBan; faEdit = faEdit;
-  faPlusCircle = faPlusCircle; faTrashAlt = faTrashAlt;
-
   useCases = [];
   mockResponses = [];
 

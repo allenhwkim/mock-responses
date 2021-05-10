@@ -78,35 +78,26 @@
   </div>
 
   <div *ngIf="tab === 'mock-responses'" class="available-section">
-    This shows all currently active mock responses by active use cases and mock-responses activated by you.
-    <br/><br/>
-    <div class="search-section">
-      <input class="mock-response-search" size="40"
-        [(ngModel)]="availMockRespSearch"
-        (keyup)="setMockResponses({key: $event.target.value})"
-        placeholder="Type to search mock responses" />
-    </div>
-    <br/>
-    <ul class="available-mock-responses"  *ngIf="availableMockResponses">
+    This shows all currently active mock responses by;<br/>
+    <ol>
+      <li>active use cases.</li> 
+      <li>mock-responses activated by you.</li>
+    </ol>
+
+    <div class="error" *ngIf="error">{{error}}</div>
+
+    <ul class="available-mock-responses" *ngIf="availableMockResponses">
       <li class="mock-response" *ngFor="let el of objectEntries(availableMockResponses);">
         <div *ngIf="el[0] !== 'REGEXP' && el[0]; let url">
-          <div *ngFor="let el of objectEntries(availableMockResponses[url]);">
-            <div *ngIf="el[0]; let method">
-              <div *ngIf="el[1]; let mockResp" title="{{mockResp.id}}">
-                <div class="flex row" *ngIf="foundMockResp(mockResp, availMockRespSearch)">
-                  <fa-icon class="play" [icon]="faPlay" (click)="play(mockResp)"></fa-icon> &nbsp;
-                  <b class="method">{{mockResp.req_method || 'ANY'}}</b>
-                  <span class="req-resp" (click)="openMockResponseDialog(mockResp)">
-                    <span title="status code">{{mockResp.res_status}}</span> &nbsp;
-                    <b>{{mockResp.req_url}}</b> &nbsp;
-                    <!-- <span title="content type">{{mockResp.res_content_type}}</span> -->
-                    <span title="name">{{mockResp.name}}</span> &nbsp;
-                  </span>
-                </div>
-              </div> <!-- mockResp -->
-            </div> <!-- method -->
-          </div> <!-- methods --> 
-        </div> <!-- url --> 
+          <b class="url">{{url}}</b>
+          <div class="mock-resp" *ngFor="let el of objectEntries(availableMockResponses[url]);"
+             (click)="openMockResponseDialog(el[1])">
+            <span class="method">{{el[1].req_method || 'ANY'}}</span>
+            <span class="status-code">{{el[1].res_status}}</span>
+            <span class="content-type">{{el[1].res_content_type}}</span>
+            <span class="name">{{el[1].name}}</span>
+          </div>
+        </div> 
       </li> 
     </ul>
   </div>

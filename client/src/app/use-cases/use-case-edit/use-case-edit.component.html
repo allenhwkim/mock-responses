@@ -91,7 +91,7 @@
       <button *ngIf="auth.authorized && mode === 'edit'"
         [disabled]="!updatable"
         (click)="updateUseCase()">
-        <fa-icon [icon]="faEdit"></fa-icon> Update
+        <i class="fas fa-edit"></i> Update
       </button>
       &nbsp;
       <button *ngIf="auth.authorized && mode === 'edit'"
@@ -101,13 +101,13 @@
       </button>
       &nbsp;
       <button *ngIf="auth.authorized && mode === 'edit'" (click)="deleteUseCase()">
-        <fa-icon [icon]="faTrashAlt"></fa-icon> Delete 
+        <i class="fas fa-trash-alt"></i> Delete 
       </button>
       &nbsp;
       <button *ngIf="auth.authorized && mode === 'new'" 
         [disabled]="!creatable"
         (click)="createUseCase()">
-        <fa-icon [icon]="faPlusCircle"></fa-icon> Create 
+        <i class="fas fa-plus-circle"></i> Create 
       </button>
     </div>
   </div>

@@ -119,18 +119,25 @@
       list-style-type: none;
       margin: 0;
       padding: 0;
-      .flex.row {
-        display: flex;
-        padding-bottom: 8px;
-        .play {
-          color: #1F88E5;
-          cursor: pointer;
+      .mock-response {
+        padding: 8px;
+        .url {
+          display: block;
+          background: #ccc;
+          padding: 4px;
         }
-        .method {
-          min-width: 80px;
-        }
-        .req-resp {
+        .mock-resp {
+          display: flex;
           cursor: pointer;
+          .method {
+            min-width: 80px;
+          }
+          .status-code {
+            min-width: 60px;
+          }
+          .content-type {
+            min-width: 160px;
+          }
         }
       }
     }

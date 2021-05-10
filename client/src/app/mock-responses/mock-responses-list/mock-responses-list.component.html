@@ -4,6 +4,7 @@
   <thead>
     <tr class="header">
       <th class="request">Request</th>
+      <th class="actions">Actions</th>
       <th class="id-name">Id/Name</th>
       <th class="response">Response</th>
     </tr>
@@ -17,60 +18,57 @@
             <div class="req_url"><b>URL</b>: {{el.req_url}}</div>
             <div class="req_payload" *ngIf="el.req_payload">Payload: {{el.req_payload}}</div>
           </div>
-          <div class="actions">
-            <div class="activate-buttons" *ngIf="auth.authorized && !collectionMode && !listMode">
-              <span *ngIf="!activeIds.includes(el.id) && availableIds.includes(el.id)" class="active"> 
-                <!-- set by use cases including default ones -->
-                Active
-              </span>
-              <a *ngIf="activeIds.includes(el.id)" class="activate" 
-                (click)="deactivateClicked.emit(el)">
-                Deactivate 
-              </a>
-              <a *ngIf="!activeIds.includes(el.id) && !availableIds.includes(el.id)" class="deactivate" 
-                (click)="activateClicked.emit(el)">
-                Activate 
-              </a>
-            </div>
-
-            <a class="button icon" *ngIf="auth.authorized && !collectionMode && !listMode " 
-              [routerLink]="['/mock-responses', el.id, 'edit']">
-              <fa-icon [icon]="faEdit"></fa-icon>
-            </a>
-
-            <a class="button icon" *ngIf="!auth.authorized && !collectionMode && !listMode"
-              [routerLink]="['/mock-responses', el.id, 'edit']">
-              <fa-icon [icon]="faFile"></fa-icon>
-            </a>
-
-            <a class="button icon delete" *ngIf="auth.authorized && listMode"
-              (click)="deleteClicked.emit(el)">
-              <fa-icon [icon]="faTrashAlt"></fa-icon>
-            </a>
-
-            <button *ngIf="collectionMode"
-              (click)="selectClicked.emit(el)">
-              Select
-            </button>&nbsp;
-
-          </div>
         </div>
+      </td>
+      <td class="actions">
+        <span class="activate-buttons" *ngIf="auth.authorized && !collectionMode && !listMode">
+          <span *ngIf="!activeIds.includes(el.id) && availableIds.includes(el.id)" class="active"> 
+            <i title="Active" class="fa-lg fas fa-toggle-on" style="opacity: .3"></i>
+          </span>
+          <a *ngIf="activeIds.includes(el.id)" class="activate" 
+            (click)="deactivateClicked.emit(el)">
+            <i title="Deactivate" class="fa-lg fas fa-toggle-off"></i>
+          </a>
+          <a *ngIf="!activeIds.includes(el.id) && !availableIds.includes(el.id)" class="deactivate" 
+            (click)="activateClicked.emit(el)">
+            <i title="Activate" class="fa-lg fas fa-toggle-on"></i>
+          </a>
+        </span>
+
+        <a class="button icon" *ngIf="auth.authorized && !collectionMode && !listMode " 
+          [routerLink]="['/mock-responses', el.id, 'edit']">
+          <i class="fa-lg fas fa-edit"></i>
+        </a>
+
+        <a class="button icon" *ngIf="!auth.authorized && !collectionMode && !listMode"
+          [routerLink]="['/mock-responses', el.id, 'edit']">
+          <i class="fa-lg fas fa-file"></i>
+        </a>
+
+        <a class="button icon delete" *ngIf="auth.authorized && listMode"
+          (click)="deleteClicked.emit(el)">
+          <i class="fa-lg fas fa-trash-alt"></i>>
+        </a>
+
+        <button *ngIf="collectionMode"
+          (click)="selectClicked.emit(el)">
+          Select
+        </button>
+
+        <a class="button icon" (click)="openMockResponseDialog(el.id)">
+          <i class="fas fa-lg fa-info-circle"></i>
+        </a>
       </td>
       <td class="id-name">({{el.id}}) <br/> {{el.name}}</td>
       <td class="response">
         <div>
           <b>Status</b>: {{el.res_status}}
           <span *ngIf="el.res_delay_sec"> after delay: {{el.res_delay_sec}}</span>
-          <a class="button icon" style="float:right" (click)="openMockResponseDialog(el.id)">
-            detail
-            <!-- <fa-icon [icon]="faQuestionCircle"></fa-icon> -->
-          </a>
         </div>
         <div>
           <b>Type</b>: {{el.res_content_type}}
         </div>
       </td>
-
     </tr>
   </tbody>
 </table>

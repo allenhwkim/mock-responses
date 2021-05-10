@@ -3,6 +3,7 @@
     <tr>
       <th class="id">Id</th>
       <th class="name-desc">Name<br/>/Description</th>
+      <th class="id">Actions</th>
       <th class="children">Use Cases<br/>/Mock Responses</th>
     </tr>
   </thead>
@@ -12,32 +13,33 @@
     <td class="id">
       <div class="contents">
         <div>{{useCase.id}}</div>
-        <div>
-          <a class="button icon" *ngIf="auth.authorized && !collectionMode && !listMode && !activateMode" 
-            [routerLink]="['/use-cases', useCase.id, 'edit']">
-            <fa-icon [icon]="faEdit"></fa-icon>
-          </a>
-          <a class="button icon" *ngIf="!auth.authorized && !collectionMode && !listMode && !activateMode"
-            [routerLink]="['/use-cases', useCase.id, 'edit']">
-            <fa-icon [icon]="faFile"></fa-icon>
-          </a>
-          <button *ngIf="activateMode" (click)="selectClicked.emit(useCase)">
-            Activate
-          </button>
-          <button *ngIf="collectionMode" (click)="selectClicked.emit(useCase)">
-            Select
-          </button>
-          <a *ngIf="auth.authorized && listMode" class="button icon delete"
-            (click)="deleteClicked.emit(useCase)">
-            <fa-icon [icon]="faTrashAlt"></fa-icon>
-          </a>
-        </div>
       </div>
     </td>
 
     <td class="name-desc">
       <b>{{useCase.name}}</b>
       <p>{{useCase.description}}</p> 
+    </td>
+
+    <td class="actions">
+      <a class="button icon" *ngIf="auth.authorized && !collectionMode && !listMode && !activateMode" 
+        [routerLink]="['/use-cases', useCase.id, 'edit']">
+        <i class="fas fa-lg fa-edit"></i>
+      </a>
+      <a class="button icon" *ngIf="!auth.authorized && !collectionMode && !listMode && !activateMode"
+        [routerLink]="['/use-cases', useCase.id, 'edit']">
+        <i class="fas fa-lg fa-file"></i>
+      </a>
+      <button *ngIf="activateMode" (click)="selectClicked.emit(useCase)">
+        Activate
+      </button>
+      <button *ngIf="collectionMode" (click)="selectClicked.emit(useCase)">
+        Select
+      </button>
+      <a *ngIf="auth.authorized && listMode" class="button icon delete"
+        (click)="deleteClicked.emit(useCase)">
+        <i class="fas fa-lg fa-trash-alt"></i>
+      </a>
     </td>
 
     <td class="children">

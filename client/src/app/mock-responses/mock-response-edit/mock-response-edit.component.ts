@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faEdit, faTrashAlt, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { AuthorizedServiceService } from '../../authorized.service';
 import { MockResponsesService } from '../mock-responses.service';
@@ -16,7 +15,6 @@ export class MockResponseEditComponent implements OnInit {
 
   orgMockResponse: MockResponse = {};
   mockResponse: MockResponse = {};
-  faEdit = faEdit; faPlusCircle = faPlusCircle; faTrashAlt = faTrashAlt;
 
   get updatable() {
     return Object.keys(this.getUpdatedMockResponse()).length > 1; // id is default

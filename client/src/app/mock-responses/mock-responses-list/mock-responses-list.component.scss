@@ -3,7 +3,7 @@
   .id { width: 100px; }
   .id-name { width: 25%; }
   .request {
-    width: 50%; 
+    // width: 50%; 
     .contents {
       display: flex; 
       width: 80%;
@@ -28,9 +28,16 @@
     }
   }
   .response { 
-    width: 25%;
+    // width: 25%;
+    white-space: nowrap;
     .icon { 
       cursor: pointer;
+    }
+  }
+  .actions {
+    white-space: nowrap;
+    .fa-lg {
+      padding: 2px;
     }
   }
 }

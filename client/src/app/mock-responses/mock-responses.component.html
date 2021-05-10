@@ -5,11 +5,20 @@
   &nbsp;
   <button *ngIf="auth.authorized"
     [routerLink]="['/mock-responses/new']">
-    <fa-icon [icon]="faPlus"></fa-icon> New
+    <i class="fas fa-plus"></i> New
   </button>
 </div>
 
-<app-mock-responses-list
+<div class="fa-2x" *ngIf="loading">
+  <i class="fas fa-cog fa-spin"></i>
+  <i class="fas fa-cog fa-spin"></i>
+  <i class="fas fa-cog fa-spin"></i>
+  <i class="fas fa-cog fa-spin"></i>
+  <i class="fas fa-cog fa-spin"></i>
+  <i class="fas fa-cog fa-spin"></i>
+</div>
+
+<app-mock-responses-list *ngIf="!loading"
   [mockResponses]="mockResponses"
   [availableIds]="availableIds"
   [activeIds]="activeIds"
@@ -17,3 +26,5 @@
   (deactivateClicked)="deactivateClicked($event)"
   (deleteClicked)="deleteClicked($event)">
 </app-mock-responses-list>
+
+<div class="error" *ngIf="error"> {{this.error}} </div>

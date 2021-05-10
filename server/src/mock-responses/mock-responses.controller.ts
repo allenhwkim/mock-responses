@@ -1,5 +1,5 @@
 import {
-  Body, Controller, Delete, Get, Param, Post, Put, Query, Request, Response, Headers
+  Body, Controller, Delete, Get, Param, Post, Put, Query, Request, Response, Headers, Header
 } from '@nestjs/common';
 import { MockResponsesService } from './mock-responses.service';
 import { MockResponse, ArchiveData } from '../common/interfaces';
@@ -35,17 +35,27 @@ export class MockResponsesController {
   }
 
   @Get('last-archived/:username')
-  findLastArchived(@Param() params, @Headers() headers) {
-    // if request is from the same host, exit
-    console.log('...................', headers);
-    return this.mockResp.lastArchived(params.username);
+  findLastArchived(@Param() params, @Headers() headers, @Response() res) {
+    if (headers['req-domain-name'] === 'localhost') {
+      const resp = this.mockResp.lastArchived(params.username);
+      res.send(resp);
+      res.end();
+      // return JSON.parse(resp);
+    } else {
+      return res.status(403).send({error: 'invalid request. Must be from localhost server(not browser)'});
+    }
   }
 
   @Post('archive')
-  archive(@Body() data: ArchiveData, @Headers() headers) {
-    // if request is from the same host, exit
-    console.log('...................', headers);
-    return this.mockResp.archive(data.userName, data.mockResponse);
+  archive(@Body() data: ArchiveData, @Headers() headers, @Response() res) {
+console.log('}}}}}}}}}}}}}}}}}}}}}}}}{{{{{{{{{{', {data})
+    if (headers['req-domain-name'] === 'localhost') {
+      const resp = this.mockResp.archive(data.userName, data.mockResponse);
+      res.send(resp);
+      res.end();
+    } else {
+      return res.status(403).send({error: 'same host'});
+    }
   }
 
   @Post()

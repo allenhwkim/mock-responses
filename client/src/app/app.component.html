@@ -8,19 +8,15 @@
         &nbsp; &nbsp; &nbsp; &nbsp; | &nbsp; &nbsp; &nbsp; &nbsp;
         <a [routerLink]="['/use-cases']">All  Use Cases</a>
       </div>
-      <span class="mode" *ngIf="this.authorized()">
-        Write Mode
+      <span class="mode" *ngIf="this.authorized()" (click)="setEditMode(false)">
+        <i title="Change to read-only mode" class="fas fa-eye"></i>
       </span>
-      <span class="mode" *ngIf="!this.authorized()">
-        Read Mode
-        <input class="passcode public" 
-          maxlength="1"
-          title="Enter passcode here to enable edit mode"
-          (keypress)="authorizedChanged($event)"/>
+      <span class="mode" *ngIf="!this.authorized()" (click)="setEditMode(true)">
+        <i title="Change to read/write mode" class="fas fa-edit"></i>
       </span>
       <div>
         <a href="https://github.com/allenhwkim/mock-responses">
-          <sup>github</sup>
+          <i title="read-only mode" class="fab fa-github"></i>
         </a>
       </div>
     </div>

@@ -6,11 +6,13 @@
   &nbsp;
   <button class="button" *ngIf="auth.authorized" 
     [routerLink]="['/use-cases/new']">
-    <fa-icon [icon]="faPlus"></fa-icon> New
+    <i class="fas fa-plus"></i> New
   </button>
 </div>
 
-<app-use-cases-list 
+<div class="error" *ngIf="error">{{error}}</div>
+
+<app-use-cases-list *ngIf="!error"
   [useCases]="useCases"
   [collectionMode]="false">
 </app-use-cases-list>

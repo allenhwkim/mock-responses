@@ -80,7 +80,7 @@
 
   <div *ngIf="auth.authorized" class="buttons">
     <button *ngIf="mockResponse.id" [disabled]="!updatable" (click)="updateMockResponse()">
-      <fa-icon [icon]="faEdit"></fa-icon>
+      <i class="fas fa-edit"></i>
       Update Mock Response 
     </button>
     <button *ngIf="mockResponse.id" class="button"
@@ -90,12 +90,12 @@
     </button>
     <button *ngIf="mockResponse.id" 
       (click)="deleteMockResponse()">
-      <fa-icon [icon]="faTrashAlt"></fa-icon>
+      <i class="fas fa-trash-alt"></i>
       Delete Mock Resoponse
     </button>
     <button *ngIf="!mockResponse.id" [disabled]="!creatable"
       (click)="createMockResponse()">
-      <fa-icon [icon]="faPlusCircle"></fa-icon>
+      <i class="fas fa-plus-circle"></i>
       Create Mock Response 
     </button>
   </div>

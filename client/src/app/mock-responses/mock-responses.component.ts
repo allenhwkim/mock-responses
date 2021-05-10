@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, of } from 'rxjs';
 
@@ -17,8 +16,9 @@ export class MockResponsesComponent implements OnInit {
   mockResponses: any; // mock_resonses table data
   availableIds: Array<number>; // mock response ids from useCases.availableMockResponese
   activeIds: Array<number>; // avail mock responses ids, which is set by activating it
-  faPlus = faPlus; faSearch = faSearch;
   subject = new Subject();
+  loading: boolean;
+  error;
 
   constructor(
     public mockResponseService: MockResponsesService,
@@ -50,11 +50,20 @@ export class MockResponsesComponent implements OnInit {
     const debounced = this.debounce(_ => this.setMockResponses(by), 500);
     if (debounced) return;
 
-    const mockResps: any = await this.mockResponseService.getMockResponses(by).toPromise();
-    const useCases: any = await this.useCaseService.getUseCases({activeOnly:1}).toPromise();
-    this.mockResponses = mockResps.mockResponses;
-    this.activeIds = useCases.activeMockResponses.map(el => el.id), // based on MRIDS,
-    this.availableIds = useCases.mockResponseIds;
+    this.loading = true;
+    const sleep = ms => new Promise(res => setTimeout(res, ms));
+    // await sleep(1000);
+    try {
+      const mockResps: any = await this.mockResponseService.getMockResponses(by).toPromise();
+      const useCases: any = await this.useCaseService.getUseCases({activeOnly:1}).toPromise();
+      this.mockResponses = mockResps.mockResponses;
+      this.activeIds = useCases.activeMockResponses.map(el => el.id), // based on MRIDS,
+      this.availableIds = useCases.mockResponseIds;
+      this.loading = false;
+    } catch(e) {
+      this.loading = false;
+      this.error = e.message;
+    }
   }
 
   deleteClicked(event) {

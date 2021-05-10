@@ -1,6 +1,5 @@
 import { Component, Inject, Output, OnInit, EventEmitter } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
 
 import { MockResponsesService } from '../mock-responses/mock-responses.service';
 import { MockResponse } from '../models/mock-response.interface';
@@ -19,7 +18,6 @@ import { MockResponse } from '../models/mock-response.interface';
 })
 export class MockResponseDialogComponent implements OnInit {
   mockResponse: MockResponse;
-  faEdit = faEdit;
 
   constructor(
     public dialogRef: MatDialogRef<MockResponseDialogComponent>,
