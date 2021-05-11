@@ -54,7 +54,7 @@ export class MockResponsesService {
   }
 
   lastArchived(userName) {
-    const url = `/mock-responses/lastArchived/${userName}`;
+    const url = `/mock-responses/last-archived/${userName}`;
     const row = this.db.prepare(`SELECT * FROM mock_responses WHERE req_url = '${url}'`);
     const existing = row.get();
     if (existing) {
@@ -81,23 +81,28 @@ export class MockResponsesService {
   }
 
   archive(userName: string, mockResponse: MockResponse) {
+    // console.log({userName, mockResponse});
+
     // 1) check if the same url/response exists
     const sql = `SELECT * FROM mock_responses
-      WHERE req_url = '${mockResponse.req_url.trim()}' AND res_body = '${mockResponse.res_body.trim()}'`;
+      WHERE req_url = '${mockResponse.req_url.trim()}' AND res_body = '${mockResponse.res_body.trim()}';`;
     const existing = this.db.prepare(sql).get();
     if (existing) {
       // 3) if not, insert a row, update LAST_ARCHIVED and return it
       console.log('\x1b[33m%s\x1b[0m', `[mock-responses] ARCHIVE skip, existing`, mockResponse.req_url);
     } else {
-      delete mockResponse.id;
-      this.create(mockResponse);
+      // delete mockResponse.id;
+      this.create(mockResponse, true);
     }
 
     const resBody = `{"lastArchived": ${new Date().getTime()}}`;
-    const sql2 = `UPDATE mock_responses SET
+    const updateSql = `UPDATE mock_responses SET
       res_body='${resBody}', updated_at=${new Date().getTime()}, updated_by='${userName}'
-      WHERE req_url = '/mock-responses/last-archived/${userName}'`;
-    return this.db.exec(sql) && resBody;
+      WHERE req_url = '/mock-responses/last-archived/${userName}';`;
+    if (this.db.exec(updateSql)) {
+      console.log('\x1b[33m%s\x1b[0m', `[mock-responses] update timestamp`, updateSql);
+    }
+    return resBody;
   }
 
   findAllBy(by:any ={}) {
@@ -127,7 +132,9 @@ export class MockResponsesService {
     }
   }
 
-  create(data: MockResponse) {
+  create(data: MockResponse, isFromArchive=false) {
+    if (isFromArchive) return;
+
     const createdAt = new Date().getTime();
     const reqMethod = data.req_method ? `'${data.req_method}'` : 'NULL';
     const reqName = data.name ? `'${data.name}'` : 'NULL';
@@ -157,29 +164,7 @@ export class MockResponsesService {
     try {
       this.db.exec(sql) && BetterSqlite3.backupToSql();
       UseCaseCache.reset(); // clear cache and set defaults
-
-      if (BetterSqlite3.archiveApi && BetterSqlite3.archiveApi.archiveUrl) {
-        const payload = { userName: username.sync(), mockResponse: data };
-        fetch(BetterSqlite3.archiveApi.archiveUrl, {
-            method: 'POST', 
-            headers: {
-              'req-domain-name':  BetterSqlite3.archiveApi.localDomainName,
-              'User-Agent': 'Chrome/59.0.3071.115',
-              'Content-Type': 'application/json' 
-            },
-            body: JSON.stringify(payload)
-          })
-          .then(resp => {
-            if (!resp.ok) { throw Error(resp)};
-            console.log('\x1b[33m%s\x1b[0m', `[mock-responses] ARCHIVE success`, username, data.req_url);
-            return resp.json();
-          })
-          .then(resp => console.log('[mock-responses] single archive', resp))
-          .catch(function(error) {
-            console.log('\x1b[33m%s\x1b[0m', `[mock-responses] ARCHIVE cancelled because server not available`);
-            console.log('\x1b[33m%s\x1b[0m', `[mock-responses] ARCHIVE url, ${BetterSqlite3.archiveApi.archiveUrl}`);
-          });
-      }
+      this.backup(data);
     } catch (err) {
       console.log('\x1b[33m%s\x1b[0m', '[mock-responses] ARCHIVE insert error\n', err);
     }
@@ -206,6 +191,7 @@ export class MockResponsesService {
     if (this.db.exec(sql)) {
       UseCaseCache.reset(); // clear cache and set defaults
       BetterSqlite3.backupToSql();
+      this.backup(data);
     } else {
       throw '[mock-responses] error update mock_responses'
     }
@@ -222,6 +208,38 @@ export class MockResponsesService {
 
     UseCaseCache.reset(); // clear cache and set defaults
     BetterSqlite3.backupToSql();
+  }
+
+  // called with create() and update()
+  backup(data) {
+    if (data.id) { 
+      data = Object.assign({}, this.find(data.id), data);
+    };
+
+    data.name = `(backup) $(data.name)`;
+    if (BetterSqlite3.archiveApi && BetterSqlite3.archiveApi.archiveUrl) {
+      const payload = { userName: username.sync(), mockResponse: data };
+      fetch(BetterSqlite3.archiveApi.archiveUrl, {
+          method: 'POST', 
+          headers: {
+            'req-domain-name':  BetterSqlite3.archiveApi.localDomainName,
+            'User-Agent': 'Chrome/59.0.3071.115',
+            'Content-Type': 'application/json' 
+          },
+          body: JSON.stringify(payload)
+        })
+        .then(resp => {
+          if (!resp.ok) resp.text().then(err => console.log(err));
+          if (!resp.ok) { throw Error(resp)};
+          console.log('\x1b[33m%s\x1b[0m', `[mock-responses] ARCHIVE success`, username, data.req_url);
+          return resp.json();
+        })
+        .then(resp => console.log('[mock-responses] single archive', resp))
+        .catch(function(error) {
+          console.log('\x1b[33m%s\x1b[0m', `[mock-responses] ARCHIVE cancelled because server not available`);
+          console.log('\x1b[33m%s\x1b[0m', `[mock-responses] ARCHIVE url, ${BetterSqlite3.archiveApi.archiveUrl}`);
+        });
+    }
   }
 
   runInitialArchive() {
@@ -246,12 +264,13 @@ export class MockResponsesService {
         // 1) set ARCHIVE_JOB_STATUS as STARTED
         this.ARCHIVE_JOB_STATUS = 'STARTED'; 
         // 2) get all mock-responses after LAST_ARCHIVED time
-        const sql = `SELECT * FROM mock_responses WHERE updated_at > ${resp.lastArchived}`;
-        console.log('\x1b[33m%s\x1b[0m', '[mock-responses] ARCHIVE 1 last archived', this.LAST_ARCHIVED_TIME);
+        const sql = `SELECT DISTINCT * FROM mock_responses WHERE updated_at > ${resp.lastArchived}`;
+        console.log('\x1b[33m%s\x1b[0m', '[mock-responses] ARCHIVE 1 last archived', 
+          new Date(this.LAST_ARCHIVED_TIME).toLocaleString());
         return this.db.prepare(sql).all();
       }).then(mockResps => {
         // 3) Search all mock responses to archive
-        console.log('\x1b[33m%s\x1b[0m', '[mock-responses] ARCHIVE 2 processing', mockResps);
+        console.log('\x1b[33m%s\x1b[0m', '[mock-responses] ARCHIVE 2 processing', mockResps.length, mockResps);
         let processed = 0;
         return new Promise(resolve => {
           mockResps.forEach(mockResponse => {

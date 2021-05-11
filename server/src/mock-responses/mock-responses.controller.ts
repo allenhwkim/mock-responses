@@ -48,7 +48,6 @@ export class MockResponsesController {
 
   @Post('archive')
   archive(@Body() data: ArchiveData, @Headers() headers, @Response() res) {
-console.log('}}}}}}}}}}}}}}}}}}}}}}}}{{{{{{{{{{', {data})
     if (headers['req-domain-name'] === 'localhost') {
       const resp = this.mockResp.archive(data.userName, data.mockResponse);
       res.send(resp);
