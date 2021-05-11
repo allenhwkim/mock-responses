@@ -86,6 +86,7 @@ export class MockResponsesService {
     // 1) check if the same url/response exists
     const sql = `SELECT * FROM mock_responses
       WHERE req_url = '${mockResponse.req_url.trim()}' AND res_body = '${mockResponse.res_body.trim()}';`;
+    
     const existing = this.db.prepare(sql).get();
     if (existing) {
       // 3) if not, insert a row, update LAST_ARCHIVED and return it
