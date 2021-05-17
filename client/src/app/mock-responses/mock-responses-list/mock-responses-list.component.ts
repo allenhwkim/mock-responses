@@ -27,10 +27,25 @@ export class MockResponsesListComponent {
     public dialog: MatDialog
   ) { }
 
+  ngOnInit() {
+  }
+
   openMockResponseDialog(id) {
     this.mockResponseService.getMockResponse(id).subscribe(resp => {
       const dialogRef = this.dialog.open(MockResponseDialogComponent, { data: { mockResponse: resp } });
     })
   }
   
+  backupSavedOnes() {
+    const storageIds = JSON.parse( localStorage.getItem('archiveIds') || '[]' );
+    storageIds.forEach(async id => {
+      const data = await this.mockResponseService.getMockResponse(id).toPromise();
+      const result = await this.mockResponseService.backup(data);
+      if (result) {
+        const storageIds = JSON.parse( localStorage.getItem('archiveIds') || '[]' );
+        const ids = storageIds.filter(el => el !== id)
+        localStorage.setItem('archiveIds', JSON.stringify(ids));
+      }
+    });
+  }
 }

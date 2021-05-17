@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class MockResponsesService {
@@ -37,6 +39,49 @@ export class MockResponsesService {
 
   deactivateMockResponse(id) {
     return this.http.put(`/mock-responses/${id}/deactivate`, {});
+  }
+
+  getConfig() {
+    return this.http.get(`/mock-responses/config`).pipe(
+      catchError(err => {
+        console.log('[mock-responses] error with /mock-responses/config', err);
+        return of(false)
+      })
+    );
+  }
+
+  archive(config: any, payload) {
+    return this.http.post(config.archiveUrl, payload);
+  }
+
+  async backup(data) {
+    const resp: any = await this.getConfig().toPromise();
+    if (resp) { // false with any error
+      const config = JSON.parse(resp.res_body);
+      console.log({config})
+      if (config.archiveUrl) {
+        const payload = { userName: 'archive', mockResponse: data };
+        try {
+          const resp = await this.archive(config, payload).toPromise();
+          console.log('resp', {resp, data})
+          console.log('[mock-responses] archive', data.req_url ,'to', config.archiveUrl);
+          return true;
+        } catch(err) {
+          if (err.status === 0) {
+            console.log('[mock-responses] not connecting to', config.archiveUrl, 'saving it for later');
+            const storageIds = JSON.parse( localStorage.getItem('archiveIds') || '[]' );
+            const ids = [...new Set(storageIds.concat(data.id))];
+            localStorage.setItem('archiveIds', JSON.stringify(ids));
+          } else {
+            throw err;
+          }
+        }
+      } else {
+        console.log('[mock-response] skipping backup by not getting config config.archiveUrl');
+      }
+    } else {
+      console.log('[mock-response] skipping backup by not getting config /mock-responses/config');
+    }
   }
 
 }

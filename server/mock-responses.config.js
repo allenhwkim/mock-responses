@@ -8,10 +8,5 @@ module.exports = {
   headers: [
     'Access-Control-Allow-Headers=Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, Ocp-Apim-Subscription-Key, requestId, flow',
     'Access-Control-Allow-Methods=GET,POST,PATCH,DELETE,PUT'
-  ],
-  archiveApi: {
-    localDomainName: 'localhost',
-    archiveUrl: 'http://localhost:8100/mock-responses/archive', // POST
-    statusCheckUrl: 'http://localhost:8100/mock-responses/last-archived/{{username}}'
-  }
+  ]
 };

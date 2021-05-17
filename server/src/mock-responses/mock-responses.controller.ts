@@ -29,32 +29,20 @@ export class MockResponsesController {
     return { mockResponses, key};
   }
 
+  @Get('config')
+  findConfig() {
+    return this.mockResp.findByUrl('/mock-responses/config');
+  }
+
   @Get(':id')
   findOne(@Param() params) {
     return this.mockResp.find(params.id);
   }
 
-  @Get('last-archived/:username')
-  findLastArchived(@Param() params, @Headers() headers, @Response() res) {
-    if (headers['req-domain-name'] === 'localhost') {
-      const resp = this.mockResp.lastArchived(params.username);
-      res.send(resp);
-      res.end();
-      // return JSON.parse(resp);
-    } else {
-      return res.status(403).send({error: 'invalid request. Must be from localhost server(not browser)'});
-    }
-  }
-
   @Post('archive')
   archive(@Body() data: ArchiveData, @Headers() headers, @Response() res) {
-    if (headers['req-domain-name'] === 'localhost') {
-      const resp = this.mockResp.archive(data.userName, data.mockResponse);
-      res.send(resp);
-      res.end();
-    } else {
-      return res.status(403).send({error: 'same host'});
-    }
+    const statusCode = this.mockResp.archive(data.userName, data.mockResponse);
+    res.status(statusCode).end();
   }
 
   @Post()

@@ -137,7 +137,6 @@ async function bootstrap(config) {
 
 const config = getConfig(argv || 3331);
 console.log('[mock-responses] yargs argv', config);
-BetterSqlite3.archiveApi = config.archiveApi;
 BetterSqlite3.initialize(config.dbPath);
 
 bootstrap(config);

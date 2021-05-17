@@ -22,7 +22,6 @@ export class MockResponseEditComponent implements OnInit {
 
   get creatable() {
     const mockResp: MockResponse = this.getUpdatedMockResponse();
-    console.log({mockResp})
     return !!(mockResp.name && mockResp.req_url && mockResp.res_body);
   }
 
@@ -63,7 +62,9 @@ export class MockResponseEditComponent implements OnInit {
   getUpdatedMockResponse() {
     const updated = {id: this.mockResponse.id};
     for(var key in this.mockResponse) {
-      if (this.orgMockResponse[key] !== this.mockResponse[key]) {
+      if (key === 'req_url' || key === 'name') {
+        updated[key] = this.mockResponse[key];
+      } else if (this.orgMockResponse[key] !== this.mockResponse[key]) {
         updated[key] = this.mockResponse[key];
       }
     }
@@ -71,17 +72,19 @@ export class MockResponseEditComponent implements OnInit {
   }
 
   updateMockResponse() {
-    const updated = this.getUpdatedMockResponse();
+    const updated: any = this.getUpdatedMockResponse();
     if (Object.keys(updated).length > 1) {
       this.mockResp.updateMockResponse(updated)
         .subscribe(resp => this.router.navigate(['/mock-responses']) );
     }
+    updated.res_body && this.mockResp.backup(updated);
   }
 
   createMockResponse() {
-    const updated = this.getUpdatedMockResponse();
+    const updated: any = this.getUpdatedMockResponse();
     this.mockResp.createMockResponse(updated)
       .subscribe(resp => this.router.navigate(['/mock-responses']) );
+    updated.res_body && this.mockResp.backup(updated);
   }
 
   deleteMockResponse() {
