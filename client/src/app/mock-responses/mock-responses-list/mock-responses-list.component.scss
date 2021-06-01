@@ -39,5 +39,8 @@
     .fa-lg {
       padding: 2px;
     }
+    .button:not(:disabled) {
+      cursor: pointer;
+    }
   }
 }

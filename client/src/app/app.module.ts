@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -15,8 +15,8 @@ import { MockResponseEditComponent } from './mock-responses/mock-response-edit/m
 import { MockResponsesListComponent } from './mock-responses/mock-responses-list/mock-responses-list.component';
 import { UseCaseEditComponent } from './use-cases/use-case-edit/use-case-edit.component';
 import { UseCasesListComponent } from './use-cases/use-cases-list/use-cases-list.component';
-import { HomeComponent } from './home/home.component';
-import { SetUseCaseComponent } from './home/set-use-case.component';
+import { ActivesComponent } from './actives/actives.component';
+import { SetUseCaseComponent } from './actives/set-use-case.component';
 import { UseCaseDialogComponent } from './dialogs/use-case-dialog.component';
 import { MockResponseDialogComponent } from './dialogs/mock-response-dialog.component';
 
@@ -31,7 +31,7 @@ import { MockResponseDialogComponent } from './dialogs/mock-response-dialog.comp
     UseCaseEditComponent,
     UseCasesListComponent,
     UseCaseDialogComponent,
-    HomeComponent,
+    ActivesComponent,
     SetUseCaseComponent
   ],
   imports: [
@@ -46,6 +46,6 @@ import { MockResponseDialogComponent } from './dialogs/mock-response-dialog.comp
   ],
   providers: [],
   bootstrap: [AppComponent],
-
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

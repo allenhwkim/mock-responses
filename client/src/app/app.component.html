@@ -2,11 +2,11 @@
   <div class="contents">
     <div class="top-header" *ngIf="showHeader">
       <div class="left">
-        <a [routerLink]="['/home']">Home</a> 
+        <a [routerLink]="['/mock-responses']">Mock Responses</a>
         &nbsp; &nbsp; &nbsp; &nbsp; | &nbsp; &nbsp; &nbsp; &nbsp;
-        <a [routerLink]="['/mock-responses']">All Mock Responses</a>
+        <a [routerLink]="['/use-cases']">Use Cases</a>
         &nbsp; &nbsp; &nbsp; &nbsp; | &nbsp; &nbsp; &nbsp; &nbsp;
-        <a [routerLink]="['/use-cases']">All  Use Cases</a>
+        <a [routerLink]="['/actives']">Active Responses</a> 
       </div>
       <div>
         <span class="mode" *ngIf="this.authorized()" (click)="setEditMode(false)">

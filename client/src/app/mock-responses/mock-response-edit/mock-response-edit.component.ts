@@ -77,6 +77,7 @@ export class MockResponseEditComponent implements OnInit {
       this.mockResp.updateMockResponse(updated)
         .subscribe(resp => this.router.navigate(['/mock-responses']) );
     }
+    // ARCHIVE - CLIENT (update)
     updated.res_body && this.mockResp.backup(updated);
   }
 
@@ -84,6 +85,7 @@ export class MockResponseEditComponent implements OnInit {
     const updated: any = this.getUpdatedMockResponse();
     this.mockResp.createMockResponse(updated)
       .subscribe(resp => this.router.navigate(['/mock-responses']) );
+   // ARCHIVE - CLIENT (create)
     updated.res_body && this.mockResp.backup(updated);
   }
 

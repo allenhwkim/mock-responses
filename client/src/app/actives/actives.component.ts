@@ -13,11 +13,11 @@ import { MockResponse } from '../models/mock-response.interface';
 import { UseCase } from '../models/use-case.interface';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  selector: 'app-actives',
+  templateUrl: './actives.component.html',
+  styleUrls: ['./actives.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class ActivesComponent implements OnInit {
   objectEntries = Object.entries;
 
   activeUseCases = [];

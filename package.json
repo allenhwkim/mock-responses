@@ -13,7 +13,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "start": "cd server && read -p 'open a terminal and run cd client && npm run start:client' && npm run start:server",
+    "start": "cd server && read -p 'open a terminal and run \"cd client && npm run start:client\"' && npm run start:server",
     "prebuild": "cd client && npm i && cd - && cd server && npm i && cd - && rm -rf dist",
     "build": "npm run build:server && npm run build:client",
     "build:server": "cd server && npm run build",

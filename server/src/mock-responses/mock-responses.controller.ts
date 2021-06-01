@@ -39,6 +39,7 @@ export class MockResponsesController {
     return this.mockResp.find(params.id);
   }
 
+  // ARCHIVE - SERVER
   @Post('archive')
   archive(@Body() data: ArchiveData, @Headers() headers, @Response() res) {
     const statusCode = this.mockResp.archive(data.userName, data.mockResponse);

@@ -1,4 +1,4 @@
-<div class="search-section">
+<div class="search-section" style="display: flex; align-items: center;">
   <input class="mock-response-search" size="40" 
     (keyup)="setMockResponses({key: $event.target.value})"
     placeholder="Type to search mock responses" />
@@ -7,6 +7,11 @@
     [routerLink]="['/mock-responses/new']">
     <i class="fas fa-plus"></i> New
   </button>
+
+  <x-pagination style="flex:1" (x-select)="offset=$event.detail.offset"
+    num-records-per-page="7" [attr.total-records]="mockResponses.length">
+  </x-pagination>
+  {{offset + 1}} to {{offset + 7}} of {{mockResponses.length}} records
 </div>
 
 <div class="fa-2x" *ngIf="loading">
@@ -19,7 +24,7 @@
 </div>
 
 <app-mock-responses-list *ngIf="!loading"
-  [mockResponses]="mockResponses"
+  [mockResponses]="mockResponses.slice(offset, offset+7)"
   [availableIds]="availableIds"
   [activeIds]="activeIds"
   (activateClicked)="activateClicked($event)"

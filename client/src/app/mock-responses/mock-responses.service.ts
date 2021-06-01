@@ -41,6 +41,7 @@ export class MockResponsesService {
     return this.http.put(`/mock-responses/${id}/deactivate`, {});
   }
 
+  // ARCHIVE - CLIENT (config)
   getConfig() {
     return this.http.get(`/mock-responses/config`).pipe(
       catchError(err => {
@@ -50,19 +51,15 @@ export class MockResponsesService {
     );
   }
 
-  archive(config: any, payload) {
-    return this.http.post(config.archiveUrl, payload);
-  }
-
+  // ARCHIVE - CLIENT (service)
   async backup(data) {
     const resp: any = await this.getConfig().toPromise();
     if (resp) { // false with any error
       const config = JSON.parse(resp.res_body);
-      console.log({config})
       if (config.archiveUrl) {
         const payload = { userName: 'archive', mockResponse: data };
         try {
-          const resp = await this.archive(config, payload).toPromise();
+          const resp = await this.http.post(config.archiveUrl, payload).toPromise();
           console.log('resp', {resp, data})
           console.log('[mock-responses] archive', data.req_url ,'to', config.archiveUrl);
           return true;

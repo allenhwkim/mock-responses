@@ -161,6 +161,7 @@ export class MockResponsesService {
     BetterSqlite3.backupToSql();
   }
 
+  // ARCHIVE - SERVER
   archive(userName: string, mockResponse: MockResponse) {
     const sql = `SELECT * FROM mock_responses
       WHERE req_url = '${mockResponse.req_url.trim()}' AND res_body = '${mockResponse.res_body.trim()}';`;

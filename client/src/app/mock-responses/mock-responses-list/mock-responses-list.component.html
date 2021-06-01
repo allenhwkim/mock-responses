@@ -45,9 +45,9 @@
           <i class="fa-lg fas fa-file"></i>
         </a>
 
-        <a class="button icon delete" *ngIf="auth.authorized && listMode"
+        <a class="button icon delete" *ngIf="auth.authorized"
           (click)="deleteClicked.emit(el)">
-          <i class="fa-lg fas fa-trash-alt"></i>>
+          <i class="fa-lg fas fa-trash-alt"></i>
         </a>
 
         <button *ngIf="collectionMode"

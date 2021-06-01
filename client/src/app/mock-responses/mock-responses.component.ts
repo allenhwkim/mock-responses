@@ -13,12 +13,13 @@ import { UseCasesService } from '../use-cases/use-cases.service';
 })
 export class MockResponsesComponent implements OnInit {
   useCases: any; // actvieeMockResponses, activeUseCases, mockResponseIds, availableMockRespnses
-  mockResponses: any; // mock_resonses table data
+  mockResponses: any = []; // mock_resonses table data
   availableIds: Array<number>; // mock response ids from useCases.availableMockResponese
   activeIds: Array<number>; // avail mock responses ids, which is set by activating it
   subject = new Subject();
   loading: boolean;
   error;
+  offset = 0;
 
   constructor(
     public mockResponseService: MockResponsesService,

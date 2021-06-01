@@ -62,3 +62,22 @@ button.no-style {
   font-weight: bold;
   color: red;
 }
+
+body x-button {
+  margin: 0px 4px;
+  --size: 24px;
+}
+
+body x-pagination .page {
+  border: none;
+  background: #FFF;
+  min-width: 28px;
+  min-height: 28px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 14px;
+  color: inherit;
+}
+body x-pagination .page:disabled {
+  color: #999;
+}

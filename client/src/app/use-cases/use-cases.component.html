@@ -1,8 +1,7 @@
 <div class="for-edit for-dialog">
   <input class="use-cases-search" size="40"
     placeholder="Type to search use cases"
-    (keyup)="setUseCases({key: $event.target.value})"
-    />
+    (keyup)="setUseCases({key: $event.target.value})" />
   &nbsp;
   <button class="button" *ngIf="auth.authorized" 
     [routerLink]="['/use-cases/new']">

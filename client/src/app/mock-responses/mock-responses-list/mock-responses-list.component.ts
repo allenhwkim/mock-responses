@@ -36,6 +36,7 @@ export class MockResponsesListComponent {
     })
   }
   
+  // ARCHIVE - CLIENT (bulk)
   backupSavedOnes() {
     const storageIds = JSON.parse( localStorage.getItem('archiveIds') || '[]' );
     storageIds.forEach(async id => {
