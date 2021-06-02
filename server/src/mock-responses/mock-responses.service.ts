@@ -117,6 +117,7 @@ export class MockResponsesService {
     try {
       this.db.exec(sql) && BetterSqlite3.backupToSql();
       UseCaseCache.reset(); // clear cache and set defaults
+      return {id};
     } catch (err) {
       console.log('\x1b[33m%s\x1b[0m', '[mock-responses] ARCHIVE insert error\n', err);
     }

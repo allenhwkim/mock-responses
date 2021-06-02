@@ -78,15 +78,18 @@ export class MockResponseEditComponent implements OnInit {
         .subscribe(resp => this.router.navigate(['/mock-responses']) );
     }
     // ARCHIVE - CLIENT (update)
-    updated.res_body && this.mockResp.backup(updated);
+    // updated.res_body && this.mockResp.backup(updated);
   }
 
   createMockResponse() {
     const updated: any = this.getUpdatedMockResponse();
     this.mockResp.createMockResponse(updated)
-      .subscribe(resp => this.router.navigate(['/mock-responses']) );
+      .subscribe(resp => {
+        console.log('[mock-response] create response', {resp}, {...updated, resp});
+        this.router.navigate(['/mock-responses']) 
+        updated.res_body && this.mockResp.backup({...updated, resp});
+      });
    // ARCHIVE - CLIENT (create)
-    updated.res_body && this.mockResp.backup(updated);
   }
 
   deleteMockResponse() {
