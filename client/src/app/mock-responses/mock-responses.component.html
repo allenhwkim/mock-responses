@@ -9,9 +9,9 @@
   </button>
 
   <x-pagination style="flex:1" (x-select)="offset=$event.detail.offset"
-    num-records-per-page="7" [attr.total-records]="mockResponses.length">
+    num-records-per-page="9" [attr.total-records]="mockResponses.length">
   </x-pagination>
-  {{offset + 1}} to {{offset + 7}} of {{mockResponses.length}} records
+  {{offset + 1}} to {{offset + 9}} of {{mockResponses.length}} records
 </div>
 
 <div class="fa-2x" *ngIf="loading">
@@ -24,7 +24,7 @@
 </div>
 
 <app-mock-responses-list *ngIf="!loading"
-  [mockResponses]="mockResponses.slice(offset, offset+7)"
+  [mockResponses]="mockResponses.slice(offset, offset+9)"
   [availableIds]="availableIds"
   [activeIds]="activeIds"
   (activateClicked)="activateClicked($event)"
