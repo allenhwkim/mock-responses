@@ -86,7 +86,7 @@ export class MockResponsesService {
   }
 
   create(data: MockResponse, isFromArchive=false) {
-    if (isFromArchive) return;
+    // if (isFromArchive) return;
 
     const createdAt = new Date().getTime();
     const reqMethod = data.req_method ? `'${data.req_method}'` : 'NULL';
