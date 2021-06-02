@@ -75,7 +75,14 @@ export class MockResponseEditComponent implements OnInit {
     const updated: any = this.getUpdatedMockResponse();
     if (Object.keys(updated).length > 1) {
       this.mockResp.updateMockResponse(updated)
-        .subscribe(resp => this.router.navigate(['/mock-responses']) );
+        .subscribe(resp => {
+          window['openDialog']('Updated successfully. Continue edit?', {
+            buttons: {
+              Yes: e => e,
+              No: e => this.router.navigate(['/mock-responses']) 
+            }
+          });
+        });
     }
     // ARCHIVE - CLIENT (update)
     // updated.res_body && this.mockResp.backup(updated);
