@@ -98,7 +98,8 @@ export class MockResponseEditComponent implements OnInit {
     const element = this.resBody.nativeElement;
     if (element.scrollHeight > 30) { 
       element.style.height = '5px';
-      element.style.height = `${element.scrollHeight}px`;
+      const maxHeight = Math.min(window.innerHeight - 100, element.scrollHeight);
+      element.style.height = `${maxHeight}px`;
     }
   }
 

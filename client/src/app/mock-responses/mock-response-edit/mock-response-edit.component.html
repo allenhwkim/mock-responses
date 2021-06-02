@@ -73,7 +73,6 @@
       <textarea #resBody
         id="res_body" required 
         [readonly]="!auth.authorized"
-        (keypress)="autoGrow()"
         [(ngModel)]="mockResponse.res_body"></textarea>
     </div>
   </fieldset>
