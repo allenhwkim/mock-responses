@@ -68,8 +68,10 @@ export class MockResponsesComponent implements OnInit {
   }
 
   deleteClicked(event) {
-    this.mockResponseService.deleteMockResponse(event.id)
-      .subscribe( (resp: any) => this.setMockResponses({key:''}) );
+    if (window.confirm('Want to delete '+ event.id + '?')) {
+      this.mockResponseService.deleteMockResponse(event.id)
+        .subscribe( (resp: any) => this.setMockResponses({key:''}) );
+    }
   }
 
   async activateClicked(event) {

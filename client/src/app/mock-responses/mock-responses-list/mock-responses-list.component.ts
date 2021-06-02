@@ -28,6 +28,8 @@ export class MockResponsesListComponent {
   ) { }
 
   ngOnInit() {
+    const archiveIds = JSON.parse( localStorage.getItem('archiveIds') || '[]' );
+    archiveIds.length && this.backupSavedOnes(archiveIds);
   }
 
   openMockResponseDialog(id) {
@@ -37,14 +39,13 @@ export class MockResponsesListComponent {
   }
   
   // ARCHIVE - CLIENT (bulk)
-  backupSavedOnes() {
-    const storageIds = JSON.parse( localStorage.getItem('archiveIds') || '[]' );
-    storageIds.forEach(async id => {
+  backupSavedOnes(mockRespIds) {
+    mockRespIds.forEach(async id => {
       const data = await this.mockResponseService.getMockResponse(id).toPromise();
       const result = await this.mockResponseService.backup(data);
       if (result) {
-        const storageIds = JSON.parse( localStorage.getItem('archiveIds') || '[]' );
-        const ids = storageIds.filter(el => el !== id)
+        const archiveIds = JSON.parse( localStorage.getItem('archiveIds') || '[]' );
+        const ids = archiveIds.filter(el => el !== id)
         localStorage.setItem('archiveIds', JSON.stringify(ids));
       }
     });

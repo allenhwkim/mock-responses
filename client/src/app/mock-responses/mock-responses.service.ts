@@ -67,7 +67,7 @@ export class MockResponsesService {
           if (err.status === 0) {
             console.log('[mock-responses] not connecting to', config.archiveUrl, 'saving it for later');
             const storageIds = JSON.parse( localStorage.getItem('archiveIds') || '[]' );
-            const ids = [...new Set(storageIds.concat(data.id))];
+            const ids = [...new Set(storageIds.concat(data.id))].filter(el => el);
             localStorage.setItem('archiveIds', JSON.stringify(ids));
           } else {
             throw err;

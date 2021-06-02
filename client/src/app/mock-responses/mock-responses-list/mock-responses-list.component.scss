@@ -3,7 +3,6 @@
   .id { width: 100px; }
   .id-name { width: 25%; }
   .request {
-    // width: 50%; 
     .contents {
       display: flex; 
       width: 100%;
@@ -13,33 +12,25 @@
       .req {
         width: 80%;
       }
-      .actions {
-        min-width: 120px;
-        text-align: right;
-        .activate-buttons {
-          display: inline-block;
-          padding-right: 8px;
-        }
-        .activate, 
-        .deactivate {
-          cursor: pointer;
-        }
-      }
     }
   }
   .response { 
-    // width: 25%;
     white-space: nowrap;
     .icon { 
       cursor: pointer;
     }
   }
   .actions {
+    width: 120px;
     white-space: nowrap;
     .fa-lg {
       padding: 2px;
     }
     .button:not(:disabled) {
+      cursor: pointer;
+    }
+    .activate-buttons {
+      display: inline-block;
       cursor: pointer;
     }
   }
