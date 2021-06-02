@@ -1,8 +1,5 @@
-To get username
-username.sync()
-
 # mock-responses
-Intentionally NOT-real API server for front-end development
+NOT-real API server for front-end development
 [Introduction](https://medium.com/allenhwkim/fake-it-until-make-it-mock-responses-9a9eb3361312)
 
 ### Start server(NestJS) for production
@@ -13,13 +10,11 @@ $ npm run build
 $ cd dist/server && node main.js
 ```
 ### Start server(NestJS) for development
-$ cd server && npm i && ts-node src/main.ts
+$ npm i
+$ cd server && npm run start:server
 
 ### Start Client(Angular9)
-$ cd client
-$ npm i
-$ npm run build
-$ cd dist/client && open index.html
+$ cd client && npm run start:client
 
 ### Configuration File
 Update mock-responses.config.js for detailed setup.
@@ -41,3 +36,13 @@ module.exports = {
   ]
 };
 ```
+
+### To make it your local changes archived to a different server, add this mock-responses
+ * name: archive config
+ * request URL: /mock-responses/config
+ * request body: 
+   ```
+   {
+     "archiveUrl": "http://my-backup-server.com:port/mock-responses/archive"
+   }
+  ```
