@@ -4,3 +4,5 @@
 dist
 node_modules
 server/mock-responses.sqlite3
+# tracking server/mock-responses.example.sql
+server/mock-responses.sql
