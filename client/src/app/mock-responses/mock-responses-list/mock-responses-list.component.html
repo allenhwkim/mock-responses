@@ -23,31 +23,31 @@
       <td class="actions">
         <span class="activate-buttons" *ngIf="auth.authorized && !collectionMode && !listMode">
           <span *ngIf="!activeIds.includes(el.id) && availableIds.includes(el.id)" class="active"> 
-            <i title="Active" class="fa-lg fas fa-toggle-on" style="opacity: .3"></i>
+            <i title="Active" class="fa-lg fas fa-toggle-on"></i>
           </span>
-          <a *ngIf="activeIds.includes(el.id)" class="activate" 
+          <a *ngIf="activeIds.includes(el.id)" class="active deactivate" 
             (click)="deactivateClicked.emit(el)">
-            <i title="Deactivate" class="fa-lg fas fa-toggle-off"></i>
+            <i title="Click here to deactivate" class="fa-lg fas fa-toggle-on"></i>
           </a>
-          <a *ngIf="!activeIds.includes(el.id) && !availableIds.includes(el.id)" class="deactivate" 
+          <a *ngIf="!activeIds.includes(el.id) && !availableIds.includes(el.id)" class="inactive activate" 
             (click)="activateClicked.emit(el)">
-            <i title="Activate" class="fa-lg fas fa-toggle-on"></i>
+            <i title="Click here to activate" class="fa-lg fas fa-toggle-off"></i>
           </a>
         </span>
 
         <a class="button icon" *ngIf="auth.authorized && !collectionMode && !listMode " 
           [routerLink]="['/mock-responses', el.id, 'edit']">
-          <i class="fa-lg fas fa-edit"></i>
+          <i class="fa-lg fas fa-edit" title="edit"></i>
         </a>
 
         <a class="button icon" *ngIf="!auth.authorized && !collectionMode && !listMode"
           [routerLink]="['/mock-responses', el.id, 'edit']">
-          <i class="fa-lg fas fa-file"></i>
+          <i class="fa-lg fas fa-file" title="view"></i>
         </a>
 
         <a class="button icon delete" *ngIf="auth.authorized"
           (click)="deleteClicked.emit(el)">
-          <i class="fa-lg fas fa-trash-alt"></i>
+          <i class="fa-lg fas fa-trash-alt" title="delete"></i>
         </a>
 
         <button *ngIf="collectionMode"

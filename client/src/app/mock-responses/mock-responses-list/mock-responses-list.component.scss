@@ -29,8 +29,12 @@
     .button:not(:disabled) {
       cursor: pointer;
     }
-    .activate-buttons {
+    .activate-buttons > * {
       display: inline-block;
+    }
+    .activate-buttons > .activate,
+    .activate-buttons > .deactivate {
+      color: #1F88E5;
       cursor: pointer;
     }
   }
