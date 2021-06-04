@@ -43,18 +43,16 @@
         </a>
       </td>
       <td class="use-cases">
-        <x-button *ngFor="let el of useCase.useCases" (click)="openUseCaseDialog(el)">
+        <x-button class="use-case" *ngFor="let el of useCase.useCases" (click)="openUseCaseDialog(el)">
           ({{el.id}}) {{el.name}}
         </x-button>
       </td>
-      <td class="children">
+      <td class="mock-responses">
         <x-button class="mock-response" 
           *ngFor="let mr of useCase.mockResponses" 
           (click)="openMockResponseDialog(mr)"
           title="{{mr.id}}"> 
-          <span class="req_status"> {{mr.res_status}} </span>
-          <span class="req_url">{{mr.req_url}} </span>
-          <span class="name">{{mr.name}} </span> 
+          {{mr.res_status}} {{mr.req_url}}
         </x-button>
       </td>
     </tr>

@@ -1,52 +1,26 @@
 .use-cases  {
-  text-align: left;
   .use-case {
-    vertical-align: top;
-
+     white-space: initial;
     .id {
       white-space: nowrap;
-      overflow: hidden;
-      .contents {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-      }
     }
-    .actions {
-      white-space: nowrap;
-      .fa-lg {
-        padding: 2px;
+    .use-cases {
+      width: 30%;
+      vertical-align: top;
+      .use-case {
+        white-space: initial;
+        text-align: left;
       }
     }
 
-    .name-desc {
-      // width: 40%; 
-      overflow: hidden;
-      .description {
-        white-space: pre-wrap;
-      }
-    }
-
-    .children {
-      width: 50%; 
-      overflow: hidden;
-      padding: 12px;
-      .mock-responses {
-        list-style: inside;
-        padding: 0;
-        .mock-response {
-          cursor: pointer;
-        }
-      }
-      .child-use-case {
-        display: inline-block;
-        background: #FFF;
-        border: 1px solid rgb(75, 69, 69);
-        border-radius: 4px;
-        cursor: pointer;
-        margin-right: 4px;
+    .mock-responses {
+      white-space: initial;
+      width: 30%;
+      .mock-response {
+        white-space: initial;
+        text-align: left;
       }
     }
   }
-
 }
+
