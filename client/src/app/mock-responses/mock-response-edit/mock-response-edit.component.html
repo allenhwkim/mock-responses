@@ -78,24 +78,17 @@
   </fieldset>
 
   <div *ngIf="auth.authorized" class="buttons">
-    <button *ngIf="mockResponse.id" [disabled]="!updatable" (click)="updateMockResponse()">
-      <i class="fas fa-edit"></i>
-      Update Mock Response 
-    </button>
-    <button *ngIf="mockResponse.id" class="button"
-      [routerLink]="[ '/mock-responses/new']"
-      [queryParams]="{from: mockResponse.id}">
-      Duplicate Mock Response
-    </button>
-    <button *ngIf="mockResponse.id" 
-      (click)="deleteMockResponse()">
-      <i class="fas fa-trash-alt"></i>
-      Delete Mock Resoponse
-    </button>
-    <button *ngIf="!mockResponse.id" [disabled]="!creatable"
-      (click)="createMockResponse()">
-      <i class="fas fa-plus-circle"></i>
+    <x-button *ngIf="mockResponse.id" [disabled]="!updatable" (click)="updateMockResponse()">
+      Update 
+    </x-button>
+    <x-button *ngIf="mockResponse.id" [routerLink]="['/mock-responses/new']" [queryParams]="{from: mockResponse.id}"> 
+      Duplicate 
+    </x-button>
+    <x-button *ngIf="mockResponse.id" (click)="deleteMockResponse()">
+      Delete 
+    </x-button>
+    <x-button *ngIf="!mockResponse.id" [disabled]="!creatable" (click)="createMockResponse()">
       Create Mock Response 
-    </button>
+    </x-button>
   </div>
 </div> 

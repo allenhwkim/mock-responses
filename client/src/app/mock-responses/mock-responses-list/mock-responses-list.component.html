@@ -1,6 +1,6 @@
 <ng-content></ng-content>
 
-<table class="mock-responses">
+<table class="mock-responses x-table">
   <thead>
     <tr class="header">
       <th class="request">Request</th>
@@ -23,31 +23,31 @@
       <td class="actions">
         <span class="activate-buttons" *ngIf="auth.authorized && !collectionMode && !listMode">
           <span *ngIf="!activeIds.includes(el.id) && availableIds.includes(el.id)" class="active"> 
-            <i title="Active" class="fa-lg fas fa-toggle-on"></i>
+            <i title="Active" class="fas fa-toggle-on"></i>
           </span>
           <a *ngIf="activeIds.includes(el.id)" class="active deactivate" 
             (click)="deactivateClicked.emit(el)">
-            <i title="Click here to deactivate" class="fa-lg fas fa-toggle-on"></i>
+            <i title="Click here to deactivate" class="fas fa-toggle-on"></i>
           </a>
           <a *ngIf="!activeIds.includes(el.id) && !availableIds.includes(el.id)" class="inactive activate" 
             (click)="activateClicked.emit(el)">
-            <i title="Click here to activate" class="fa-lg fas fa-toggle-off"></i>
+            <i title="Click here to activate" class="fas fa-toggle-off"></i>
           </a>
         </span>
 
         <a class="button icon" *ngIf="auth.authorized && !collectionMode && !listMode " 
           [routerLink]="['/mock-responses', el.id, 'edit']">
-          <i class="fa-lg fas fa-edit" title="edit"></i>
+          <i class="fas fa-edit" title="edit"></i>
         </a>
 
         <a class="button icon" *ngIf="!auth.authorized && !collectionMode && !listMode"
           [routerLink]="['/mock-responses', el.id, 'edit']">
-          <i class="fa-lg fas fa-file" title="view"></i>
+          <i class="fas fa-file" title="view"></i>
         </a>
 
-        <a class="button icon delete" *ngIf="auth.authorized"
+        <a class="button icon delete" *ngIf="auth.authorized  && !collectionMode"
           (click)="deleteClicked.emit(el)">
-          <i class="fa-lg fas fa-trash-alt" title="delete"></i>
+          <i class="fas fa-trash-alt" title="delete"></i>
         </a>
 
         <button *ngIf="collectionMode"
@@ -55,8 +55,8 @@
           Select
         </button>
 
-        <a class="button icon" (click)="openMockResponseDialog(el.id)">
-          <i class="fas fa-lg fa-info-circle"></i>
+        <a class="button icon" *ngIf="!collectionMode" (click)="openMockResponseDialog(el.id)">
+          <i class="fas fa-info-circle"></i>
         </a>
       </td>
       <td class="id-name">({{el.id}}) <br/> {{el.name}}</td>

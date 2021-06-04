@@ -1,12 +1,9 @@
 <div class="for-edit for-dialog">
-  <input class="use-cases-search" size="40"
-    placeholder="Type to search use cases"
-    (keyup)="setUseCases({key: $event.target.value})" />
+  <x-input class="use-cases-search" size="40"
+    label="Type to search use cases"
+    (keyup)="setUseCases({key: $event.target.value})"></x-input>
   &nbsp;
-  <button class="button" *ngIf="auth.authorized" 
-    [routerLink]="['/use-cases/new']">
-    <i class="fas fa-plus"></i> New
-  </button>
+  <x-button *ngIf="auth.authorized" [routerLink]="['/use-cases/new']"> New </x-button>
 </div>
 
 <div class="error" *ngIf="error">{{error}}</div>

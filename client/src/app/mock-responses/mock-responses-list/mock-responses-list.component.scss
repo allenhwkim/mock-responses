@@ -1,8 +1,8 @@
 .mock-responses {
   text-align: left;
   .id { width: 100px; }
-  .id-name { width: 25%; }
   .request {
+    width: 50%;
     .contents {
       display: flex; 
       width: 100%;
@@ -14,27 +14,31 @@
       }
     }
   }
-  .response { 
-    white-space: nowrap;
-    .icon { 
-      cursor: pointer;
-    }
-  }
   .actions {
-    width: 120px;
+    width: 6%;
     white-space: nowrap;
-    .fa-lg {
+    .fas {
       padding: 2px;
     }
     .button:not(:disabled) {
       cursor: pointer;
     }
     .activate-buttons > * {
+      color: #1F88E5;
       display: inline-block;
     }
     .activate-buttons > .activate,
     .activate-buttons > .deactivate {
-      color: #1F88E5;
+      cursor: pointer;
+    }
+  }
+  .id-name { 
+    width: 22%; 
+  }
+  .response { 
+    width: 22%;
+    white-space: nowrap;
+    .icon { 
       cursor: pointer;
     }
   }

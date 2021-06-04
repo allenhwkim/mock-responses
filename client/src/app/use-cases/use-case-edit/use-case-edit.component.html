@@ -35,16 +35,18 @@
         <span>{{useCase.name}}</span>
         <div>{{useCase.description}}</div>
         <a *ngIf="auth.authorized" class="button icon delete"
-          (click)="setUseCases('remove', useCase.id); $event.stopPropagation();"> x </a>
+          (click)="setUseCases('remove', useCase.id); $event.stopPropagation();">
+          <i class="fas fa-trash-alt"></i>
+        </a>
       </li>
       <li class="use-case add-use-case" [ngClass]="{expanded: useCaseSearchVisible}">
-        <span (click)="openUseCasesSearch()">Add</span>
-        <div *ngIf="useCaseSearchVisible">
+        <x-button (click)="openUseCasesSearch()">Add</x-button>
+        <div class="dialog" *ngIf="useCaseSearchVisible">
           <div class="blocker" (click)="useCaseSearchVisible=false"></div>
-          <div class="contents" cdkDrag>
-            <input class="use-case-search" size="40" 
+          <div class="contents">
+            <x-input class="use-case-search" size="40" 
               (keyup)="openUseCasesSearch({key: $event.target.value})"
-              placeholder="Type to search use-cases" />
+              label="Type to search use-cases"></x-input>
             <app-use-cases-list 
               [useCases]="searchUseCases"
               [collectionMode]="true"
@@ -66,13 +68,15 @@
         <span title="status code">{{mockResp.res_status}}</span> &nbsp;
         <span title="content type">{{mockResp.res_content_type}}</span>
         <a *ngIf="auth.authorized" class="button icon delete"
-          (click)="setMockResponses('remove', mockResp.id); $event.stopPropagation();"> x </a>
+          (click)="setMockResponses('remove', mockResp.id); $event.stopPropagation();"> 
+          <i class="fas fa-trash-alt" title="delete"></i>
+        </a>
       </li>
       <li class="mock-response add-mock-response" [ngClass]="{expanded: mockResponseSearchVisible}">
-        <span (click)="showMockResponsesSearch()">Add</span>
-        <div *ngIf="mockResponseSearchVisible">
+        <x-button (click)="showMockResponsesSearch()">Add</x-button>
+        <div class="dialog" *ngIf="mockResponseSearchVisible">
           <div class="blocker" (click)="mockResponseSearchVisible=false"></div>
-          <div class="contents" cdkDrag>
+          <div class="contents">
             <input class="mock-response-search" size="40" 
               (keyup)="showMockResponsesSearch({key: $event.target.value})"
               placeholder="Type to search mock response" />
@@ -88,27 +92,27 @@
 
     <br/>
     <div class="buttons for-edit">
-      <button *ngIf="auth.authorized && mode === 'edit'"
+      <x-button *ngIf="auth.authorized && mode === 'edit'"
         [disabled]="!updatable"
         (click)="updateUseCase()">
         <i class="fas fa-edit"></i> Update
-      </button>
+      </x-button>
       &nbsp;
-      <button *ngIf="auth.authorized && mode === 'edit'"
+      <x-button *ngIf="auth.authorized && mode === 'edit'"
         [routerLink]="['/use-cases/new']"
         [queryParams]="{from: useCase.id}">
         Duplicate
-      </button>
+      </x-button>
       &nbsp;
-      <button *ngIf="auth.authorized && mode === 'edit'" (click)="deleteUseCase()">
+      <x-button *ngIf="auth.authorized && mode === 'edit'" (click)="deleteUseCase()">
         <i class="fas fa-trash-alt"></i> Delete 
-      </button>
+      </x-button>
       &nbsp;
-      <button *ngIf="auth.authorized && mode === 'new'" 
+      <x-button *ngIf="auth.authorized && mode === 'new'"
         [disabled]="!creatable"
         (click)="createUseCase()">
         <i class="fas fa-plus-circle"></i> Create 
-      </button>
+      </x-button>
     </div>
   </div>
   

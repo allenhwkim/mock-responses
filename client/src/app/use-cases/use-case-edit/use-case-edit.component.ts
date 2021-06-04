@@ -60,7 +60,6 @@ export class UseCaseEditComponent implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     const from = this.route.snapshot.queryParamMap.get('from');
-    console.log(this.route.snapshot.url);
     if (id) {
       this.useCaseService.getUseCase(id)
         .subscribe((resp:any) => {
@@ -78,7 +77,8 @@ export class UseCaseEditComponent implements OnInit {
           this.useCases = [...resp.useCases];
           this.mockResponses = [...resp.mockResponses];
         });
-    } else if (!id) {
+    } 
+    if (!id) {
       this.useCaseService.getUseCase('last')
         .subscribe((resp: any) => {
           const newId = (Math.floor(parseInt(resp.id) / 100) + 1) * 100; // increase id by 100

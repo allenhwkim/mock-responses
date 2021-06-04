@@ -23,19 +23,14 @@
   padding: 0;
   .use-case, 
   .mock-response {
+    padding: 12px;
     position: relative;
     display: inline-block;
-    padding: 12px 20px; 
     border: 1px solid #ccc;
     border-radius: 4px;
     cursor: pointer;
     margin: 4px;
     vertical-align: top;
-    .delete {
-      position: absolute;
-      top: 4px;
-      right: 8px;
-    }
     &.add-use-case:not(.expanded),
     &.add-mock-response:not(.expanded) {
       border: none;
@@ -45,35 +40,9 @@
   .add-use-case,
   .add-mock-response {
     position: relative;
+    padding: 0;
     display: inline-block;
-    padding: 12px 20px; 
     width: 800px;
     border: none;
-    .blocker {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-    }
-    .contents {
-      position: absolute;
-      background: #FFF;
-      z-index: 1;
-      padding: 12px;
-      width: 100%;
-      max-height: 400px;
-      overflow: auto;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-shadow: 0 0 24px #333;
-      ::ng-deep .mock-responses,
-      ::ng-deep .use-cases {
-        // max-height: ;
-        display: block;
-        margin: 12px 0;
-        // overflow: auto;
-      }
-    }
   }
 }

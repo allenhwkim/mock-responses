@@ -1,64 +1,62 @@
-<table class="use-cases">
+<table class="use-cases x-table">
   <thead>
     <tr>
       <th class="id">Id</th>
-      <th class="name-desc">Name<br/>/Description</th>
+      <th class="name-desc">Name / Description</th>
       <th class="id">Actions</th>
-      <th class="children">Use Cases<br/>/Mock Responses</th>
+      <th class="children">Use Cases</th>
+      <th class="children">Mock Responses</th>
     </tr>
   </thead>
+  <tbody>
+    <tr *ngFor="let useCase of useCases" class="use-case">
 
-  <tr *ngFor="let useCase of useCases" class="use-case">
+      <td class="id">
+        <div class="contents">
+          <div>{{useCase.id}}</div>
+        </div>
+      </td>
 
-    <td class="id">
-      <div class="contents">
-        <div>{{useCase.id}}</div>
-      </div>
-    </td>
+      <td class="name-desc">
+        <b>{{useCase.name}}</b>
+        <p>{{useCase.description}}</p> 
+      </td>
 
-    <td class="name-desc">
-      <b>{{useCase.name}}</b>
-      <p>{{useCase.description}}</p> 
-    </td>
-
-    <td class="actions">
-      <a class="button icon" *ngIf="auth.authorized && !collectionMode && !listMode && !activateMode" 
-        [routerLink]="['/use-cases', useCase.id, 'edit']">
-        <i class="fas fa-lg fa-edit"></i>
-      </a>
-      <a class="button icon" *ngIf="!auth.authorized && !collectionMode && !listMode && !activateMode"
-        [routerLink]="['/use-cases', useCase.id, 'edit']">
-        <i class="fas fa-lg fa-file"></i>
-      </a>
-      <button *ngIf="activateMode" (click)="selectClicked.emit(useCase)">
-        Activate
-      </button>
-      <button *ngIf="collectionMode" (click)="selectClicked.emit(useCase)">
-        Select
-      </button>
-      <a *ngIf="auth.authorized && listMode" class="button icon delete"
-        (click)="deleteClicked.emit(useCase)">
-        <i class="fas fa-lg fa-trash-alt"></i>
-      </a>
-    </td>
-
-    <td class="children">
-      <div class="child-use-case"
-         *ngFor="let el of useCase.useCases"
-        (click)="openUseCaseDialog(el)">
-         <div><b>({{el.id}}) {{el.name}}</b></div>
-        <div>{{el.description}}</div>
-      </div>
-      <ul class="mock-responses">
-        <li class="mock-response" 
+      <td class="actions">
+        <a class="button icon" *ngIf="auth.authorized && !collectionMode && !listMode && !activateMode" 
+          [routerLink]="['/use-cases', useCase.id, 'edit']">
+          <i class="fas fa-edit"></i>
+        </a>
+        <a class="button icon" *ngIf="!auth.authorized && !collectionMode && !listMode && !activateMode"
+          [routerLink]="['/use-cases', useCase.id, 'edit']">
+          <i class="fas fa-file"></i>
+        </a>
+        <button *ngIf="activateMode" (click)="selectClicked.emit(useCase)">
+          Activate
+        </button>
+        <button *ngIf="collectionMode" (click)="selectClicked.emit(useCase)">
+          Select
+        </button>
+        <a *ngIf="auth.authorized && listMode" class="button icon delete"
+          (click)="deleteClicked.emit(useCase)">
+          <i class="fas fa-trash-alt"></i>
+        </a>
+      </td>
+      <td class="use-cases">
+        <x-button *ngFor="let el of useCase.useCases" (click)="openUseCaseDialog(el)">
+          ({{el.id}}) {{el.name}}
+        </x-button>
+      </td>
+      <td class="children">
+        <x-button class="mock-response" 
           *ngFor="let mr of useCase.mockResponses" 
           (click)="openMockResponseDialog(mr)"
           title="{{mr.id}}"> 
           <span class="req_status"> {{mr.res_status}} </span>
           <span class="req_url">{{mr.req_url}} </span>
           <span class="name">{{mr.name}} </span> 
-        </li>
-      </ul>
-    </td>
-  </tr>
+        </x-button>
+      </td>
+    </tr>
+  </tbody>
 </table>

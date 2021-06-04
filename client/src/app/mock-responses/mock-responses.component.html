@@ -1,12 +1,9 @@
 <div class="search-section" style="display: flex; align-items: center;">
-  <input class="mock-response-search" size="40" 
+  <x-input class="mock-response-search" size="40" 
     (keyup)="setMockResponses({key: $event.target.value})"
-    placeholder="Type to search mock responses" />
+    label="Type to search mock responses"></x-input>
   &nbsp;
-  <button *ngIf="auth.authorized"
-    [routerLink]="['/mock-responses/new']">
-    <i class="fas fa-plus"></i> New
-  </button>
+  <x-button *ngIf="auth.authorized" [routerLink]="['/mock-responses/new']"> New </x-button>
 
   <x-pagination style="flex:1" (x-select)="offset=$event.detail.offset"
     num-records-per-page="9" [attr.total-records]="mockResponses.length">

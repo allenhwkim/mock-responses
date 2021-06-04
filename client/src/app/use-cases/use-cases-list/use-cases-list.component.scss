@@ -4,7 +4,7 @@
     vertical-align: top;
 
     .id {
-      // width: 10%; 
+      white-space: nowrap;
       overflow: hidden;
       .contents {
         display: flex;
@@ -41,8 +41,7 @@
       .child-use-case {
         display: inline-block;
         background: #FFF;
-        padding: 12px 20px; 
-        border: 1px solid #ccc;
+        border: 1px solid rgb(75, 69, 69);
         border-radius: 4px;
         cursor: pointer;
         margin-right: 4px;
