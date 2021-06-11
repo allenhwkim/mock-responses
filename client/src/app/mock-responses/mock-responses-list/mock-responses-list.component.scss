@@ -27,8 +27,20 @@
       color: #1F88E5;
       display: inline-block;
     }
+    .activate-buttons > .active {
+      font-size: 18px;
+      opacity: .7;
+		}
+    .activate-buttons > .active::after {
+      content: '*';
+      font-size: 75%;
+      position: relative;
+      top: -4px;
+      left: -2px;
+    }
     .activate-buttons > .activate,
     .activate-buttons > .deactivate {
+      font-size: 18px;
       cursor: pointer;
     }
   }

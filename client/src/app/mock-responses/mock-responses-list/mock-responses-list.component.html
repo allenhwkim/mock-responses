@@ -23,15 +23,15 @@
       <td class="actions">
         <span class="activate-buttons" *ngIf="auth.authorized && !collectionMode && !listMode">
           <span *ngIf="!activeIds.includes(el.id) && availableIds.includes(el.id)" class="active"> 
-            <i title="Active" class="fas fa-toggle-on"></i>
+            <i title="Active, To deactivate, activate others" class="fas fa-toggle-on active"></i>
           </span>
-          <a *ngIf="activeIds.includes(el.id)" class="active deactivate" 
+          <a *ngIf="activeIds.includes(el.id)" class="deactivate" 
             (click)="deactivateClicked.emit(el)">
-            <i title="Click here to deactivate" class="fas fa-toggle-on"></i>
+            <i title="Click here to deactivate" class="fas fa-toggle-on activate"></i>
           </a>
           <a *ngIf="!activeIds.includes(el.id) && !availableIds.includes(el.id)" class="inactive activate" 
             (click)="activateClicked.emit(el)">
-            <i title="Click here to activate" class="fas fa-toggle-off"></i>
+            <i title="Click here to activate" class="fas fa-toggle-off deactivate"></i>
           </a>
         </span>
 
