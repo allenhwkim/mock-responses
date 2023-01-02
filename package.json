@@ -51,6 +51,6 @@
     "yargs": "^14.0.0"
   },
   "devDependencies": {
-    "@nestjs/cli": "^7.6.0"
+    "@nestjs/cli": "^9.1.8"
   }
 }
